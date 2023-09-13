@@ -47,7 +47,7 @@ echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../
             <div class="card bg-secondary text-white mb-4">
                 <div class="card-body"><img src="assets/img/icon/jurusan.png" alt="Jurusan" width="24" height="24"> Data Jurusan </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="media.php?module=jurusan">View Details Jurusan</a>
+                    <a class="small text-white stretched-link" href="media.php?module=akun">View Details Jurusan</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

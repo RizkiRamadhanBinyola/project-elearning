@@ -45,22 +45,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     ?>
 
     <div class="container mt-5">
-        <?php
-        
-        // Debug: Cetak nilai $_GET['key'] untuk memeriksa apakah sesuai dengan yang diharapkan.
-echo "Value of key: " . $_GET['key'] . "<br>";
-
-if ($update) {
-    $sql = $connect->query("SELECT * FROM mapel WHERE kd_mapel='$_GET[key]'");
-    $row = $sql->fetch_assoc();
-    
-    // Debug: Cetak nilai yang diambil dari database untuk memeriksa apakah sesuai dengan yang diharapkan.
-    print_r($row);
-}
-
-// Debug: Cetak query SQL yang akan dieksekusi.
-echo "SQL Query: " . $sql . "<br>";
-?>
         <div class="content-wrapper">
             <div class="container">
                 <div class="row">

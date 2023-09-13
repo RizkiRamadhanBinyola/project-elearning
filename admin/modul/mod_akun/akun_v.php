@@ -12,7 +12,7 @@ a {
 <!-- CSS/ -->
 
 <?php
-include "config.php";
+include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
 echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
@@ -24,7 +24,7 @@ echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../
 <?php
 $update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
 if ($update) {
-	$sql = $connection->query("SELECT * FROM jurusan WHERE kd_jurusan='$_GET[key]'");
+	$sql = $connect->query("SELECT * FROM jurusan WHERE kd_jurusan='$_GET[key]'");
 	$row = $sql->fetch_assoc();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -33,14 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	} else {
 		$sql = "INSERT INTO jurusan VALUES ('$_POST[kd]', '$_POST[nama]')";
 	}
-  if ($connection->query($sql)) {
+  if ($connect->query($sql)) {
     echo "<script>alert('Berhasil'); window.location = 'media.php?module=akun'</script>";
   } else {
 		echo "<script>alert('Gagal'); window.location = 'media.php?module=akun'</script>";
   }
 }
 if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
-  $connection->query("DELETE FROM jurusan WHERE kd_jurusan='$_GET[key]'");
+  $connect->query("DELETE FROM jurusan WHERE kd_jurusan='$_GET[key]'");
 	echo "<script>alert('Berhasil'); window.location = 'media.php?module=akun'</script>";
 }
 ?>
@@ -103,7 +103,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
                                     </thead>
                                     <tbody>
 									<?php $no = 1; ?>
-	                    <?php if ($query = $connection->query("SELECT * FROM jurusan")): ?>
+	                    <?php if ($query = $connect->query("SELECT * FROM jurusan")): ?>
 	                        <?php while($row = $query->fetch_assoc()): ?>
                                         <tr>
 										<td></td>
