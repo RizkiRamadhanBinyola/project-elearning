@@ -12,7 +12,7 @@
 <!-- CSS/ -->
 
 <?php
-include "config.php";
+include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
   echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
@@ -27,7 +27,7 @@ else{
 
   $update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
   if ($update) {
-   $sql = $connection->query("SELECT * FROM rombel WHERE nis='$_GET[key]'");
+   $sql = $connect->query("SELECT * FROM rombel WHERE nis='$_GET[key]'");
    $row = $sql->fetch_assoc();
  }
  if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -36,14 +36,14 @@ else{
   } else {
     $sql = "INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')";
   }
-  if ($connection->query($sql)) {
+  if ($connect->query($sql)) {
     echo "<script>alert('Berhasil'); window.location = 'media.php?module=rombel&kls=$_POST[kd_kelas]'</script>";
   } else {
     echo "<script>alert('Gagal'); window.location = 'media.php?module=rombel&kls=$_POST[kd_kelas]'</script>";
   }
 }
 if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
-  $connection->query("DELETE FROM rombel WHERE nis='$_GET[key]' AND kd_kelas='$_GET[kd_kelas]' AND kd_tajar='$thn_ajar'");
+  $connect->query("DELETE FROM rombel WHERE nis='$_GET[key]' AND kd_kelas='$_GET[kd_kelas]' AND kd_tajar='$thn_ajar'");
   echo "<script>alert('Berhasil'); window.location = 'media.php?module=rombel&kls=$_GET[kd_kelas]'</script>";
 }
 ?>
@@ -70,7 +70,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
         <label>Siswa </label>
         <select class="form-control" name="nis">
           <option>--Pilih Siswa--</option>
-          <?php $query = $connection->query("SELECT * FROM siswa WHERE nis NOT IN (SELECT nis FROM rombel,tahun_ajar WHERE rombel.kd_tajar=tahun_ajar.kd_tajar AND tahun_ajar.aktif='Y')"); while ($data = $query->fetch_assoc()): ?>
+          <?php $query = $connect->query("SELECT * FROM siswa WHERE nis NOT IN (SELECT nis FROM rombel,tahun_ajar WHERE rombel.kd_tajar=tahun_ajar.kd_tajar AND tahun_ajar.aktif='Y')"); while ($data = $query->fetch_assoc()): ?>
           <option value="<?=$data["nis"]?>" <?= (!$update) ?: (($data["nis"] != $data["nis"]) ?: 'selected="on"') ?>><?=$data["nis"]?>--<?=$data["nama"]?></option>
         <?php endwhile; ?>
       </select>
@@ -81,7 +81,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
       <label>Kelas </label>
       <select class="form-control" name="kd_kelas" id="cbbkls">
         <option value="">--Pilih Kelas--</option>
-        <?php $query3 = $connection->query("SELECT * FROM kelas ORDER BY tingkat"); while ($data3 = $query3->fetch_assoc()): ?>
+        <?php $query3 = $connect->query("SELECT * FROM kelas ORDER BY tingkat"); while ($data3 = $query3->fetch_assoc()): ?>
         <option value="<?=$data3["kd_kelas"]?>" <?= (!$update) ? (!isset($_GET['kls']) ? : ($data3["kd_kelas"] != $_GET['kls'] ?: 'selected=""'))  : (($data3["kd_kelas"] != $data3["kd_kelas"]) ?: 'selected="on"') ?>><?=$data3["nama_kelas"]?></option>
       <?php endwhile; ?>
     </select>
@@ -261,7 +261,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
         </tr>
       </thead>
       <tbody>
-        <?php if ($query = $connection->query($sql)): ?>
+        <?php if ($query = $connect->query($sql)): ?>
          <?php while($row = $query->fetch_assoc()): ?>
           <tr>
             <td></td>

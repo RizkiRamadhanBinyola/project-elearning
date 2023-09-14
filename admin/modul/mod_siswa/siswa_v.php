@@ -13,72 +13,74 @@
 <!-- CSS/ -->
 
 <?php
+
 include "../koneksi/koneksi.php";
-if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
+if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
   echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
-} else {
-?>
+}
+else{
 
-  <?php
-  $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
-  if ($update) {
-    $sql = $connect->query("SELECT * FROM siswa,login WHERE siswa.username=login.username and siswa.nis='$_GET[key]'");
-    $row = $sql->fetch_assoc();
-  }
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $nisn = mysqli_real_escape_string($connect, $_POST['nisn']);
-    $nama = htmlspecialchars($_POST['nama']);
-    $username = mysqli_real_escape_string($connect, $_POST['username']);
-    $kelamin = $_POST['kelamin'];
-    $email = htmlspecialchars($_POST['email']);
-    $telp = mysqli_real_escape_string($connect, $_POST['telp']);
-    $status = $_POST['status'];
-
-    // Cek apakah input kosong
-    if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
-      echo "
-      <script>
-          alert('Form tidak boleh kosong');
-          window.location.href='media.php?module=siswa';
-      </script>
-    ";
-      exit; // Hentikan eksekusi jika input kosong
-    }
-
-    if ($update) {
-      $sql = "UPDATE siswa SET nisn='$nisn', nama='$nama', username='$username', kelamin='$kelamin', email='$email', telp='$telp', status='$status' WHERE nis='$_GET[key]'";
-    } else {
-      $nis = mysqli_real_escape_string($connect, $_POST['nis']);
-      $password = md5($nis);
-      $tg = date('Y-m-d H:i:s');
-      echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
-
-      $connect->query("INSERT INTO login VALUES ('$nis', '$password', 'siswa', '$tg', 'aktif')");
-      $connect->query("INSERT INTO rombel VALUES ('$nis', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
-    }
-
-    if ($connect->query($sql)) {
-      if ($update) {
-        $sql = "UPDATE login SET password='$_POST[password]' WHERE username='$_POST[username]'";
-      } else {
-        $password = md5($_POST['nis']);
-        $tg = date('Y-m-d H:i:s');
-        echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
-
-        $connect->query("INSERT INTO login VALUES ('$_POST[nis]', '$password', 'siswa', '$tg', 'aktif')");
-        $connect->query("INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
-      }
-    } else {
-      echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
-    }
-  }
-  if (isset($_GET['action']) and $_GET['action'] == 'delete') {
-    $connect->query("DELETE FROM siswa WHERE nis='$_GET[key]'");
-    echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
-  }
   ?>
+  <?php
+  $update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
+  if ($update) {
+   $sql = $connect->query("SELECT * FROM siswa,login WHERE siswa.username=login.username and siswa.nis='$_GET[key]'");
+   $row = $sql->fetch_assoc();
+ }
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $nisn = mysqli_real_escape_string($connect, $_POST['nisn']);
+  $nama = htmlspecialchars($_POST['nama']);
+  $username = mysqli_real_escape_string($connect, $_POST['username']);
+  $kelamin = $_POST['kelamin'];
+  $email = htmlspecialchars($_POST['email']);
+  $telp = mysqli_real_escape_string($connect, $_POST['telp']);
+  $status = $_POST['status'];
 
+  // Cek apakah input kosong
+  if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
+    echo "
+    <script>
+        alert('Form tidak boleh kosong');
+        window.location.href='media.php?module=siswa';
+    </script>
+  ";
+    exit; // Hentikan eksekusi jika input kosong
+  }
+
+   if ($update) {
+    $sql = "UPDATE siswa SET nisn='$_POST[nisn]', nama='$_POST[nama]', username='$_POST[username]', 
+    kelamin='$_POST[kelamin]',email='$_POST[email]',telp='$_POST[telp]',
+    status='$_POST[status]' WHERE nis='$_GET[key]'";
+  } else {
+    $sql = "INSERT INTO siswa VALUES ('$_POST[nis]', '$_POST[nisn]', '$_POST[nama]',
+    '$_POST[username]', '$_POST[kelamin]', '$_POST[email]', '', '$_POST[telp]', '$_POST[status]')";
+
+  }
+
+  if ($connect->query($sql)) {
+	  if ($update) {
+		  $sql = "UPDATE login SET password='$_POST[password]' WHERE username='$_POST[username]'";
+   
+	 } else {
+		 $password=md5($_POST['nis']);
+		$tg=date('Y-m-d H:i:s');
+		echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
+   
+		$connect->query("INSERT INTO login VALUES ('$_POST[nis]', '$password', 
+		'siswa','$tg','aktif')");
+	
+		$connect->query("INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
+	 }
+ } else {
+   echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
+ }
+ 
+}
+if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
+  $connect->query("DELETE FROM siswa WHERE nis='$_GET[key]'");
+  echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
+}
+?>
 
   <div class="container mt-5">
     <div class="content-wrapper">
