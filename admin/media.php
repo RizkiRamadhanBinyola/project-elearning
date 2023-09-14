@@ -70,9 +70,7 @@ if($_SESSION['login']==0){
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="assets/js/datatables-simple-demo.js"></script>
-        <!-- DATATABLE SCRIPTS  -->
-        <script src="assets/js/dataTables/jquery.dataTables.js"></script>
-        <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
+
         <script>
             function prosesLogin() {
                 let timerInterval

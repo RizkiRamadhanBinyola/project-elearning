@@ -52,7 +52,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         <div class="card border-secondary mb-3">
 
                             <div class="card-header text-bg-<?= ($update) ? "success" : "secondary" ?>">
-                             <?= ($update) ? "EDIT" : "TAMBAH" ?> MATA PELAJARAN
+                                <?= ($update) ? "EDIT" : "TAMBAH" ?> MATA PELAJARAN
                             </div>
                             <div class="card-body text-secondary">
                                 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" role="form">
@@ -89,7 +89,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 
                             </div>
                             <div class="card-body text-secondary">
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>No</th>
