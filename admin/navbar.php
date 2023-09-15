@@ -43,14 +43,39 @@
                                     <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
                                     Home
                                 </a>
-                                <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=tahun">
-                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                                    Tahun pelajaran
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                                    Master
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=mapel">
-                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
-                                    Mapel
-                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link <?php if ($_GET['module'] == 'siswa') {echo "open";} ?>" href="media.php?module=siswa">
+                                            <div class="sb-nav-link-icon"><img src="assets/img/icon/siswa.png" alt="Siswa" width="20" height="20"></div>
+                                            Siswa
+                                        </a>
+                                        <a class="nav-link <?php if ($_GET['module'] == 'kelas') {echo "open";} ?>" href="media.php?module=kelas">
+                                            <div class="sb-nav-link-icon"><img src="assets/img/icon/kelas.png" alt="Kelas" width="20" height="20"></div>
+                                            Kelas
+                                        </a>
+                                        <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=akun">
+                                            <div class="sb-nav-link-icon"><img src="assets/img/icon/jurusan.png" alt="Jurusan" width="20" height="20"></div>
+                                            Jurusan
+                                        </a>
+                                        <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=guru">
+                                            <div class="sb-nav-link-icon"><img src="assets/img/icon/guru.png" alt="Guru" width="20" height="20"></div>
+                                            Guru
+                                        </a>
+                                        <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=tahun">
+                                            <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                                            Tahun pelajaran
+                                        </a>
+                                        <a class="nav-link <?php if ($_GET['module'] == 'mapel') {echo "open";} ?>" href="media.php?module=mapel">
+                                            <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                            Mapel
+                                        </a>
+                                    </nav>
+                                </div>
                             <!-- End Admin Sidebar Navigasi -->
 
                             <?php

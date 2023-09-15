@@ -13,18 +13,22 @@
 <!-- CSS/ -->
 
 <?php
+
 include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
   echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
 } else {
 
-?>
-  <?php
+  $kode_guru_awal = ""; // Langkah 1: Inisialisasi variabel kode guru awal
+
   $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
   if ($update) {
     $sql = $connect->query("SELECT * FROM guru WHERE kd_guru='$_GET[key]'");
     $row = $sql->fetch_assoc();
+
+    // Langkah 2: Isi $kode_guru_awal dengan kode guru yang akan diubah
+    $kode_guru_awal = $row["kd_guru"];
   }
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kd_guru = mysqli_real_escape_string($connect, $_POST['kd_guru']);
@@ -36,14 +40,14 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $status = $_POST['status'];
 
     if ($update) {
-      $sql = "UPDATE guru SET username='$username', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
+      $sql = "UPDATE guru SET kd_guru='$kd_guru',username='$username', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
     } else {
       $tg = date('Y-m-d H:i:s');
       $sql = "INSERT INTO guru VALUES ('$kd_guru', '$username', '$nip', '$nama', '$telp', '$email', 'default.jpg', '$status')";
     }
 
     if ($connect->query($sql)) {
-      $password = md5('1234');
+      $password = md5('smktpg2');
       $tg = date('Y-m-d H:i:s');
       echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
       $connect->query("INSERT INTO login VALUES ('$username', '$password', 'guru', '$tg', 'aktif')");
@@ -73,16 +77,27 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   $sql = "SELECT * FROM guru ORDER BY kd_guru DESC LIMIT 0,1";
                   $results = mysqli_query($connect, $sql) or die("Error: " . mysqli_error($connect));
                   $data = mysqli_fetch_array($results);
-                  $kodeawal = substr($data['kd_guru'], 3, 4) + 1;
-                  if ($kodeawal < 10) {
-                    $kd = 'GR00' . $kodeawal;
-                  } elseif ($kodeawal > 9 && $kodeawal <= 99) {
-                    $kd = 'GR0' . $kodeawal;
+
+                  if (empty($data['kd_guru'])) {
+                    // Jika kd_guru kosong, atur kode awal
+                    $kd = 'GR001'; // Atur kode awal sesuai dengan kebutuhan Anda
                   } else {
-                    $kd = 'GR' . $kodeawal;
+                    $kodeawal = substr($data['kd_guru'], 3, 4) + 1;
+                    if ($kodeawal < 10) {
+                      $kd = 'GR00' . $kodeawal;
+                    } elseif ($kodeawal > 9 && $kodeawal <= 99) {
+                      $kd = 'GR0' . $kodeawal;
+                    } else {
+                      $kd = 'GR' . $kodeawal;
+                    }
+                  }
+
+                  // Langkah 3: Gunakan $kode_guru_awal sebagai nilai awal pada inputan "Kode Guru"
+                  if ($update) {
+                    $kd = $kode_guru_awal;
                   }
                   ?>
-                  <input class="form-control" value="<?php echo $kd; ?>" "Masukkan Kode Guru" name="kd_guru" type="text" />
+                  <input class="form-control" value="<?php echo $kd; ?>" name="kd_guru" type="text" />
                 </div>
                 <div class="form-group mb-3">
                   <label>NIP</label>
