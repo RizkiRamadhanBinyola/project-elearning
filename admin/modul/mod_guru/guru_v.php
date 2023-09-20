@@ -122,7 +122,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                 <div class="form-group mb-3">
                   <label>Status </label>
                   <select class="form-control" name="status">
-                    <option>--Pilih Status--</option>
+                    <option selected hidden>--Pilih Status--</option>
                     <?php $query5 = $connect->query("SELECT * FROM guru group by status");
                     while ($data5 = $query5->fetch_assoc()) : ?>
                       <?php if ($data5["status"] == 'Aktif') { ?>

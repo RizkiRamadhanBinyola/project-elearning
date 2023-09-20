@@ -77,8 +77,8 @@ else{
       include "modul/mod_homeadm/homeadm_v.php";
       break;
 
-      case 'akun':
-      include "modul/mod_akun/akun_v.php";
+      case 'jurusan':
+      include "modul/mod_jurusan/jurusan_v.php";
       break;
 
       case 'siswa':

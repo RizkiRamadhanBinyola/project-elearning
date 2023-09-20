@@ -31,7 +31,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     }
 
     if ($update) {
-      $sql = "UPDATE kelas SET nama_kelas='$nama_kelas', tingkat='$tingkat', kd_jurusan='$kd_jurusan' WHERE kd_kelas='$_GET[key]'";
+      $sql = "UPDATE kelas SET kd_kelas='$kd_kelas',nama_kelas='$nama_kelas', tingkat='$tingkat', kd_jurusan='$kd_jurusan' WHERE kd_kelas='$_GET[key]'";
     } else {
       $sql = "INSERT INTO kelas VALUES ('$kd_kelas', '$nama_kelas', '$tingkat', '$kd_jurusan')";
     }
@@ -59,16 +59,15 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
               <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" role="form">
 
                 <div class="form-group mb-3">
-                  <label>Tingkat </label>
+                  <label>Tingkat</label>
                   <select class="form-control" name="tingkat">
                     <option selected hidden disabled>--Pilih Tingkat--</option>
-                    <option value="X">X</option>
-                    <option value="XI">XI</option>
-                    <option value="XII">XII</option>
+                    <option value="X" <?= (!$update) ?: (($row["tingkat"] != "X") ?: 'selected="selected"') ?>>X</option>
+                    <option value="XI" <?= (!$update) ?: (($row["tingkat"] != "XI") ?: 'selected="selected"') ?>>XI</option>
+                    <option value="XII" <?= (!$update) ?: (($row["tingkat"] != "XII") ?: 'selected="selected"') ?>>XII</option>
                   </select>
-
-
                 </div>
+
 
                 <div class="form-group mb-3">
                   <label>Jurusan </label>
@@ -95,7 +94,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 
                 <button type="submit" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block">Simpan</button>
                 <?php if ($update) : ?>
-                  <a href="?module=akun" class="btn btn-info btn-block">Batal</a>
+                  <a href="?module=kelas" class="btn btn-info btn-block">Batal</a>
                 <?php endif; ?>
 
 
@@ -123,7 +122,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                 </thead>
                 <tbody>
                   <?php $no = 1; ?>
-                  <?php if ($query = $connect->query("SELECT * FROM kelas,jurusan where kelas.kd_jurusan=jurusan.kd_jurusan")) : ?>
+                  <?php if ($query = $connect->query("SELECT * FROM kelas,jurusan where kelas.kd_jurusan=jurusan.kd_jurusan ORDER BY FIELD(tingkat, 'XII', 'XI', 'X')")) : ?>
                     <?php while ($row = $query->fetch_assoc()) : ?>
                       <tr>
                         <td><?= $no++ ?></td>
@@ -137,7 +136,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                             <a href="?module=kelas&action=delete&key=<?= $row['kd_kelas'] ?>" class="btn btn-danger btn-xs">Hapus</a>
                           </div>
                         </td>
-
                       </tr>
                     <?php endwhile ?>
                   <?php endif ?>

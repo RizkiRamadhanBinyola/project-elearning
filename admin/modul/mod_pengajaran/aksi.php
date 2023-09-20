@@ -1,5 +1,5 @@
 <?php 
-include "../../../system/koneksi.php";
+include "../../../koneksi/koneksi.php";
 
 if (isset($_GET['act'])){
 	switch ($_GET['act']) {
@@ -27,40 +27,45 @@ if (isset($_GET['act'])){
 				return 0;
 			}
 		}
-		foreach ($kd_kelas as $kd) {
-		//cek kd_guru
-			$cek=cek_pengajar($connect,$kd_mapel,$kd);
-			switch ($cek) {
-				case '1':
-				$query=mysqli_query($connect,"SELECT kd_pengajaran,kd_guru FROM pengajaran WHERE kd_mapel='$kd_mapel' AND kd_kelas='$kd'");
-				$guru1=mysqli_fetch_array($query);
-				$kd_insert=$guru1['kd_guru'].','.$kd_guru;
+		if (is_array($kd_kelas)) {
+			foreach ($kd_kelas as $kd) {
+				//cek kd_guru
+				$cek=cek_pengajar($connect,$kd_mapel,$kd);
+				switch ($cek) {
+					case '1':
+					$query=mysqli_query($connect,"SELECT kd_pengajaran,kd_guru FROM pengajaran WHERE kd_mapel='$kd_mapel' AND kd_kelas='$kd'");
+					$guru1=mysqli_fetch_array($query);
+					$kd_insert=$guru1['kd_guru'].','.$kd_guru;
 
-				$qins=mysqli_query($connect,"UPDATE pengajaran SET kd_guru='$kd_insert' WHERE kd_pengajaran='$guru1[kd_pengajaran]'");
+					$qins=mysqli_query($connect,"UPDATE pengajaran SET kd_guru='$kd_insert' WHERE kd_pengajaran='$guru1[kd_pengajaran]'");
 
-				if ($qins){
-					echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
-				} else {
-					echo "<script>alert('GAGAL'); location='../../media.php?module=pengajaran'</script>";
+					if ($qins){
+						echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
+					} else {
+						echo "<script>alert('GAGAL'); location='../../media.php?module=pengajaran'</script>";
+					}
+					break;
+					case '2':
+					echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
+					break;
+					case '0':
+					$kd_insert=$kd_guru;
+					$qins=mysqli_query($connect,"INSERT INTO pengajaran (kd_mapel,kd_kelas,kd_guru) VALUES ('$kd_mapel','$kd','$kd_insert')");
+					if ($qins){
+						echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
+					} else {
+						echo "<script>alert('GAGAL'); location='../../media.php?module=pengajaran'</script>";
+					}
+					break;
+
+					default:
+					echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
+					break;
 				}
-				break;
-				case '2':
-				echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
-				break;
-				case '0':
-				$kd_insert=$kd_guru;
-				$qins=mysqli_query($connect,"INSERT INTO pengajaran (kd_mapel,kd_kelas,kd_guru) VALUES ('$kd_mapel','$kd','$kd_insert')");
-				if ($qins){
-					echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
-				} else {
-					echo "<script>alert('GAGAL'); location='../../media.php?module=pengajaran'</script>";
-				}
-				break;
-
-				default:
-				echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
-				break;
 			}
+		} else {
+			// Handle jika $kd_kelas bukan array
+			echo "<script>alert('Gagal karena format kelas tidak valid'); location='../../media.php?module=pengajaran'</script>";
 		}
 		break;
 
@@ -107,5 +112,3 @@ if (isset($_GET['act'])){
 } else {
 
 }
-
-?>

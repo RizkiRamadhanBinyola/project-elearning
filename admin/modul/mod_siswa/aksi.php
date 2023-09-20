@@ -1,6 +1,6 @@
 <?php 
 //koneksi ke database, username,password  dan namadatabase menyesuaikan
-include "../../../system/koneksi.php";
+include "../../../koneksi/koneksi.php";
 require "../../../assets/excel_reader2.php";
 
 $target = basename($_FILES['filesoal']['name']) ;
