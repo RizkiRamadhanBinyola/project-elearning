@@ -1,7 +1,7 @@
 <?php 
 //koneksi ke database, username,password  dan namadatabase menyesuaikan
-include "../../../system/koneksi.php";
-require "../../../assets/excel_reader2.php";
+include "./koneksi/koneksi.php";
+require "./admin/assets/excel_reader2.php";
 
 $target = basename($_FILES['filesoal']['name']) ;
 move_uploaded_file($_FILES['filesoal']['tmp_name'], $target);

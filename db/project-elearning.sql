@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Sep 2023 pada 18.52
+-- Waktu pembuatan: 21 Sep 2023 pada 14.40
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `smk-elearning`
+-- Database: `project-elearning`
 --
 
 -- --------------------------------------------------------
@@ -34,6 +34,14 @@ CREATE TABLE `absensi` (
   `kd_kelas` varchar(10) NOT NULL,
   `kd_mapel` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `absensi`
+--
+
+INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel`) VALUES
+(1, '2023-09-16', '2023-09-16 08:51:41', '', ''),
+(2, '2023-09-16', '2023-09-16 14:09:45', '', '');
 
 -- --------------------------------------------------------
 
@@ -83,6 +91,7 @@ INSERT INTO `detail_soal` (`kd_detail_soal`, `kd_soal`, `soal`, `pil_A`, `pil_B`
 CREATE TABLE `guru` (
   `kd_guru` varchar(20) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `nip` varchar(50) NOT NULL DEFAULT '-',
   `nama` varchar(100) NOT NULL,
   `telp` varchar(20) NOT NULL DEFAULT '-',
@@ -90,108 +99,6 @@ CREATE TABLE `guru` (
   `foto` varchar(100) NOT NULL DEFAULT 'default.jpg',
   `status` varchar(10) NOT NULL DEFAULT 'aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `guru`
---
-
-INSERT INTO `guru` (`kd_guru`, `username`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
-('GR001', 'smkwsb1', '-', 'Ainur Rojik,S.Pd., M.Eng', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR002', 'smkwsb2', '-', 'Drs. Supramono', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR003', 'smkwsb3', '-', 'Dra. Sri Lestari', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR004', 'smkwsb4', '-', 'Riswaryanti, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR005', 'smkwsb5', '-', 'Sri Karyani, S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR006', 'smkwsb6', '-', 'Jahrotun Nisa, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR007', 'smkwsb7', '-', 'Siti Istinganah, S.Pd, M.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR008', 'smkwsb8', '-', 'Much Arihni, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR009', 'smkwsb9', '-', 'Puji Iswati,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR010', 'smkwsb10', '-', 'M.Yustiningrum,S.Pd, M.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR011', 'smkwsb11', '-', 'Subaryanto,S.Pd, M.M', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR012', 'smkwsb12', '-', 'Rita Herawati,S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR013', 'smkwsb13', '-', 'Wiwik Setyowati,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR014', 'smkwsb14', '-', 'Totok Subiyoto,S.Pd,M.M  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR015', 'smkwsb15', '-', 'Fatchurohman,S.Pd, M.M', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR016', 'smkwsb16', '-', 'Wening Handayani, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR017', 'smkwsb17', '-', 'Nanik Sri Rahmini,S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR018', 'smkwsb18', '-', 'Aniek Endrawati, S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR019', 'smkwsb19', '-', 'Rahayu Ratnaningsih, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR020', 'smkwsb20', '-', 'Wahyu Widowati,S.Pd.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR021', 'smkwsb21', '-', 'Eko Susanto,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR022', 'smkwsb22', '-', 'Dewi Natalia Purnaningsih, S.Si, M.M', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR023', 'smkwsb23', '-', 'Diah Sulistiani, S.Kom, M.M ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR024', 'smkwsb24', '-', 'Wahyono,S.Pd, M.M   ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR025', 'smkwsb25', '-', 'Rakhmat Sutrisno,S.Pd,M.Eng', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR026', 'smkwsb26', '-', 'Herni Kurniawati, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR027', 'smkwsb27', '-', 'Drs.Setyo Budi. M.Eng.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR028', 'smkwsb28', '-', 'Drs.Sudarman   ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR029', 'smkwsb29', '-', 'Drs.Yekti Toto Raharjo   ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR030', 'smkwsb30', '-', 'Drs.Zaenal Arifin ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR031', 'smkwsb31', '-', 'Dwi Setyowati Hilga,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR032', 'smkwsb33', '-', 'Kuspartana,S.Pd   ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR033', 'smkwsb34', '-', 'Dra.Sri Sulistyaningsih, M.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR034', 'smkwsb35', '-', 'Munarno Ahmad,S.Pd, M.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR035', 'smkwsb36', '-', 'Udhie Umaroh Z,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR036', 'smkwsb37', '-', 'Agus Triyono, S.Pd.I  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR037', 'smkwsb38', '-', 'Drs.Dwi Rusdiyanto  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR038', 'smkwsb39', '-', 'Drs.Santoso Budi.S  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR039', 'smkwsb40', '-', 'Heni Yosida,S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR040', 'smkwsb41', '-', 'Teguh Nur Rohman,MT  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR041', 'smkwsb42', '-', 'Anjar Dwi Suryani, S.Pd.T ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR042', 'smkwsb43', '-', 'Yaser Arofat,ST  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR043', 'smkwsb44', '-', 'Indah Purwanti,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR044', 'smkwsb45', '-', 'Yuli Marhendra Kristianing, S.Si', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR045', 'smkwsb46', '-', 'Drs. Purnama, MT ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR046', 'smkwsb47', '-', 'Drs.Sutiyorono  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR047', 'smkwsb48', '-', 'Drs.Casnoto  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR048', 'smkwsb49', '-', 'Abdul Faqih,S.Pd.M.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR049', 'smkwsb50', '-', 'Sutrisno Kuncoro,S.Pd,M.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR050', 'smkwsb51', '-', 'A.Rusdiatson,S.Pd   ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR051', 'smkwsb52', '-', 'Drs.Dwi Joko Suprapto  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR052', 'smkwsb53', '-', 'Syamsudin Hidayat,S.Pd,M.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR053', 'smkwsb54', '-', 'Sutrisno,S.Pd, M.M  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR054', 'smkwsb55', '-', 'Wahju Budi Utojo,S.Pd, M.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR055', 'smkwsb56', '-', 'Hendra Suprayogi, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR056', 'smkwsb57', '-', 'Slamet Suhardi, S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR057', 'smkwsb58', '-', 'Tri Auliya Retno Ridha,SE. M.Pd 24', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR058', 'smkwsb59', '-', 'Nur Afida,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR059', 'smkwsb60', '-', 'Nurul Hayati,SE ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR060', 'smkwsb61', '-', 'Siti Rohayah,S.Pd  ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR061', 'smkwsb62', '-', 'Iwan  Aji, S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR062', 'smkwsb63', '-', 'Salis Suciati, S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR063', 'smkwsb64', '-', 'Setiyaningsih, S.Pd ', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR064', 'smkwsb65', '-', 'Arif Hidayat, S.Pd. I.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR065', 'smkwsb66', '-', 'Mujab, S.Pd.I', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR066', 'smkwsb67', '-', 'Anita Karlina Dewi, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR067', 'smkwsb68', '-', 'Dwi Sutanto, S.S.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR068', 'smkwsb69', '-', 'Septiana Aslamiah, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR069', 'smkwsb70', '-', 'Angga Puspita Sari, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR070', 'smkwsb71', '-', 'Riyadi,S.Pd.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR071', 'smkwsb72', '-', 'Tri Setyaningsih,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR072', 'smkwsb73', '-', 'Ediyanto, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR073', 'smkwsb74', '-', 'Esti Nugrahani,S.Pd. Si.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR074', 'smkwsb75', '-', 'Irani, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR075', 'smkwsb76', '-', 'Bambang Budiharjo,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR076', 'smkwsb77', '-', 'Purwo Dhiyantoko,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR077', 'smkwsb78', '-', 'Nilam Risdayanti, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR078', 'smkwsb79', '-', 'Purwo Damayastuti,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR079', 'smkwsb80', '-', 'Ahmad Hidayat, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR080', 'smkwsb81', '-', 'M. Nurhajiyanto,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR081', 'smkwsb82', '-', 'Krisdiantoro,ST', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR082', 'smkwsb83', '-', 'Nugroho Widyastomo,ST', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR083', 'smkwsb84', '-', 'Purbha Aji Kuncara,S.Kom.', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR084', 'smkwsb85', '-', 'Ermanu Sapto Purnomo, S.Sn', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR085', 'smkwsb86', '-', 'Fitria Yuniyanti,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR086', 'smkwsb87', '-', 'Lutfi Ariani,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR087', 'smkwsb88', '-', 'Ika Ujiwati,SE', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR088', 'smkwsb89', '-', 'Catur Herlina Artati,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR089', 'smkwsb90', '-', 'Rudy Hermawanto,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR090', 'smkwsb91', '-', 'Atik Faoziah,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR091', 'smkwsb92', '-', 'Santi Arofah,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR092', 'smkwsb93', '-', 'Puji Laksono,S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR093', 'smkwsb94', '-', 'Ulung Giri Sutikno, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR094', 'smkwsb95', '-', 'Ayu Andriyani, S.Pd', '-', 'user@gmail.com', 'default.jpg', 'Aktif'),
-('GR095', 'test', '-', 'test', '08574322002', 'Elethaveronica@gmail.com', 'default.jpg', 'Aktif'),
-('GR096', 'Nandut', '1123221', 'Nandut S.pd', '0088999112', 'nandut@gmail.com', 'default.jpg', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -239,6 +146,7 @@ INSERT INTO `jurusan` (`kd_jurusan`, `nama_jurusan`) VALUES
 ('DKV', 'Desain Komunikasi Visual'),
 ('MM', 'Multimedia'),
 ('OTKP', 'Otomatisasi dan Tata Kelola Perkantoran '),
+('PBK', 'Perbankan'),
 ('RPL', 'Rekayasa Perangkat Lunak');
 
 -- --------------------------------------------------------
@@ -259,8 +167,11 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`kd_kelas`, `nama_kelas`, `tingkat`, `kd_jurusan`) VALUES
+('xdkv', 'xdkv', 'X', 'DKV'),
 ('xiibdp', 'XII BDP', 'XII', 'BDP'),
-('xrpl', 'X RPL', 'XII', 'RPL');
+('xiimm', 'XII RPL', 'XII', 'MM'),
+('xiirpl', 'XII RPL', 'XII', 'RPL'),
+('xirpl', 'XI RPL', 'XI', 'RPL');
 
 -- --------------------------------------------------------
 
@@ -360,8 +271,8 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
-('31423426', '65a6bfcfbdda6f27f7de780eb8b0c453', 'siswa', '2023-09-09 08:02:37', 'aktif'),
-('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif');
+('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
+('smktpg2', 'smktpg2aa', 'guru', '2023-09-21 14:32:42', 'aktif');
 
 -- --------------------------------------------------------
 
@@ -379,7 +290,11 @@ CREATE TABLE `mapel` (
 --
 
 INSERT INTO `mapel` (`kd_mapel`, `nama_mapel`) VALUES
-('Pbo', 'Pemrograman berbasis objek');
+('Bindo', 'Bahasa Indonesia'),
+('Bing', 'Bahasa Inggris'),
+('Pbo', 'Pemrograman berbasis objek'),
+('Pkn', 'Pendidikan Kewarganegaraan'),
+('Pweb', 'Pemrograman Web');
 
 -- --------------------------------------------------------
 
@@ -439,7 +354,8 @@ INSERT INTO `pengajaran` (`kd_pengajaran`, `kd_mapel`, `kd_kelas`, `kd_guru`, `k
 (12, 'bind', 'xakl1', 'GR090,GR079', '042021GR090001'),
 (13, 'bk', 'xan1', 'GR089', '1'),
 (16, 'bind', 'xiakl1', 'GR001', '1'),
-(17, 'bing', 'xiiakl1', 'GR096', '1');
+(17, 'bing', 'xiiakl1', 'GR096', '1'),
+(20, 'Pbo', 'xirpl', 'GR001', '1');
 
 -- --------------------------------------------------------
 
@@ -842,7 +758,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
@@ -854,7 +770,7 @@ ALTER TABLE `jurnal`
 -- AUTO_INCREMENT untuk tabel `pengajaran`
 --
 ALTER TABLE `pengajaran`
-  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `post`

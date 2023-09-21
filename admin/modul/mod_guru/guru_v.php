@@ -46,7 +46,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     } else {
       $tg = date('Y-m-d H:i:s');
       $passwordHash = md5($_POST['password']);
-      $sql = "INSERT INTO guru VALUES ('$kd_guru', '$username', '$nip', '$passwordHash','$nama', '$telp', '$email', 'default.jpg', '$status')";
+      $sql = "INSERT INTO guru (kd_guru, username, password, nip, nama, telp, email, foto, status) VALUES ('$kd_guru', '$username', '$passwordHash', '$nip','$nama', '$telp', '$email', 'default.jpg', '$status')";
+
       
     }
     // Mengecek repeat password
@@ -61,13 +62,14 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     }
 
     if ($connect->query($sql)) {
-      $passwordHash = md5($_POST['password']);
+      $passwordHash = md5($_POST['password']); // Meng-hash password
       $tg = date('Y-m-d H:i:s');
       echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
-      $connect->query("INSERT INTO login VALUES ('$username', '$password', 'guru', '$tg', 'aktif')");
+      $connect->query("INSERT INTO login VALUES ('$username', '$passwordHash', 'guru', '$tg', 'aktif')");
     } else {
       echo "<script>alert('Gagal'); window.location = 'media.php?module=guru'</script>";
     }
+    
   }
   if (isset($_GET['action']) and $_GET['action'] == 'delete') {
     $connect->query("DELETE FROM guru WHERE kd_guru='$_GET[key]'");
