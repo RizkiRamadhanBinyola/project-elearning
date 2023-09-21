@@ -33,6 +33,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kd_guru = mysqli_real_escape_string($connect, $_POST['kd_guru']);
     $nip = mysqli_real_escape_string($connect, $_POST['nip']);
+    $password = mysqli_real_escape_string($connect, $_POST['password']);
+    $password2 = mysqli_real_escape_string($connect, $_POST['password2']);
     $username = strtolower(stripslashes($_POST['username']));
     $nama = htmlspecialchars($_POST['nama']);
     $telp = mysqli_real_escape_string($connect, $_POST['telp']);
@@ -43,11 +45,23 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
       $sql = "UPDATE guru SET kd_guru='$kd_guru',username='$username', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
     } else {
       $tg = date('Y-m-d H:i:s');
-      $sql = "INSERT INTO guru VALUES ('$kd_guru', '$username', '$nip', '$nama', '$telp', '$email', 'default.jpg', '$status')";
+      $passwordHash = md5($_POST['password']);
+      $sql = "INSERT INTO guru VALUES ('$kd_guru', '$username', '$nip', '$passwordHash','$nama', '$telp', '$email', 'default.jpg', '$status')";
+      
+    }
+    // Mengecek repeat password
+    if ($password !== $password2) {
+      echo "
+          <script>
+              alert('Konfirmasi Password Salah');
+              document.location.href='media.php?module=guru';
+          </script>
+          ";
+      return false;
     }
 
     if ($connect->query($sql)) {
-      $password = md5('smktpg2');
+      $passwordHash = md5($_POST['password']);
       $tg = date('Y-m-d H:i:s');
       echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
       $connect->query("INSERT INTO login VALUES ('$username', '$password', 'guru', '$tg', 'aktif')");
@@ -59,7 +73,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $connect->query("DELETE FROM guru WHERE kd_guru='$_GET[key]'");
     echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
   }
-  ?>
+?>
 
   <div class="container mt-5">
     <div class="cotent-wrapper">
@@ -108,6 +122,14 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   <input class="form-control" placeholder="Masukkan Username" name="username" type="text" <?= (!$update) ?: 'value="' . $row["username"] . '"' ?> />
                 </div>
                 <div class="form-group mb-3">
+                  <label class="mx-2" for="floatingPassword">Password</label>
+                  <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+                </div>
+                <div class="form-group mb-3">
+                  <label class="mx-2" for="rfloatingPassword">Repeat Password</label>
+                  <input type="password" name="password2" class="form-control" id="rfloatingPassword" placeholder="Repeat Password">
+                </div>
+                <div class="form-group mb-3">
                   <label>Nama Guru </label>
                   <input class="form-control" placeholder="Masukkan Nama Guru" name="nama" type="text" <?= (!$update) ?: 'value="' . $row["nama"] . '"' ?> />
                 </div>
@@ -123,8 +145,10 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   <label>Status </label>
                   <select class="form-control" name="status">
                     <option selected hidden>--Pilih Status--</option>
-                    <?php $query5 = $connect->query("SELECT * FROM guru group by status");
-                    while ($data5 = $query5->fetch_assoc()) : ?>
+                    <?php 
+                    $query5 = $connect->query("SELECT * FROM guru group by status");
+                    while ($data5 = $query5->fetch_assoc()) : 
+                    ?>
                       <?php if ($data5["status"] == 'Aktif') { ?>
                         <option value="Aktif" <?= (!$update) ?: (($data5["status"] != $data5["status"]) ?: 'selected="on"') ?>>Aktif</option>
                         <option value="NonAktif">NonAktif</option>
