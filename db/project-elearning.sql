@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 21 Sep 2023 pada 14.40
+-- Waktu pembuatan: 18 Okt 2023 pada 00.39
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -41,7 +41,12 @@ CREATE TABLE `absensi` (
 
 INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel`) VALUES
 (1, '2023-09-16', '2023-09-16 08:51:41', '', ''),
-(2, '2023-09-16', '2023-09-16 14:09:45', '', '');
+(2, '2023-09-16', '2023-09-16 14:09:45', '', ''),
+(3, '2023-09-21', '2023-09-21 14:45:49', '', ''),
+(4, '2023-09-21', '2023-09-21 14:53:04', '', ''),
+(5, '2023-09-26', '2023-09-26 10:36:43', '', ''),
+(6, '2023-09-26', '2023-09-26 14:12:09', '', ''),
+(7, '2023-09-27', '2023-09-27 14:02:34', '', '');
 
 -- --------------------------------------------------------
 
@@ -99,6 +104,13 @@ CREATE TABLE `guru` (
   `foto` varchar(100) NOT NULL DEFAULT 'default.jpg',
   `status` varchar(10) NOT NULL DEFAULT 'aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `guru`
+--
+
+INSERT INTO `guru` (`kd_guru`, `username`, `password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
+('GR001', 'smktpg2', 'b080be81e59d37c3e8658bf2ecfa6785', '-', 'Ahmad Amin Iswanto', '-', '-', 'default.jpg', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -271,8 +283,10 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
+('1809599001', '586e0a7bf3a4a957c5120533d649cf94', 'siswa', '2023-09-26 13:56:59', 'aktif'),
+('2112230013', '9a3bccdb018f27be5f675e3de16647c8', 'siswa', '2023-09-26 14:06:39', 'aktif'),
 ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
-('smktpg2', 'smktpg2aa', 'guru', '2023-09-21 14:32:42', 'aktif');
+('smktpg2', 'b080be81e59d37c3e8658bf2ecfa6785', 'guru', '2023-09-21 14:45:30', 'aktif');
 
 -- --------------------------------------------------------
 
@@ -426,7 +440,9 @@ INSERT INTO `rombel` (`nis`, `kd_kelas`, `kd_tajar`) VALUES
 ('8168', 'xiiav1', '2022-2023-ganjil'),
 ('8169', 'xiiav1', '2022-2023-ganjil'),
 ('31423426', 'xiiakl1', '2023-2024-genap'),
-('31423426', '--Pilih Ke', '2021-2022-ganjil');
+('31423426', '--Pilih Ke', '2021-2022-ganjil'),
+('1809599001', 'xiimm', '2023-2024-genap'),
+('2112230013', 'xiirpl', '2023-2024-genap');
 
 -- --------------------------------------------------------
 
@@ -462,7 +478,6 @@ CREATE TABLE `siswa` (
   `nis` varchar(10) NOT NULL,
   `nisn` varchar(10) NOT NULL DEFAULT '-',
   `nama` varchar(100) NOT NULL,
-  `username` varchar(50) NOT NULL,
   `kelamin` varchar(10) NOT NULL,
   `email` varchar(50) NOT NULL DEFAULT '-',
   `foto` varchar(100) NOT NULL DEFAULT 'default.jpg',
@@ -474,8 +489,8 @@ CREATE TABLE `siswa` (
 -- Dumping data untuk tabel `siswa`
 --
 
-INSERT INTO `siswa` (`nis`, `nisn`, `nama`, `username`, `kelamin`, `email`, `foto`, `telp`, `status`) VALUES
-('31423426', '2020112233', 'Rizki Ramadhan Binyola', 'tony', 'L', 'rizkibinyola25@gmail.com', '', '628979912254', 'Aktif');
+INSERT INTO `siswa` (`nis`, `nisn`, `nama`, `kelamin`, `email`, `foto`, `telp`, `status`) VALUES
+('2112230013', '2010212524', 'Rizki Ramadhan Binyola', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -758,7 +773,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
