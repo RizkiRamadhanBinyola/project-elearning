@@ -42,7 +42,7 @@ if (!ctype_alnum($username) || !ctype_alnum($pass)) {
             $kd1 = mysqli_query($connect, $qkd1);
             header('location:admin/media.php?module=home');
         } else if ($r['level'] == 'siswa') {
-            $qkd = "SELECT nis FROM siswa WHERE username='$r[username]'";
+            $qkd = "SELECT nis FROM siswa WHERE nis='$r[username]'";
             $kd = mysqli_query($connect, $qkd);
             $kode = mysqli_fetch_array($kd);
             $_SESSION['kode'] = $kode['nis'];

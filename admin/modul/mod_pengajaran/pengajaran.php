@@ -60,12 +60,12 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   <select class="form-control" name="kd_kls[]" id="cbbkelas" data-kelas="">
                     <option selected hidden>Pilih Kelas</option>
                     <?php if ($query = $connect->query("SELECT * FROM kelas ORDER BY kd_kelas")) : ?>
-                    <?php while ($row = $query->fetch_assoc()) : ?>
+                      <?php while ($row = $query->fetch_assoc()) : ?>
                         <option value="<?php echo $row['kd_kelas']; ?>"><?= $row['nama_kelas'] ?></option>
-                    <?php endwhile ?>
+                      <?php endwhile ?>
                     <?php endif ?>
                   </select>
-                  
+
                 </div>
                 <div class="form-group mb-3">
                   <label>Guru </label>
@@ -96,6 +96,29 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
               TABEL PENGAJAR
             </div>
             <div class="card-body text-secondary">
+              <form action="" method="get" class="mb-3">
+                <div class="form-group col-sm-4 col-md-2 col-xs-12">
+                  <label>Filter</label>
+                  <input type="hidden" name="module" value="pengajaran">
+                </div>
+                <div class="row">
+                  <div class="form-group col-sm-6 col-md-8 col-xs-12">
+                    <select name='fkelas' class="form-control">
+                      <option value="all">Semua</option>
+                      <?php
+                      $query = mysqli_query($connect, "SELECT kd_kelas,nama_kelas FROM kelas ORDER BY tingkat");
+
+                      while ($result = mysqli_fetch_array($query)) {
+                        echo "<option value='$result[kd_kelas]'>$result[nama_kelas]</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-2 col-md-4 col-xs-12 ms-auto">
+                    <input type="submit" class="btn btn-info btn-sm col-12" value="Saring">
+                  </div>
+                </div>
+              </form>
               <table id="datatablesSimple">
                 <thead>
                   <tr>
@@ -145,22 +168,22 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                               $j++;
                             }
                             ?>
-                                    <a href="?module=pengajaran&eid=<?php echo $row['kd_pengajaran'] ?>" class="btn btn-warning btn-xs">Edit</a>
-                                </div>
-                              </div>
-                          </td>
-
-                      </tr>
-                    <?php $no++;
-                    endwhile ?>
-                  <?php endif ?>
-                </tbody>
-              </table>
+                          <a href="?module=pengajaran&eid=<?php echo $row['kd_pengajaran'] ?>" class="btn btn-warning btn-xs">Edit</a>
             </div>
           </div>
+          </td>
+
+          </tr>
+        <?php $no++;
+                    endwhile ?>
+      <?php endif ?>
+      </tbody>
+      </table>
         </div>
       </div>
     </div>
+  </div>
+  </div>
   </div>
 
 <?php } ?>

@@ -134,21 +134,21 @@ else{
     break;
 
     case 'siswa':
-    $q=mysqli_query($connect,"SELECT * FROM siswa,rombel,kelas WHERE rombel.nis=siswa.nis AND rombel.kd_kelas=kelas.kd_kelas AND rombel.nis='$_SESSION[kode]' AND rombel.kd_tajar='$kd_tajar'");
-    $rombel="OK";
-    if (mysqli_num_rows($q)){
-      $qkls=mysqli_fetch_array($q);
-      $kode_kelas=$qkls['kd_kelas'];
-      $nama_kelas=$qkls['nama_kelas'];
-      $nama_siswa=$qkls['nama'];
-      $nis = $qkls['nis'];
-      $username = $qkls['username'];
-
-    } else {
-      $rombel="NULL";
-      $kode_kelas="kosong";
-      $nama_kelas="kosong";
-    }
+      $q = mysqli_query($connect, "SELECT * FROM siswa, rombel, kelas WHERE rombel.nis = siswa.nis AND rombel.kd_kelas = kelas.kd_kelas AND rombel.nis = '$_SESSION[kode]' AND rombel.kd_tajar = '$kd_tajar'");
+      $rombel = "OK";
+      if (mysqli_num_rows($q)) {
+          $qkls = mysqli_fetch_array($q);
+          $kode_kelas = $qkls['kd_kelas'];
+          $nama_kelas = $qkls['nama_kelas'];
+          $nama_siswa = $qkls['nama']; // Menggunakan 'nama' sebagai gantinya
+          $nis = $qkls['nis'];
+          $username = $qkls['nama']; // Menggunakan 'nama' sebagai gantinya
+      } else {
+          $rombel = "NULL";
+          $kode_kelas = "kosong";
+          $nama_kelas = "kosong";
+          $username = "kosong";
+      }
     
     switch ($modul) {
       case 'home':
