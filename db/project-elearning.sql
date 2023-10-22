@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 18 Okt 2023 pada 00.39
+-- Waktu pembuatan: 23 Okt 2023 pada 00.49
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -46,7 +46,12 @@ INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel
 (4, '2023-09-21', '2023-09-21 14:53:04', '', ''),
 (5, '2023-09-26', '2023-09-26 10:36:43', '', ''),
 (6, '2023-09-26', '2023-09-26 14:12:09', '', ''),
-(7, '2023-09-27', '2023-09-27 14:02:34', '', '');
+(7, '2023-09-27', '2023-09-27 14:02:34', '', ''),
+(8, '2023-10-22', '2023-10-22 08:47:55', '', ''),
+(9, '2023-10-22', '2023-10-22 09:11:22', '', ''),
+(10, '2023-10-22', '2023-10-22 09:52:10', '', ''),
+(11, '2023-10-22', '2023-10-22 10:03:21', '', ''),
+(12, '2023-10-22', '2023-10-22 15:54:31', '', '');
 
 -- --------------------------------------------------------
 
@@ -96,8 +101,8 @@ INSERT INTO `detail_soal` (`kd_detail_soal`, `kd_soal`, `soal`, `pil_A`, `pil_B`
 CREATE TABLE `guru` (
   `kd_guru` varchar(20) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `nip` varchar(50) NOT NULL DEFAULT '-',
+  `nip_password` varchar(50) NOT NULL DEFAULT '-',
+  `nip` varchar(50) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `telp` varchar(20) NOT NULL DEFAULT '-',
   `email` varchar(30) NOT NULL DEFAULT '-',
@@ -109,8 +114,8 @@ CREATE TABLE `guru` (
 -- Dumping data untuk tabel `guru`
 --
 
-INSERT INTO `guru` (`kd_guru`, `username`, `password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
-('GR001', 'smktpg2', 'b080be81e59d37c3e8658bf2ecfa6785', '-', 'Ahmad Amin Iswanto', '-', '-', 'default.jpg', 'Aktif');
+INSERT INTO `guru` (`kd_guru`, `username`, `nip_password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
+('GR001', 'smktpg2aa', 'e10adc3949ba59abbe56e057f20f883e', '123456', 'Ahmad Amin Iswanto', '628979912254', 'rizkibinyola25@gmail.com', 'default.jpg', '--Pilih St');
 
 -- --------------------------------------------------------
 
@@ -179,11 +184,10 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`kd_kelas`, `nama_kelas`, `tingkat`, `kd_jurusan`) VALUES
-('xdkv', 'xdkv', 'X', 'DKV'),
+('xdkv', 'X DKV', 'X', 'DKV'),
 ('xiibdp', 'XII BDP', 'XII', 'BDP'),
-('xiimm', 'XII RPL', 'XII', 'MM'),
-('xiirpl', 'XII RPL', 'XII', 'RPL'),
-('xirpl', 'XI RPL', 'XI', 'RPL');
+('xiimm', 'XII MM', 'XII', 'MM'),
+('xiirpl', 'XII RPL', 'XII', 'RPL');
 
 -- --------------------------------------------------------
 
@@ -283,10 +287,13 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
+('123456', 'c33367701511b4f6020ec61ded352059', 'siswa', '2023-10-21 11:41:09', 'aktif'),
 ('1809599001', '586e0a7bf3a4a957c5120533d649cf94', 'siswa', '2023-09-26 13:56:59', 'aktif'),
 ('2112230013', '9a3bccdb018f27be5f675e3de16647c8', 'siswa', '2023-09-26 14:06:39', 'aktif'),
+('5454', '107030ca685076c0ed5e054e2c3ed940', 'siswa', '2023-10-22 11:51:06', 'aktif'),
+('789', '68053af2923e00204c3ca7c6a3150cf7', 'siswa', '2023-10-21 15:22:47', 'aktif'),
 ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
-('smktpg2', 'b080be81e59d37c3e8658bf2ecfa6785', 'guru', '2023-09-21 14:45:30', 'aktif');
+('smktpg2aa', 'e10adc3949ba59abbe56e057f20f883e', 'guru', '2023-10-22 09:11:04', 'aktif');
 
 -- --------------------------------------------------------
 
@@ -369,7 +376,9 @@ INSERT INTO `pengajaran` (`kd_pengajaran`, `kd_mapel`, `kd_kelas`, `kd_guru`, `k
 (13, 'bk', 'xan1', 'GR089', '1'),
 (16, 'bind', 'xiakl1', 'GR001', '1'),
 (17, 'bing', 'xiiakl1', 'GR096', '1'),
-(20, 'Pbo', 'xirpl', 'GR001', '1');
+(20, 'Pbo', 'xirpl', 'GR001', '1'),
+(21, 'Pbo', 'xiirpl', 'GR001', '1'),
+(22, 'Bing', 'xiirpl', 'GR001', '1');
 
 -- --------------------------------------------------------
 
@@ -418,31 +427,10 @@ CREATE TABLE `rombel` (
 --
 
 INSERT INTO `rombel` (`nis`, `kd_kelas`, `kd_tajar`) VALUES
-('8170', 'xakl1', '2020-2021-ganjil'),
-('8168', 'xakl1', '2020-2021-ganjil'),
-('8169', 'xakl1', '2020-2021-ganjil'),
-('8171', 'xakl1', '2020-2021-ganjil'),
-('8172', 'xakl1', ''),
-('8172', 'xakl1', ''),
-('8172', 'xakl1', '2020-2021-ganjil'),
-('8173', 'xakl1', '2020-2021-ganjil'),
-('8174', 'xakl1', '2020-2021-ganjil'),
-('8168', 'xav1', '2022-2023-ganjil'),
-('8169', 'xav1', '2022-2023-ganjil'),
-('8170', 'xav1', '2022-2023-ganjil'),
-('--Pilih Si', 'xiiakl1', '2021-2022-ganjil'),
-('8169', 'xiakl1', '2021-2022-genap'),
-('--Pilih Si', 'xiakl1', '2021-2022-ganjil'),
-('8168', 'xav1', '2021-2022-ganjil'),
-('8169', 'xav1', '2021-2022-ganjil'),
-('8168', 'xav1', '2021-2022-genap'),
-('8169', 'xav1', '2021-2022-genap'),
-('8168', 'xiiav1', '2022-2023-ganjil'),
-('8169', 'xiiav1', '2022-2023-ganjil'),
-('31423426', 'xiiakl1', '2023-2024-genap'),
-('31423426', '--Pilih Ke', '2021-2022-ganjil'),
-('1809599001', 'xiimm', '2023-2024-genap'),
-('2112230013', 'xiirpl', '2023-2024-genap');
+('123456', 'xiirpl', '2023-2024-genap'),
+('2112230013', 'xiibdp', '2023-2024-genap'),
+('5454', 'xiimm', '2023-2024-genap'),
+('789', 'xiirpl', '2023-2024-genap');
 
 -- --------------------------------------------------------
 
@@ -490,7 +478,10 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nisn`, `nama`, `kelamin`, `email`, `foto`, `telp`, `status`) VALUES
-('2112230013', '2010212524', 'Rizki Ramadhan Binyola', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif');
+('123456', '654321', 'Jagad', 'L', 'rizkibinyola25@gmail.com', '', '628979912254', 'Aktif'),
+('2112230013', '2010212524', 'Rizki Ramadhan Binyola', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif'),
+('5454', '5454', 'tes', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif'),
+('789', '789', 'Rrehan', 'L', 'rizkibinyola25@gmail.com', '', '628979912254', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -557,12 +548,8 @@ CREATE TABLE `tahun_ajar` (
 --
 
 INSERT INTO `tahun_ajar` (`kd_tajar`, `tahun_ajar`, `kd_semester`, `aktif`) VALUES
-('2021-2022-ganjil', '2021-2022', 1, 'N'),
-('2021-2022-genap', '2021-2022', 2, 'N'),
-('2022-2023-ganjil', '2022-2023', 1, 'N'),
-('2022-2023-genap', '2022-2023', 2, 'N'),
-('2023-2024-ganjil', '2023-2024', 1, 'Y'),
-('2023-2024-genap', '2023-2024', 2, 'N');
+('2023-2024-ganjil', '2023-2024', 1, 'N'),
+('2023-2024-genap', '2023-2024', 2, 'Y');
 
 -- --------------------------------------------------------
 
@@ -736,6 +723,12 @@ ALTER TABLE `post`
   ADD PRIMARY KEY (`id_post`);
 
 --
+-- Indeks untuk tabel `rombel`
+--
+ALTER TABLE `rombel`
+  ADD PRIMARY KEY (`nis`);
+
+--
 -- Indeks untuk tabel `silabus`
 --
 ALTER TABLE `silabus`
@@ -773,7 +766,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
@@ -785,7 +778,7 @@ ALTER TABLE `jurnal`
 -- AUTO_INCREMENT untuk tabel `pengajaran`
 --
 ALTER TABLE `pengajaran`
-  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `post`

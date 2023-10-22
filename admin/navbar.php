@@ -100,6 +100,12 @@
                                                         <div class="sb-nav-link-icon"><img src="assets/img/icon/jurusan.png" alt="Jurusan" width="20" height="20"></div>
                                                         Jurusan
                                                     </a>
+                                                    <a class="nav-link <?php if ($_GET['module'] == 'rombel') {
+                                                                            echo "open";
+                                                                        } ?>" href="media.php?module=rombel">
+                                                        <div class="sb-nav-link-icon"><img src="assets/img/icon/jurusan.png" alt="Jurusan" width="20" height="20"></div>
+                                                        Rombel
+                                                    </a>
                                                 </nav>
                                             </div>
                                             <a class="nav-link <?php if ($_GET['module'] == 'tahun') {
@@ -138,8 +144,7 @@
                                 </div>
                             </div>
                             <div class="sb-sidenav-footer">
-                                <div class="small">Logged in as:</div>
-                                Start Bootstrap
+                                <div class="small"><?= $_SESSION['username']; ?> Sebagai <?= $_SESSION['level'] ?></div>
                             </div>
                         </nav>
                     </div>

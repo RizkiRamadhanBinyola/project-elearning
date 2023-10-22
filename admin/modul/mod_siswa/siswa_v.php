@@ -34,16 +34,16 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $telp = mysqli_real_escape_string($connect, $_POST['telp']);
     $status = $_POST['status'];
 
-    // Cek apakah input kosong
-    if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
-      echo "
-    <script>
-        alert('Form tidak boleh kosong');
-        window.location.href='media.php?module=siswa';
-    </script>
-  ";
-      exit; // Hentikan eksekusi jika input kosong
-    }
+  //   // Cek apakah input kosong
+  //   if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
+  //     echo "
+  //   <script>
+  //       alert('Form tidak boleh kosong');
+  //       window.location.href='media.php?module=siswa';
+  //   </script>
+  // ";
+  //     exit; // Hentikan eksekusi jika input kosong
+  //   }
 
     if ($update) {
       $sql = "UPDATE siswa SET nisn='$_POST[nisn]', nama='$_POST[nama]', kelamin='$_POST[kelamin]', email='$_POST[email]', telp='$_POST[telp]', status='$_POST[status]' WHERE nis='$_GET[key]'";

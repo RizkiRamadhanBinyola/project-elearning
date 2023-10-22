@@ -13,11 +13,10 @@
 <!-- CSS/ -->
 
 <?php
-
 include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
-  echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
+  echo "<script>alert('Kembalilah Kejalan yang benar!!!'); window.location = '../../index.php';</script>";
 } else {
 
   $kode_guru_awal = ""; // Langkah 1: Inisialisasi variabel kode guru awal
@@ -33,8 +32,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kd_guru = mysqli_real_escape_string($connect, $_POST['kd_guru']);
     $nip = mysqli_real_escape_string($connect, $_POST['nip']);
-    $password = mysqli_real_escape_string($connect, $_POST['password']);
-    $password2 = mysqli_real_escape_string($connect, $_POST['password2']);
     $username = strtolower(stripslashes($_POST['username']));
     $nama = htmlspecialchars($_POST['nama']);
     $telp = mysqli_real_escape_string($connect, $_POST['telp']);
@@ -42,40 +39,28 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $status = $_POST['status'];
 
     if ($update) {
-      $sql = "UPDATE guru SET kd_guru='$kd_guru',username='$username', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
+      $sql = "UPDATE guru SET kd_guru='$kd_guru', username='$username', nip_password='$nip', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
     } else {
       $tg = date('Y-m-d H:i:s');
-      $passwordHash = md5($_POST['password']);
-      $sql = "INSERT INTO guru (kd_guru, username, password, nip, nama, telp, email, foto, status) VALUES ('$kd_guru', '$username', '$passwordHash', '$nip','$nama', '$telp', '$email', 'default.jpg', '$status')";
-
-      
-    }
-    // Mengecek repeat password
-    if ($password !== $password2) {
-      echo "
-          <script>
-              alert('Konfirmasi Password Salah');
-              document.location.href='media.php?module=guru';
-          </script>
-          ";
-      return false;
+      // Meng-hash NIP dengan MD5
+      $hashedNIP = md5($nip);
+      $sql = "INSERT INTO guru (kd_guru, username, nip_password, nip, nama, telp, email, foto, status) VALUES ('$kd_guru', '$username', '$hashedNIP', '$nip', '$nama', '$telp', '$email', 'default.jpg', '$status')";
     }
 
     if ($connect->query($sql)) {
-      $passwordHash = md5($_POST['password']); // Meng-hash password
       $tg = date('Y-m-d H:i:s');
       echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
-      $connect->query("INSERT INTO login VALUES ('$username', '$passwordHash', 'guru', '$tg', 'aktif')");
+      $connect->query("INSERT INTO login VALUES ('$username', '$hashedNIP', 'guru', '$tg', 'aktif')");
     } else {
       echo "<script>alert('Gagal'); window.location = 'media.php?module=guru'</script>";
     }
-    
   }
   if (isset($_GET['action']) and $_GET['action'] == 'delete') {
     $connect->query("DELETE FROM guru WHERE kd_guru='$_GET[key]'");
     echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
   }
 ?>
+
 
   <div class="container mt-5">
     <div class="cotent-wrapper">
@@ -122,14 +107,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                 <div class="form-group mb-3">
                   <label>Username</label>
                   <input class="form-control" placeholder="Masukkan Username" name="username" type="text" <?= (!$update) ?: 'value="' . $row["username"] . '"' ?> />
-                </div>
-                <div class="form-group mb-3">
-                  <label class="mx-2" for="floatingPassword">Password</label>
-                  <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
-                </div>
-                <div class="form-group mb-3">
-                  <label class="mx-2" for="rfloatingPassword">Repeat Password</label>
-                  <input type="password" name="password2" class="form-control" id="rfloatingPassword" placeholder="Repeat Password">
                 </div>
                 <div class="form-group mb-3">
                   <label>Nama Guru </label>

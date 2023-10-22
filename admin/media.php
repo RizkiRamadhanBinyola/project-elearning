@@ -1,28 +1,19 @@
 <?php
 session_start();
 //error_reporting(1);
-include "../fungsi/timeout.php";
 include "../koneksi/koneksi.php";
 
-if($_SESSION['login']==1){
-  if(!cek_login()){
-    $_SESSION['login'] = 0;
-}
-}
-if($_SESSION['login']==0){
-  header('location:../logout.php');
+if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
+    echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = 'index.php';</script>";
 } else {
-    if (empty($_SESSION['username']) AND empty($_SESSION['level']) AND $_SESSION['login']==0) {
-      echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = 'index.php';</script>";
-  } else{ 
-    $qtj="SELECT * FROM tahun_ajar WHERE aktif='Y'";
+    $qtj = "SELECT * FROM tahun_ajar WHERE aktif='Y'";
     $result = mysqli_query($connect, $qtj);
 
     if ($result) {
         $tj = mysqli_fetch_array($result);
         if ($tj) {
             $kd_tajar = $tj['kd_tajar'];
-            $namatajar = $tj['tahun_ajar']." Semester ".$tj['kd_semester'];
+            $namatajar = $tj['tahun_ajar'] . " Semester " . $tj['kd_semester'];
         } else {
             // Handle jika tidak ada baris yang cocok dengan query
             echo "<script>alert('Data tahun ajar tidak ditemukan!.');</script>";
@@ -100,4 +91,4 @@ if($_SESSION['login']==0){
     
     </body>
 </html>
-<?php }} ?>
+<?php } ?>

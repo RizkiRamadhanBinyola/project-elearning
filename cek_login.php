@@ -8,10 +8,6 @@ function anti_injection($connect, $data) {
 
 // Contoh penggunaan:
 $username = anti_injection($connect, $_POST['username']);
-$password = anti_injection($connect, $_POST['password']);
-
-
-$username = anti_injection($connect, $_POST['username']);
 $pass = md5($_POST['password']);
 
 // Pastikan username dan password adalah berupa huruf atau angka.
@@ -25,7 +21,6 @@ if (!ctype_alnum($username) || !ctype_alnum($pass)) {
     // Apabila username dan password ditemukan
     if ($ketemu > 0) {
         session_start();
-        include "fungsi/timeout.php";
         $_SESSION['username'] = $r['username'];
         $_SESSION['level'] = $r['level'];
 
@@ -50,13 +45,8 @@ if (!ctype_alnum($username) || !ctype_alnum($pass)) {
         } else if ($r['level'] == 'admin') {
             header('location:admin/media.php?module=homeadm');
         }
-
-        // Session timeout
-        $_SESSION['login'] = 1;
-        timer();
     } else {
         echo "<script>alert('Maaf! Username atau Password anda salah, mohon diulangi kembali'); window.location = 'index.php';</script>";
     }
 }
 ?>
-
