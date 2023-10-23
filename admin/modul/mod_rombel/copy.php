@@ -1,9 +1,8 @@
 <?php 
-
+ 
 include "../../../koneksi/koneksi.php";
 
 if (isset($_GET['action']) AND $_GET['action'] == 'salindata') {
-
 	$kd_tajar = $_POST['tahun_ajar'];
 	$kd_kelas = $_POST['kelas'];
 	$kd_kelasnow = $_POST['kelasnow'];
@@ -17,26 +16,34 @@ if (isset($_GET['action']) AND $_GET['action'] == 'salindata') {
 	}
 	
 	if ($daftsiswa!=""){
-		$daftsiswa=substr($daftsiswa, 1);
+		$daftsiswa = substr($daftsiswa, 1);
 		$siswa = explode(",", $daftsiswa);
 
 		$sql = "";
 		$h = 0;
 		foreach ($siswa as $id) {
-			$sql .= "INSERT INTO rombel VALUES ('$id', '$kd_kelasnow', '$kd_tajarnow');";
-			$h++;
+			// Periksa apakah data sudah ada sebelumnya
+			$check_query = "SELECT * FROM rombel WHERE nis = '$id' AND kd_kelas = '$kd_kelasnow' AND kd_tajar = '$kd_tajarnow'";
+			$check_result = mysqli_query($connect, $check_query);
+
+			if (mysqli_num_rows($check_result) == 0) {
+				$sql .= "INSERT INTO rombel VALUES ('$id', '$kd_kelasnow', '$kd_tajarnow');";
+				$h++;
+			}
 		}
+
 		if (mysqli_multi_query($connect, $sql)){
 			echo "<script>alert('Berhasil menyalin $h data siswa'); window.location = '../../media.php?module=rombel&kls=$kd_kelasnow'</script>";
 		} else {
 			echo "<script>alert('Gagal'); window.location = '../../media.php?module=rombel&kls=$kd_kelasnow'</script>";
-		}
+	}
 
 	} else {
 		echo "<script>alert('Gagal, tidak ada data disalin'); window.location = '../../media.php?module=rombel&kls=$kd_kelasnow'</script>";
 	}
-	
-} else if (isset($_GET['action']) AND $_GET['action'] == 'salindata2') {
+}
+?>
+ else if (isset($_GET['action']) AND $_GET['action'] == 'salindata2') {
 
 	$data = explode(",", $_POST['kelas']);
 	$kd_kelas = $data[0];

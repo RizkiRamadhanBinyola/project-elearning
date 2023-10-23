@@ -1,5 +1,4 @@
 <!-- CSS -->
-
 <style type="text/css">
   .well:hover {
     box-shadow: 0px 2px 10px rgb(190, 190, 190) !important;
@@ -9,7 +8,6 @@
     color: #666;
   }
 </style>
-
 <!-- CSS/ -->
 
 <?php
@@ -49,13 +47,15 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 ?>
 
   <div class="content-wrapper">
-    <div class="container mt-5">
+    <div class="container">
       <div class="row pad-botm">
-
+        <div class="col-md-12">
+          <h4 class="header-line">SELAMAT DATANG DI DASHBOARD ADMINISTRATOR</h4>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12">
-          <div class="card border-secondary mb-3 card-<?= ($update) ? "warning" : "info" ?>">
+        <div class="card border-secondary mb-3 card-<?= ($update) ? "warning" : "info" ?>">
             <div class="card-header text-bg-secondary">
               <?= ($update) ? "EDIT" : "TAMBAH" ?> ROMBEL
             </div>
@@ -123,65 +123,72 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
           </div>
         </div>
         <div class="col-md-8 col-sm-8 col-xs-12">
-          <div class="panel panel-success">
+          <div class "panel panel-success">
+            <div class="panel-heading">
+              <?php
+              echo isset($_GET['kls']) ? ("Kelas: " . $_GET['kls']) : "ROMBEL";
+              ?> | Tahun Ajaran <?= $thn_ajar; ?>
+            </div>
             <div class="panel-body">
               <div class="table-responsive">
-                <div class="card border-secondary mb-3">
-                  <div class="card-header text-bg-secondary">
-                    <?php
-                    $sql = "SELECT * FROM rombel,kelas,tahun_ajar,siswa 
-                    where rombel.kd_kelas=kelas.kd_kelas
-                    and siswa.nis=rombel.nis
-                    and rombel.kd_tajar=tahun_ajar.kd_tajar AND rombel.kd_tajar='$thn_ajar'";
-            
-                    echo isset($_GET['kls']) ? ("Kelas: " . $_GET['kls']) : "ROMBEL";
-                    ?> | Tahun Ajaran <?= $thn_ajar; ?>
-                  </div>
-                  <div class="card-body text-secondary">
-                    <!-- Table 2 -->
-                    <table id="datatablesSimple">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>NIS</th>
-                          <th>Nama Siswa</th>
-                          <th>Kelas</th>
-                          <th>Tahun Ajaran</th>
-                          <th>Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php if ($query = $connect->query($sql)) : ?>
-                          <?php while ($row = $query->fetch_assoc()) : ?>
-                            <tr>
-                              <td></td>
-                              <td><?= $row['nis'] ?></td>
-                              <td><?= $row['nama'] ?></td>
-                              <td><?= $row['nama_kelas'] ?></td>
-                              <td><?= $row['kd_tajar'] ?></td>
-                              <td class="hidden-print">
-                                <div class="btn-group">
-                                  <a href="?module=rombel&action=update&key=<?= $row['nis'] ?>" class="btn btn-warning btn-xs">Edit</a>
-                                  <a href="?module=rombel&action=delete&key=<?= $row['nis'] ?>&kd_kelas=<?= $row['kd_kelas'] ?>" class="btn btn-danger btn-xs">Hapus</a>
-                                </div>
-                              </td>
-                            </tr>
-                          <?php endwhile ?>
-                        <?php endif ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <?php $no = 1;
+                $sql = "
+      SELECT * FROM rombel,kelas,tahun_ajar,siswa 
+      where rombel.kd_kelas=kelas.kd_kelas
+      and siswa.nis=rombel.nis
+      and rombel.kd_tajar=tahun_ajar.kd_tajar AND rombel.kd_tajar='$thn_ajar'";
+
+                if (isset($_GET['kls'])) {
+                  $sql .= " AND rombel.kd_kelas='$_GET[kls]'";
+                  $jum = mysqli_num_rows(mysqli_query($connect, $sql));
+                  if ($jum == 0) {
+                    $tingkat = mysqli_query($connect, "SELECT tingkat FROM kelas WHERE kd_kelas='$_GET[kls]'");
+                    $dtkt = mysqli_fetch_assoc($tingkat);
+                    echo "<hr>";
+                  }
+                }
+                ?>
+                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>NIS</th>
+                      <th>Nama Siswa</th>
+                      <th>Kelas</th>
+                      <th>Tahun Ajaran</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($query = $connect->query($sql)) : ?>
+                      <?php if ($query->num_rows == 0) {
+                        echo "<tr><td colspan='6'>Data siswa belum ditambahkan ke rombel.</td></tr>";
+                      } else {
+                        while ($row = $query->fetch_assoc()) : ?>
+                          <tr>
+                            <td></td>
+                            <td><?= $row['nis'] ?></td>
+                            <td><?= $row['nama'] ?></td>
+                            <td><?= $row['nama_kelas'] ?></td>
+                            <td><?= $row['kd_tajar'] ?></td>
+                            <td class="hidden-print">
+                              <div class="btn-group">
+                                <a href="?module=rombel&action=update&key=<?= $row['nis'] ?>" class="btn btn-warning btn-xs">Edit</a>
+                                <a href="?module=rombel&action=delete&key=<?= $row['nis'] ?>&kd_kelas=<?= $row['kd_kelas'] ?>" class="btn btn-danger btn-xs">Hapus</a>
+                              </div>
+                            </td>
+                          </tr>
+                    <?php endwhile;
+                      }
+                    endif;
+                    ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
-
-
-
       </div>
     </div>
-
   </div>
-
 <?php } ?>
