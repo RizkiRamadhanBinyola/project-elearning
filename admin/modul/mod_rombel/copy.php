@@ -1,6 +1,6 @@
 <?php 
 
-include "../../../system/koneksi.php";
+include "../../../koneksi/koneksi.php";
 
 if (isset($_GET['action']) AND $_GET['action'] == 'salindata') {
 

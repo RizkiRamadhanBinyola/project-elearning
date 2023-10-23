@@ -60,12 +60,6 @@
                                                         <div class="sb-nav-link-icon"><img src="assets/img/icon/guru.png" alt="Guru" width="20" height="20"></div>
                                                         Guru
                                                     </a>
-                                                    <a class="nav-link <?php if ($_GET['module'] == 'mapel') {
-                                                                            echo "open";
-                                                                        } ?>" href="media.php?module=mapel">
-                                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
-                                                        Mapel
-                                                    </a>
                                                     <a class="nav-link <?php if ($_GET['module'] == 'pengajaran') {
                                                                             echo "open";
                                                                         } ?>" href="media.php?module=pengajaran">
@@ -114,6 +108,13 @@
                                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
                                                 Tahun pelajaran
                                             </a>
+
+                                            <a class="nav-link <?php if ($_GET['module'] == 'mapel') {
+                                                                            echo "open";
+                                                                        } ?>" href="media.php?module=mapel">
+                                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                                        Mapel
+                                                    </a>
 
                                             <!-- End Admin Sidebar Navigasi -->
 

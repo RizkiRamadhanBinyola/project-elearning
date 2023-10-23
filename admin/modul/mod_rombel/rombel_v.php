@@ -126,143 +126,16 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
           <div class="panel panel-success">
             <div class="panel-body">
               <div class="table-responsive">
-                <?php $no = 1;
-                $sql = "
-                        SELECT * FROM rombel,kelas,tahun_ajar,siswa 
-                        where rombel.kd_kelas=kelas.kd_kelas
-                        and siswa.nis=rombel.nis
-                        and rombel.kd_tajar=tahun_ajar.kd_tajar AND rombel.kd_tajar='$thn_ajar'";
-
-                if (isset($_GET['kls'])) {
-                  $sql .= " AND rombel.kd_kelas='$_GET[kls]'";
-                  $jum = mysqli_num_rows(mysqli_query($connect, $sql));
-                  if ($jum == 0) {
-
-                    $tingkat = mysqli_query($connect, "SELECT tingkat FROM kelas WHERE kd_kelas='$_GET[kls]'");
-                    $dtkt = mysqli_fetch_assoc($tingkat);
-                    if ($dtkt['tingkat'] == 'X') {
-                      if ($semester == 2) {
-                ?>
-
-                        <form action="modul/mod_rombel/copy.php?kd_kelas=<?= $_GET['kls'] ?>&action=salindata" method="POST" role="form">
-                          <div class="form-group mb-3">
-                            <?php
-                            $tajarseblum = $tahun . "-ganjil";
-                            ?>
-                            <label>Salin data dari kelas: </label>
-                            <select name="kelas">
-                              <?php
-                              $kls = mysqli_query($connect, "SELECT * FROM kelas WHERE tingkat='$dtkt[tingkat]'");
-                              while ($klas = mysqli_fetch_array($kls)) {
-
-                                $qklas = "SELECT COUNT(rombel.nis) AS JML, kelas.nama_kelas,kelas.kd_kelas FROM rombel,kelas,tahun_ajar WHERE rombel.kd_kelas = kelas.kd_kelas AND rombel.kd_tajar = tahun_ajar.kd_tajar AND tahun_ajar.kd_tajar='$tajarseblum' AND kelas.kd_kelas='$klas[kd_kelas]'";
-                                $dtklas = mysqli_fetch_array(mysqli_query($connect, $qklas));
-
-                                echo "<option value='$dtklas[kd_kelas]'>$dtklas[nama_kelas] - $dtklas[JML] siswa</option>";
-                              }
-                              ?>
-
-                            </select>
-                            <select name="tahun_ajar">
-                              <option value="<?= $tajarseblum; ?>">Tahun Ajaran: <?= $tajarseblum; ?></option>
-                            </select>
-                            <input type="hidden" name="kelasnow" value="<?= $_GET['kls']; ?>">
-                            <input type="hidden" name="tajarnow" value="<?= $thn_ajar; ?>">
-                            <input type="submit" name="salin" value="Salin">
-                          </div>
-                        </form>
-
-                      <?php
-                      } else {
-                        echo "<p class='alert alert-warning'>Silahkan tambahkan siswa satu per satu.</p>";
-                      }
-                    } else {
-                      if ($semester == 2) {
-                      ?>
-
-                        <form action="modul/mod_rombel/copy.php?kd_kelas=<?= $_GET['kls'] ?>&action=salindata" method="POST" role="form">
-                          <div class="form-group mb-3">
-                            <?php
-                            $tajarseblum = $tahun . "-ganjil";
-                            ?>
-                            <label>Salin data dari kelas: </label>
-                            <select name="kelas">
-                              <?php
-                              $kls = mysqli_query($connect, "SELECT * FROM kelas WHERE tingkat='$dtkt[tingkat]'");
-                              while ($klas = mysqli_fetch_array($kls)) {
-
-                                $qklas = "SELECT COUNT(rombel.nis) AS JML, kelas.nama_kelas,kelas.kd_kelas FROM rombel,kelas,tahun_ajar WHERE rombel.kd_kelas = kelas.kd_kelas AND rombel.kd_tajar = tahun_ajar.kd_tajar AND kelas.kd_kelas='$klas[kd_kelas]' AND tahun_ajar.kd_tajar='$tajarseblum'";
-                                $dtklas = mysqli_fetch_array(mysqli_query($connect, $qklas));
-
-                                echo "<option value='$dtklas[kd_kelas]'>$dtklas[nama_kelas] - $dtklas[JML] siswa</option>";
-                              }
-                              ?>
-
-                            </select>
-                            <select name="tahun_ajar">
-                              <option value="<?= $tajarseblum; ?>">Tahun Ajaran: <?= $tajarseblum; ?></option>
-                            </select>
-                            <input type="hidden" name="kelasnow" value="<?= $_GET['kls']; ?>">
-                            <input type="hidden" name="tajarnow" value="<?= $thn_ajar; ?>">
-                            <input type="submit" name="salin" value="Salin">
-                          </div>
-                        </form>
-
-                      <?php
-                      } else {
-
-                        $dtkt['tingkat'] == 'XI' ? $tktsblm = "X" : $tktsblm = "XI";
-                      ?>
-
-                        <form action="modul/mod_rombel/copy.php?kd_kelas=<?= $_GET['kls'] ?>&action=salindata2" method="POST" role="form">
-                          <div class="form-group mb-3">
-                            <label>Salin data dari kelas: </label>
-                            <select name="kelas">
-                              <?php
-                              $tahuns1 = substr($tahun, 0, 4) - 1;
-                              $tahuns2 = substr($tahun, 5, 4) - 1;
-
-                              $tajarseblum = $tahuns1 . "-" . $tahuns2;
-                              $tajargj = $tajarseblum . "-ganjil";
-                              $tajargn = $tajarseblum . "-genap";
-                              $kls = mysqli_query($connect, "SELECT * FROM kelas WHERE tingkat='$tktsblm'");
-                              while ($klas = mysqli_fetch_array($kls)) {
-
-                                $qklas = "SELECT '$tajargj' AS tajarnya, COUNT(rombel.nis) AS JML, kelas.nama_kelas,kelas.kd_kelas,rombel.kd_tajar FROM rombel,kelas,tahun_ajar WHERE rombel.kd_kelas = kelas.kd_kelas AND rombel.kd_tajar = tahun_ajar.kd_tajar AND kelas.kd_kelas='$klas[kd_kelas]' AND tahun_ajar.kd_tajar = '$tajargj'";
-                                $dtklas = mysqli_fetch_array(mysqli_query($connect, $qklas));
-
-                                $val1 = $dtklas['kd_kelas'] . "," . $tajargj;
-
-                                echo "<option value='$val1'>$dtklas[nama_kelas] ($dtklas[tajarnya]) - $dtklas[JML] siswa</option>";
-
-                                $qklas = "SELECT '$tajargn' AS tajarnya, COUNT(rombel.nis) AS JML, kelas.nama_kelas,kelas.kd_kelas,rombel.kd_tajar FROM rombel,kelas,tahun_ajar WHERE rombel.kd_kelas = kelas.kd_kelas AND rombel.kd_tajar = tahun_ajar.kd_tajar AND kelas.kd_kelas='$klas[kd_kelas]' AND tahun_ajar.kd_tajar = '$tajargn'";
-                                $dtklas = mysqli_fetch_array(mysqli_query($connect, $qklas));
-
-                                $val2 = $dtklas['kd_kelas'] . "," . $tajargn;
-
-                                echo "<option value='$val2'>$dtklas[nama_kelas] ($dtklas[tajarnya]) - $dtklas[JML] siswa</option>";
-                              }
-                              ?>
-
-                            </select>
-
-                            <input type="hidden" name="kelasnow" value="<?= $_GET['kls']; ?>">
-                            <input type="hidden" name="tajarnow" value="<?= $thn_ajar; ?>">
-                            <input type="submit" name="salin" value="Salin">
-                          </div>
-                        </form>
-                <?php
-                      }
-                    }
-                    echo "<hr>";
-                  }
-                }
-                ?>
                 <div class="card border-secondary mb-3">
                   <div class="card-header text-bg-secondary">
-                  <?php
-                  echo isset($_GET['kls']) ? ("Kelas: " . $_GET['kls']) : "ROMBEL";
-                  ?> | Tahun Ajaran <?= $thn_ajar; ?>
+                    <?php
+                    $sql = "SELECT * FROM rombel,kelas,tahun_ajar,siswa 
+                    where rombel.kd_kelas=kelas.kd_kelas
+                    and siswa.nis=rombel.nis
+                    and rombel.kd_tajar=tahun_ajar.kd_tajar AND rombel.kd_tajar='$thn_ajar'";
+            
+                    echo isset($_GET['kls']) ? ("Kelas: " . $_GET['kls']) : "ROMBEL";
+                    ?> | Tahun Ajaran <?= $thn_ajar; ?>
                   </div>
                   <div class="card-body text-secondary">
                     <!-- Table 2 -->
@@ -274,7 +147,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                           <th>Nama Siswa</th>
                           <th>Kelas</th>
                           <th>Tahun Ajaran</th>
-  
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -287,14 +159,12 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                               <td><?= $row['nama'] ?></td>
                               <td><?= $row['nama_kelas'] ?></td>
                               <td><?= $row['kd_tajar'] ?></td>
-  
                               <td class="hidden-print">
                                 <div class="btn-group">
                                   <a href="?module=rombel&action=update&key=<?= $row['nis'] ?>" class="btn btn-warning btn-xs">Edit</a>
                                   <a href="?module=rombel&action=delete&key=<?= $row['nis'] ?>&kd_kelas=<?= $row['kd_kelas'] ?>" class="btn btn-danger btn-xs">Hapus</a>
                                 </div>
                               </td>
-  
                             </tr>
                           <?php endwhile ?>
                         <?php endif ?>
@@ -306,6 +176,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
             </div>
           </div>
         </div>
+
+
 
       </div>
     </div>
