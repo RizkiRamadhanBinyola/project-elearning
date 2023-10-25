@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Okt 2023 pada 00.49
+-- Waktu pembuatan: 25 Okt 2023 pada 09.47
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -51,7 +51,13 @@ INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel
 (9, '2023-10-22', '2023-10-22 09:11:22', '', ''),
 (10, '2023-10-22', '2023-10-22 09:52:10', '', ''),
 (11, '2023-10-22', '2023-10-22 10:03:21', '', ''),
-(12, '2023-10-22', '2023-10-22 15:54:31', '', '');
+(12, '2023-10-22', '2023-10-22 15:54:31', '', ''),
+(13, '2023-10-23', '2023-10-23 03:05:27', '', ''),
+(14, '2023-10-25', '2023-10-25 09:00:01', '', ''),
+(15, '2023-10-25', '2023-10-25 09:01:34', '', ''),
+(16, '2023-10-25', '2023-10-25 09:01:58', '', ''),
+(17, '2023-10-25', '2023-10-25 09:02:19', '', ''),
+(18, '2023-10-25', '2023-10-25 09:13:58', '', '');
 
 -- --------------------------------------------------------
 
@@ -115,7 +121,7 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`kd_guru`, `username`, `nip_password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
-('GR001', 'smktpg2aa', 'e10adc3949ba59abbe56e057f20f883e', '123456', 'Ahmad Amin Iswanto', '628979912254', 'rizkibinyola25@gmail.com', 'default.jpg', '--Pilih St');
+('GR001', 'smktpg2aa', '12345', '12345', 'Ahmad Amin Iswanto', '089122211234', 'rizkiramadhanbinyola@gmail.com', 'default.jpg', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -287,13 +293,9 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
-('123456', 'c33367701511b4f6020ec61ded352059', 'siswa', '2023-10-21 11:41:09', 'aktif'),
-('1809599001', '586e0a7bf3a4a957c5120533d649cf94', 'siswa', '2023-09-26 13:56:59', 'aktif'),
-('2112230013', '9a3bccdb018f27be5f675e3de16647c8', 'siswa', '2023-09-26 14:06:39', 'aktif'),
-('5454', '107030ca685076c0ed5e054e2c3ed940', 'siswa', '2023-10-22 11:51:06', 'aktif'),
-('789', '68053af2923e00204c3ca7c6a3150cf7', 'siswa', '2023-10-21 15:22:47', 'aktif'),
+('12345', '827ccb0eea8a706c4c34a16891f84e7b', 'siswa', '2023-10-25 04:39:47', 'aktif'),
 ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
-('smktpg2aa', 'e10adc3949ba59abbe56e057f20f883e', 'guru', '2023-10-22 09:11:04', 'aktif');
+('smktpg2aa', '827ccb0eea8a706c4c34a16891f84e7b', 'guru', '2023-10-25 09:01:26', 'aktif');
 
 -- --------------------------------------------------------
 
@@ -427,10 +429,7 @@ CREATE TABLE `rombel` (
 --
 
 INSERT INTO `rombel` (`nis`, `kd_kelas`, `kd_tajar`) VALUES
-('123456', 'xiirpl', '2023-2024-genap'),
-('2112230013', 'xiibdp', '2023-2024-genap'),
-('5454', 'xiimm', '2023-2024-genap'),
-('789', 'xiirpl', '2023-2024-genap');
+('12345', 'xiirpl', '2023-2024-ganjil');
 
 -- --------------------------------------------------------
 
@@ -478,10 +477,7 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nisn`, `nama`, `kelamin`, `email`, `foto`, `telp`, `status`) VALUES
-('123456', '654321', 'Jagad', 'L', 'rizkibinyola25@gmail.com', '', '628979912254', 'Aktif'),
-('2112230013', '2010212524', 'Rizki Ramadhan Binyola', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif'),
-('5454', '5454', 'tes', 'L', 'rizkibinyola25@gmail.com', '', '08979912254', 'Aktif'),
-('789', '789', 'Rrehan', 'L', 'rizkibinyola25@gmail.com', '', '628979912254', 'Aktif');
+('12345', '12345', 'Rizki Ramadhan Binyola', 'L', 'rizkiramadhanbinyola@gmail.com', '', '089122211234', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -548,8 +544,10 @@ CREATE TABLE `tahun_ajar` (
 --
 
 INSERT INTO `tahun_ajar` (`kd_tajar`, `tahun_ajar`, `kd_semester`, `aktif`) VALUES
-('2023-2024-ganjil', '2023-2024', 1, 'N'),
-('2023-2024-genap', '2023-2024', 2, 'Y');
+('2022-2023-ganjil', '2022-2023', 1, 'N'),
+('2022-2023-genap', '2022-2023', 2, 'N'),
+('2023-2024-ganjil', '2023-2024', 1, 'Y'),
+('2023-2024-genap', '2023-2024', 2, 'N');
 
 -- --------------------------------------------------------
 
@@ -766,7 +764,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
