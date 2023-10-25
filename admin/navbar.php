@@ -77,8 +77,8 @@
                                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                                                     <a class="nav-link <?php if ($_GET['module'] == 'siswa') {
-                                                            echo "open";
-                                                        } ?>" href="media.php?module=siswa">
+                                                                            echo "open";
+                                                                        } ?>" href="media.php?module=siswa">
                                                         <div class="sb-nav-link-icon"><img src="assets/img/icon/siswa.png" alt="Siswa" width="20" height="20"></div>
                                                         Siswa
                                                     </a>
@@ -110,11 +110,11 @@
                                             </a>
 
                                             <a class="nav-link <?php if ($_GET['module'] == 'mapel') {
-                                                                            echo "open";
-                                                                        } ?>" href="media.php?module=mapel">
-                                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
-                                                        Mapel
-                                                    </a>
+                                                                    echo "open";
+                                                                } ?>" href="media.php?module=mapel">
+                                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                                Mapel
+                                            </a>
 
                                             <!-- End Admin Sidebar Navigasi -->
 
@@ -136,6 +136,23 @@
                                             }
                                             ?>
 
+                                        <?php
+                                        case 'guru':
+                                        ?>
+                                            <!-- Start Admin Sidebar Navigasi -->
+                                            <div class="sb-sidenav-menu-heading">Core</div>
+                                            <a class="nav-link <?php if ($_GET['module'] == 'home') {
+                                                                    echo "open";
+                                                                } ?>" href="media.php?module=home">
+                                                <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
+                                                Home
+                                            </a>
+
+                                            
+
+                                            <?php
+                                            break;
+                                            ?>
 
                                     <?php
 

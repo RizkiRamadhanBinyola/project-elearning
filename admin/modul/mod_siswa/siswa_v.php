@@ -34,22 +34,25 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $telp = mysqli_real_escape_string($connect, $_POST['telp']);
     $status = $_POST['status'];
 
-  //   // Cek apakah input kosong
-  //   if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
-  //     echo "
-  //   <script>
-  //       alert('Form tidak boleh kosong');
-  //       window.location.href='media.php?module=siswa';
-  //   </script>
-  // ";
-  //     exit; // Hentikan eksekusi jika input kosong
-  //   }
+    // Cek apakah input kosong
+    if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
+      echo "
+    <script>
+        alert('Form tidak boleh kosong');
+        window.location.href='media.php?module=siswa';
+    </script>
+  ";
+      exit; // Hentikan eksekusi jika input kosong
+    }
 
     if ($update) {
       $sql = "UPDATE siswa SET nisn='$_POST[nisn]', nama='$_POST[nama]', kelamin='$_POST[kelamin]', email='$_POST[email]', telp='$_POST[telp]', status='$_POST[status]' WHERE nis='$_GET[key]'";
     } else {
       $sql = "INSERT INTO siswa VALUES ('$_POST[nis]', '$_POST[nisn]', '$_POST[nama]', '$_POST[kelamin]', '$_POST[email]', '', '$_POST[telp]', '$_POST[status]')";
+      // Setelah menyimpan siswa, tambahkan siswa ke tabel `rombel`
+      $connect->query("INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
     }
+
 
     if ($connect->query($sql)) {
       if ($update) {
@@ -121,7 +124,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     </select>
                   </div>
                   <div class="form-group mb-3">
-                    <label>Kelas </label>
+                    <label>Kelas</label>
                     <select class="form-control" name="kd_kelas">
                       <option>--Pilih Kelas--</option>
                       <?php $query3 = $connect->query("SELECT * FROM kelas");
@@ -130,7 +133,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                       <?php endwhile; ?>
                     </select>
                   </div>
-                  <div class="form-group mb-3">
+
+                  <!-- <div class="form-group mb-3">
                     <label>Tahun Ajaran</label>
                     <select class="form-control" name="kd_tajar">
                       <option>--Pilih Tahun Ajaran--</option>
@@ -139,7 +143,27 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         <option value="<?= $data5["kd_tajar"] ?>" <?= (!$update) ?: (($data5["kd_tajar"] != $row["kd_tajar"]) ?: 'selected="on"') ?>><?= $data5["tahun_ajar"] ?></option>
                       <?php endwhile; ?>
                     </select>
+                  </div> -->
+
+                  <div class="form-group mb-3">
+                    <label>Tahun Ajaran</label>
+                    <select class="form-control" name="kd_tajar">
+                      <option>--Pilih Tahun Ajaran--</option>
+                      <?php
+                      $query5 = $connect->query("SELECT * FROM tahun_ajar");
+                      while ($data5 = $query5->fetch_assoc()) {
+                        $tahun_ajar = $data5["tahun_ajar"];
+                        $kd_semester = $data5["kd_semester"];
+                        $semester_label = ($kd_semester == 1) ? "Ganjil" : "Genap";
+                      ?>
+                        <option value="<?= $data5["kd_tajar"] ?>" <?= (!$update) ?: (($data5["kd_tajar"] != $row["kd_tajar"]) ?: 'selected="on"') ?>>
+                          <?= $semester_label ?> - <?= $tahun_ajar ?>
+                        </option>
+                      <?php } ?>
+                    </select>
                   </div>
+
+
                   <button type="submit" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block">Simpan</button>
                   <?php if ($update) : ?>
                     <a href="?module=akun" class="btn btn-info btn-block">Batal</a>
@@ -182,7 +206,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                           <td><?= $row['nis'] ?></td>
                           <td><?= $row['nisn'] ?></td>
                           <td><?= $row['nama'] ?></td>
-                          
+
 
                           <td><?= $row['kelamin'] ?></td>
 
