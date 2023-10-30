@@ -12,7 +12,7 @@
 <!-- CSS/ -->
 
 <?php
-include "config.php";
+include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
     echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
@@ -23,7 +23,7 @@ else{
 <?php
   $update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
   if ($update) {
-   $sql = $connection->query("SELECT * FROM materi WHERE kd_materi='$_GET[key]'");
+   $sql = $connect->query("SELECT * FROM materi WHERE kd_materi='$_GET[key]'");
    $row = $sql->fetch_assoc();
  }
  if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -32,14 +32,14 @@ else{
   } else {
     $sql = "INSERT INTO kelas VALUES ('$_POST[kd_kelas]', '$_POST[nama_kelas]', '$_POST[tingkat]', '$_POST[kd_jurusan]')";
   }
-  if ($connection->query($sql)) {
+  if ($connect->query($sql)) {
     echo "<script>alert('Berhasil'); window.location = 'media.php?module=kelas'</script>";
   } else {
     echo "<script>alert('Gagal'); window.location = 'media.php?module=kelas'</script>";
   }
 }
 if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
-  $connection->query("DELETE FROM kelas WHERE kd_kelas='$_GET[key]'");
+  $connect->query("DELETE FROM kelas WHERE kd_kelas='$_GET[key]'");
   echo "<script>alert('Berhasil'); window.location = 'media.php?module=kelas'</script>";
 }
 ?>

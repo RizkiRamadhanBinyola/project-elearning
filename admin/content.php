@@ -65,6 +65,17 @@ else{
       include "modul/mod_laporan/laporan_v.php";
       break;
 
+      case 'tesmateri':
+        include "modul/mod_materiV2/materi_v2.php";
+        break;
+
+      case 'testambah_materi':
+        include "modul/mod_materiV2/Halaman_upload.Php";
+        break;
+      case 'tesUpload':
+        include "modul/mod_materiV2/ScriptFileUpload.Php";
+        break;
+
       default:
       //notfound modul
       include "modul/mod_404.php";

@@ -117,26 +117,8 @@
                                             </a>
 
                                             <!-- End Admin Sidebar Navigasi -->
-
-                                            <?php
-                                            if ($_SESSION['level'] == 'guru') {
-                                            ?>
-                                                <a class="nav-link" href="../logout.php" onclick="return confirm('Pastikan Anda Sudah Mengisi Jurnal Harian!! ');">
-                                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
-                                                    Logout
-                                                </a>
-                                            <?php
-                                            } else {
-                                            ?>
-                                                <a class="nav-link" href="../logout.php">
-                                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
-                                                    Logout
-                                                </a>
-                                            <?php
-                                            }
-                                            ?>
-
                                         <?php
+                                            break;
                                         case 'guru':
                                         ?>
                                             <!-- Start Admin Sidebar Navigasi -->
@@ -147,17 +129,35 @@
                                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
                                                 Home
                                             </a>
-
-                                            
-
                                             <?php
                                             break;
                                             ?>
 
-                                    <?php
 
+
+                                    <?php
+                                        default:
+                                            echo "Anda belum login";
+                                            break;
                                     }
 
+                                    ?>
+                                    <?php
+                                    if ($_SESSION['level'] == 'guru') {
+                                    ?>
+                                        <a class="nav-link" href="../logout.php" onclick="return confirm('Pastikan Anda Sudah Mengisi Jurnal Harian!! ');">
+                                            <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                                            Logout
+                                        </a>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <a class="nav-link" href="../logout.php">
+                                            <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                                            Logout
+                                        </a>
+                                    <?php
+                                    }
                                     ?>
                                 </div>
                             </div>
