@@ -1,5 +1,5 @@
 <?php 
-include "../system/koneksi.php";
+include "../koneksi/koneksi.php";
 
 if (!isset($_GET['kds']) OR empty($_GET['kds'])) {
 	header("location:?module=banksoal");

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Okt 2023 pada 09.47
+-- Waktu pembuatan: 03 Nov 2023 pada 07.45
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -57,7 +57,22 @@ INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel
 (15, '2023-10-25', '2023-10-25 09:01:34', '', ''),
 (16, '2023-10-25', '2023-10-25 09:01:58', '', ''),
 (17, '2023-10-25', '2023-10-25 09:02:19', '', ''),
-(18, '2023-10-25', '2023-10-25 09:13:58', '', '');
+(18, '2023-10-25', '2023-10-25 09:13:58', '', ''),
+(19, '2023-10-30', '2023-10-30 01:48:23', '', ''),
+(20, '2023-10-30', '2023-10-30 02:14:31', '', ''),
+(21, '2023-10-30', '2023-10-30 04:49:52', '', ''),
+(22, '2023-10-31', '2023-10-31 01:18:30', '', ''),
+(23, '2023-10-31', '2023-10-31 02:02:51', '', ''),
+(24, '2023-10-31', '2023-10-31 02:29:06', '', ''),
+(25, '2023-11-02', '2023-11-02 01:17:25', '', ''),
+(26, '2023-11-02', '2023-11-02 01:49:02', '', ''),
+(27, '2023-11-02', '2023-11-02 02:09:33', '', ''),
+(28, '2023-11-02', '2023-11-02 05:42:22', '', ''),
+(29, '2023-11-02', '2023-11-02 06:15:59', '', ''),
+(30, '2023-11-02', '2023-11-02 06:26:23', '', ''),
+(31, '2023-11-03', '2023-11-03 04:22:57', '', ''),
+(32, '2023-11-03', '2023-11-03 05:15:37', '', ''),
+(33, '2023-11-03', '2023-11-03 07:04:39', '', '');
 
 -- --------------------------------------------------------
 
@@ -332,11 +347,47 @@ CREATE TABLE `materi` (
   `ForL` varchar(5) NOT NULL DEFAULT 'file',
   `file` varchar(50) NOT NULL,
   `tgl_up` datetime NOT NULL,
-  `pertemuan` varchar(10) NOT NULL,
   `kd_mapel` varchar(10) NOT NULL,
   `kd_kelas` varchar(10) NOT NULL,
   `kd_guru` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `materi`
+--
+
+INSERT INTO `materi` (`kd_materi`, `nama_materi`, `deskripsi`, `ForL`, `file`, `tgl_up`, `kd_mapel`, `kd_kelas`, `kd_guru`) VALUES
+('KM-001', 'ddgsdsdga', '1affa', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', 'xiirpl', 'GR001'),
+('KM-002', 'ddgsdsdga', '1sdggsd', 'file', '190-Article Text-198-1-10-20190425 (3).pdf', '0000-00-00 00:00:00', 'Pbo', 'xiirpl', 'GR001'),
+('KM-003', 'ddgsdsdga', '1gsdsdg', 'file', '31054-92990-1-PB.pdf', '0000-00-00 00:00:00', 'Bing', 'xiimm', 'GR001'),
+('KM-004', 'ddgsdsdga', '1ra', 'file', '190-Article Text-198-1-10-20190425.pdf', '0000-00-00 00:00:00', 'Bing', 'xiirpl', 'GR001'),
+('KM-005', 'ddgsdsdga', '1adf', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', '', 'GR001'),
+('KM-006', 'ddgsdsdga', 'tes', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', '', 'GR001');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `materi_v2`
+--
+
+CREATE TABLE `materi_v2` (
+  `kode_materi` varchar(25) NOT NULL,
+  `nama_materi` varchar(250) NOT NULL,
+  `judul_materi` varchar(250) NOT NULL,
+  `size` int(11) NOT NULL,
+  `ekstensi` varchar(25) NOT NULL,
+  `berkas` varchar(2000) NOT NULL,
+  `kd_kelas` varchar(10) NOT NULL,
+  `kd_mapel` varchar(10) NOT NULL,
+  `kd_jurusan` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data untuk tabel `materi_v2`
+--
+
+INSERT INTO `materi_v2` (`kode_materi`, `nama_materi`, `judul_materi`, `size`, `ekstensi`, `berkas`, `kd_kelas`, `kd_mapel`, `kd_jurusan`) VALUES
+('BG01', 'Tes', 'Logika matematika_82853981.pdf', 4487, 'pdf', 'files/materi/Logika matematika_82853981.pdf', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -552,6 +603,21 @@ INSERT INTO `tahun_ajar` (`kd_tajar`, `tahun_ajar`, `kd_semester`, `aktif`) VALU
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `tes`
+--
+
+CREATE TABLE `tes` (
+  `kode_buku` varchar(25) NOT NULL,
+  `nama_buku` varchar(250) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `size` int(11) NOT NULL,
+  `ekstensi` varchar(25) NOT NULL,
+  `berkas` varchar(2000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `timeline`
 --
 
@@ -702,6 +768,12 @@ ALTER TABLE `materi`
   ADD PRIMARY KEY (`kd_materi`);
 
 --
+-- Indeks untuk tabel `materi_v2`
+--
+ALTER TABLE `materi_v2`
+  ADD PRIMARY KEY (`kode_materi`);
+
+--
 -- Indeks untuk tabel `nilai_ujian`
 --
 ALTER TABLE `nilai_ujian`
@@ -764,7 +836,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`

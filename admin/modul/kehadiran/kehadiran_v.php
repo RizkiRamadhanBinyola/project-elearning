@@ -1,5 +1,5 @@
 <?php 
-include "../system/koneksi.php";
+include "../koneksi/koneksi.php";
 
 if (!isset($_GET['mp']) OR !isset($_GET['kls']) OR empty($_GET['mp']) OR empty($_GET['kls'])) {
 	header("location:?module=home");

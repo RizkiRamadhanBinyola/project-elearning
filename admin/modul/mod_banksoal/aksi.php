@@ -1,5 +1,5 @@
 <?php 
-include "../../../system/koneksi.php";
+include "../../../koneksi/koneksi.php";
 if (isset($_GET['act'])){
 	switch ($_GET['act']) {
 		case 'add':
