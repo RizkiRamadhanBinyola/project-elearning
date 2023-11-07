@@ -12,20 +12,6 @@
 
 <?php
 include "../koneksi/koneksi.php";
-// Fungsi formatBytes ditempatkan di sini
-function formatBytes($bytes, $precision = 2) {
-    $units = array('B', 'KB', 'MB', 'GB', 'TB');
-
-    $bytes = max($bytes, 0);
-    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow = min($pow, count($units) - 1);
-
-    $bytes /= pow(1024, $pow);
-
-    // Mengembalikan string HTML untuk disisipkan ke dalam tabel
-    return '<td>' . round($bytes, $precision) . ' ' . $units[$pow] . '</td>';
-}
-
 
 if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
     echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
@@ -47,76 +33,60 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
         $nama_materi = isset($_POST['nama_materi']) ? $_POST['nama_materi'] : "";
         $deskripsi = isset($_POST['deskripsi']) ? $_POST['deskripsi'] : "";
         $ForL = isset($_POST['ForL']) ? $_POST['ForL'] : "";
-        $tgl_up = date('Y-m-d H:i:s'); // Capture the current date and time
+        $tgl_up = date('Y-m-d H:i:s');
         $kd_mapel = isset($_POST['kd_mapel']) ? $_POST['kd_mapel'] : "";
         $kd_kelas = isset($_POST['kd_kelas']) ? $_POST['kd_kelas'] : "";
         $kd_guru = isset($_POST['kd_guru']) ? $_POST['kd_guru'] : "";
-
-        // Mendapatkan informasi file yang diunggah
-        $file_info = $_FILES['filemateri'];
-        $file = $file_info['name'];
-
-        // Path tempat file akan disimpan
-        $target_directory = "files/materi/";
-        $target_file = $target_directory . basename($file);
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $nama_materi = isset($_POST['nama_materi']) ? $_POST['nama_materi'] : "";
-            $deskripsi = isset($_POST['deskripsi']) ? $_POST['deskripsi'] : "";
-            $ForL = isset($_POST['ForL']) ? $_POST['ForL'] : "";
-            $tgl_up = date('Y-m-d H:i:s'); // Capture the current date and time
-            $kd_mapel = isset($_POST['kd_mapel']) ? $_POST['kd_mapel'] : "";
-            $kd_kelas = isset($_POST['kd_kelas']) ? $_POST['kd_kelas'] : "";
-            $kd_guru = isset($_POST['kd_guru']) ? $_POST['kd_guru'] : "";
-
-            // Mendapatkan informasi file yang diunggah
+    
+        // Check if it's a "link"
+        if ($ForL === 'link') {
+            $file = $_POST['linkmateri'];
+        } else {
+            // For "file", get the file name and handle file upload
             $file_info = $_FILES['filemateri'];
             $file = $file_info['name'];
-
+    
             // Path tempat file akan disimpan
             $target_directory = "files/materi/";
             $target_file = $target_directory . basename($file);
-
-            $existingEntry = $connect->prepare("SELECT * FROM materi WHERE kd_materi = ?");
-            $existingEntry->bind_param("s", $kd_materi);
-            $existingEntry->execute();
-            $result = $existingEntry->get_result();
-            if ($result->num_rows > 0) {
-                echo "<script>alert('Duplikasi entri'); window.location = 'media.php?module=materi'</script>";
-                exit;
-            }
-
-            $stmt = $connect->prepare("INSERT INTO materi (kd_materi, nama_materi, deskripsi, ForL, file, tgl_up, kd_mapel, kd_kelas, kd_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssss", $kd_materi, $nama_materi, $deskripsi, $ForL, $file, $tgl_up, $kd_mapel, $kd_kelas, $kd_guru);
-
-            if ($stmt->execute()) {
-                // Simpan file ke direktori
-                if (move_uploaded_file($file_info['tmp_name'], $target_file)) {
-                    // Ambil ukuran file
-                    $file_size = filesize($target_file);
-
-                    echo "File berhasil diunggah. Ukuran file: " . formatBytes($file_size) . "<br>";
-                    echo "<script>alert('Berhasil'); window.location = 'media.php?module=materi'</script>";
-                } else {
-                    // echo "<script>alert('Gagal menyimpan file'); window.location = 'media.php?module=materi'</script>";
-                }
-                
+    
+            // Check for file upload success
+            if (move_uploaded_file($file_info['tmp_name'], $target_file)) {
+                echo "File berhasil diunggah.<br>";
             } else {
-                echo "<script>alert('Gagal menyimpan ke database: " . $stmt->error . "'); window.location = 'media.php?module=materi'</script>";
+                echo "<script>alert('Gagal menyimpan file'); window.location = 'media.php?module=materi'</script>";
+                exit; // Exit the script on failure to avoid database insertion
             }
-            $stmt->close();
         }
+    
+        $existingEntry = $connect->prepare("SELECT * FROM materi WHERE kd_materi = ?");
+        $existingEntry->bind_param("s", $kd_materi);
+        $existingEntry->execute();
+        $result = $existingEntry->get_result();
+    
+        if ($result->num_rows > 0) {
+            echo "<script>alert('Duplikasi entri'); window.location = 'media.php?module=materi'</script>";
+            exit; // Exit the script if there's a duplicate entry
+        }
+    
+        $stmt = $connect->prepare("INSERT INTO materi (kd_materi, nama_materi, deskripsi, ForL, materi, tgl_up, kd_mapel, kd_kelas, kd_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssss", $kd_materi, $nama_materi, $deskripsi, $ForL, $file, $tgl_up, $kd_mapel, $kd_kelas, $kd_guru);
+    
+        if ($stmt->execute()) {
+            echo "<script>alert('Berhasil'); window.location = 'media.php?module=materi'</script>";
+        } else {
+            echo "<script>alert('Gagal menyimpan ke database: " . $stmt->error . "'); window.location = 'media.php?module=materi'</script>";
+        }
+        $stmt->close();
     }
 ?>
 
     <div class="content-wrapper">
-        <div class="container">
+        <div class "container">
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">MANAJEMEN MATERI PELAJARAN</h4>
-
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-12">
@@ -129,21 +99,17 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                 <div class="form-group">
                                     <label>Mata Pelajaran</label>
                                     <select name="kd_mapel" class="form-control" id="cbbmapel" data-guru="<?php echo $_SESSION['kode'] ?>">
-
                                         <option selected="selected">Pilih Mata Pelajaran</option>
                                         <?php
-
                                         $qmapel = "SELECT m.nama_mapel,m.kd_mapel 
                         FROM pengajaran as p, mapel as m 
                         WHERE m.kd_mapel=p.kd_mapel AND p.kd_guru LIKE '%$_SESSION[kode]%' 
                         GROUP BY p.kd_mapel";
-
                                         $datamapel = mysqli_query($connect, $qmapel);
                                         while ($mapel = mysqli_fetch_array($datamapel)) { ?>
                                             <option value="<?= $mapel["kd_mapel"] ?>"><?= $mapel["kd_mapel"] ?></option>
                                         <?php
                                         }
-
                                         ?>
                                     </select>
                                 </div>
@@ -164,7 +130,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                             ?>
                                         </select>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label>Judul</label>
@@ -185,16 +150,16 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                     <div id="ForL">
                                         <label>Upload File Materi</label>
                                         <input class="form-control" type="file" name="filemateri" id="filemateri" />
+                                        <label>Atau Masukkan Link Materi</label>
+                                        <input class="form-control" type="text" name="linkmateri" id="linkmateri" />
                                     </div>
                                     <p class="warningnya text-danger text-left"></p>
                                 </div>
-
                                 <div class="form-group">
                                     <input type="hidden" name="kd_guru" value="<?php echo $_SESSION['kode'] ?>">
                                     <input type="hidden" name="act" value="tbmateri">
-
                                 </div>
-                                <button type="submit" class="btn btn-success">Simpan </button>
+                                <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>
                     </div>
@@ -213,8 +178,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                             <th>Judul</th>
                                             <th>Kelas</th>
                                             <th>Pelajaran</th>
-                                            <th>File</th>
-                                            <th>File Size</th>
+                                            <th>Materi</th>
+                                            <th>Bentuk materi</th>
                                             <th>Tanggal Posting</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -222,19 +187,16 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                     <tbody>
                                         <div id="bag-data">
                                             <?php
-
-                                            $q = "SELECT materi.ForL, materi.nama_materi, materi.file, 
+                                            $q = "SELECT materi.ForL, materi.nama_materi, materi.materi, 
                     materi.tgl_up, mapel.nama_mapel, materi.kd_materi, kelas.nama_kelas 
                     FROM materi, pengajaran as p, mapel, kelas 
                     WHERE p.kd_mapel=materi.kd_mapel AND materi.kd_mapel=mapel.kd_mapel 
                     AND kelas.kd_kelas=materi.kd_kelas AND p.kd_kelas=kelas.kd_kelas 
                     and p.kd_guru like '%$_SESSION[kode]%'
                     ";
-
                                             if (isset($_GET['mp']) and isset($_GET['kls'])) {
                                                 $q .= " AND materi.kd_mapel='$_GET[mp]' AND materi.kd_kelas='$_GET[kls]'";
                                             }
-
                                             $materi = mysqli_query($connect, $q);
                                             if (mysqli_num_rows($materi) > 0) {
                                                 $n = 1;
@@ -246,22 +208,21 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                                     <td>$rmateri[nama_mapel]</td>";
                                                 
                                                 if ($rmateri['ForL'] == 'file') {
-                                                    echo "<td><a href='files/materi/$rmateri[file]' class='btn btn-info btn-xs'>Lihat Materi</a></td>";
+                                                    echo "<td><a href='files/materi/$rmateri[materi]' target='_blank' class='btn btn-info btn-xs'>Lihat Materi</a></td>";
                                                 } else {
-                                                    echo "<td><a href='$rmateri[file]' class='btn btn-primary btn-xs' target='_blank'>Lihat Materi</a></td>";
+                                                    echo "<td><a href='$rmateri[materi]' class='btn btn-primary btn-xs' target='_blank'>Lihat Materi</a></td>";
                                                 }
-                                                
-                                                // Menampilkan ukuran file dalam kolom tabel
-                                                echo formatBytes(filesize("files/materi/$rmateri[file]"));
+
+                                                echo "<td>$rmateri[ForL]</td>";
                                                 
                                                 echo "<td>$rmateri[tgl_up]</td>
-                                                    <td> <a href='modul/mod_materi/hapus_materi.php?id=$rmateri[kd_materi]' class='btn btn-warning btn-xs' onclick='return confirm(\"Yakin Hapus?\")'>Hapus<a></td>
+                                                    <td> <a href='modul/mod_materi/hapus_materi.php?id=$rmateri[kd_materi]' class='btn btn-warning btn-xs' onclick='return confirm(\"Yakin Hapus?\")'>Hapus</a></td>
                                                 </tr>";
                                                 
                                                     $n++;
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='8'>Belum ada materi diupload</td></tr>";
+                                                echo "<tr><td colspan='7'>Belum ada materi diupload</td></tr>";
                                             }
                                             ?>
                                         </div>
@@ -271,10 +232,32 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 
+    <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    // Ambil elemen-elemen yang akan diubah tampilannya
+    var fileInput = document.getElementById('filemateri');
+    var linkInput = document.getElementById('linkmateri');
+
+    // Ambil elemen dropdown (select) yang digunakan untuk memilih 'file' atau 'link'
+    var selectInput = document.getElementById('cbbForL');
+
+    // Sembunyikan input link awalnya
+    linkInput.style.display = 'none';
+
+    // Tambahkan event listener untuk mengubah tampilan input berdasarkan pilihan dropdown
+    selectInput.addEventListener('change', function () {
+        if (selectInput.value === 'file') {
+            fileInput.style.display = 'block';
+            linkInput.style.display = 'none';
+        } else if (selectInput.value === 'link') {
+            fileInput.style.display = 'none';
+            linkInput.style.display = 'block';
+        }
+    });
+});
+</script>
 <?php } ?>

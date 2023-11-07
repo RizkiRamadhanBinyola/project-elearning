@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 03 Nov 2023 pada 07.45
+-- Waktu pembuatan: 06 Nov 2023 pada 06.58
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -72,7 +72,9 @@ INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel
 (30, '2023-11-02', '2023-11-02 06:26:23', '', ''),
 (31, '2023-11-03', '2023-11-03 04:22:57', '', ''),
 (32, '2023-11-03', '2023-11-03 05:15:37', '', ''),
-(33, '2023-11-03', '2023-11-03 07:04:39', '', '');
+(33, '2023-11-03', '2023-11-03 07:04:39', '', ''),
+(34, '2023-11-06', '2023-11-06 02:15:06', '', ''),
+(35, '2023-11-06', '2023-11-06 04:56:01', '', '');
 
 -- --------------------------------------------------------
 
@@ -345,7 +347,7 @@ CREATE TABLE `materi` (
   `nama_materi` varchar(300) NOT NULL,
   `deskripsi` text NOT NULL,
   `ForL` varchar(5) NOT NULL DEFAULT 'file',
-  `file` varchar(50) NOT NULL,
+  `materi` varchar(50) NOT NULL,
   `tgl_up` datetime NOT NULL,
   `kd_mapel` varchar(10) NOT NULL,
   `kd_kelas` varchar(10) NOT NULL,
@@ -356,13 +358,10 @@ CREATE TABLE `materi` (
 -- Dumping data untuk tabel `materi`
 --
 
-INSERT INTO `materi` (`kd_materi`, `nama_materi`, `deskripsi`, `ForL`, `file`, `tgl_up`, `kd_mapel`, `kd_kelas`, `kd_guru`) VALUES
-('KM-001', 'ddgsdsdga', '1affa', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', 'xiirpl', 'GR001'),
-('KM-002', 'ddgsdsdga', '1sdggsd', 'file', '190-Article Text-198-1-10-20190425 (3).pdf', '0000-00-00 00:00:00', 'Pbo', 'xiirpl', 'GR001'),
-('KM-003', 'ddgsdsdga', '1gsdsdg', 'file', '31054-92990-1-PB.pdf', '0000-00-00 00:00:00', 'Bing', 'xiimm', 'GR001'),
-('KM-004', 'ddgsdsdga', '1ra', 'file', '190-Article Text-198-1-10-20190425.pdf', '0000-00-00 00:00:00', 'Bing', 'xiirpl', 'GR001'),
-('KM-005', 'ddgsdsdga', '1adf', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', '', 'GR001'),
-('KM-006', 'ddgsdsdga', 'tes', 'file', 'Logika matematika_82853981.pdf', '0000-00-00 00:00:00', 'Pbo', '', 'GR001');
+INSERT INTO `materi` (`kd_materi`, `nama_materi`, `deskripsi`, `ForL`, `materi`, `tgl_up`, `kd_mapel`, `kd_kelas`, `kd_guru`) VALUES
+('KM-001', 'afaaf', 'etAa', 'file', 'Logika matematika_82853981.pdf', '2023-11-06 02:30:34', 'Pbo', 'xiirpl', 'GR001'),
+('KM-002', 'tes', 'tes', 'link', 'https://github.com/ndeet/unzipper/blob/master/unzi', '2023-11-06 05:59:56', 'Pbo', 'xiirpl', 'GR001'),
+('KM-003', 'tes', 'tes', 'file', 'kantin_pradita-master.zip', '2023-11-06 06:46:32', 'Pbo', 'xiirpl', 'GR001');
 
 -- --------------------------------------------------------
 
@@ -836,7 +835,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
