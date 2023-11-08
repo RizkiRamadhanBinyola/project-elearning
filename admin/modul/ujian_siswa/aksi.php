@@ -1,5 +1,5 @@
 <?php 
-include "../../../system/koneksi.php";
+include "../koneksi/koneksi.php";
 date_default_timezone_set("Asia/Bangkok");
 
 $pilihan=$_POST["pil"];

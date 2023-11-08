@@ -12,7 +12,8 @@ if (isset($_GET['act'])){
 
 		$cek=mysqli_query($connect,"SELECT max(kd_soal) as kode FROM soal WHERE kd_soal LIKE '$ks%'");
 		$maxs=mysqli_fetch_array($cek);
-		$nourut=substr($maxs['kode'],strlen($ks),3)+1;
+		$nourut = (int) substr($maxs['kode'], strlen($ks), 3) + 1;
+
 		if ($nourut<10) {
 			$nourut="00".$nourut;
 		} else if ($nourut<100){
