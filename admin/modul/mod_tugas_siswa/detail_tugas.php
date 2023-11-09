@@ -77,9 +77,7 @@ $rtugas=mysqli_fetch_array($qtugas);
 						<input type="hidden" name="jfile" id="hjfile" value="">	
 					</div>
 					<div class="form-group">
-						<div id="Uploadj">
-							
-						</div>
+						<input class='form-control' type='FILE' name='ftugas"+i+"'  required='required'><br>
 						<p class="warningnya text-danger text-left"></p>
 					</div>
 					<!-- 
