@@ -247,7 +247,7 @@
 
       <!-- Fitur background video -->
       <script src="assets/js/video.js"></script>
-      <script src="assets/js/custom.js"></script>
+      <script src="assets/js/script.js"></script>
 
       <!-- Animation scroll section -->
       <script>

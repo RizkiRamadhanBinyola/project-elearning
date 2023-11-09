@@ -1,5 +1,5 @@
 <?php
-include "../../../system/koneksi.php";
+include "../../../koneksi/koneksi.php";
 
 $kd=$_POST['kds'];
 $kdd=$_POST['kdd'];
