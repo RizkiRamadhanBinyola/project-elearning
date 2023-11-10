@@ -33,10 +33,10 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
             </div>
             <div class="card-body text-center recent-users-sec">
               <div class="text-start">
-              <p>
-                Nama : <?php echo $guru['nama'] ?>
-              </p>
-              <p> Password : <?php echo $guru['nip'] ?> </p>
+                <h6>
+                  Nama :
+                  <?php echo $guru['nama'] ?>
+                </h6>
               </div>
               <table class="table">
                 <thead>
@@ -53,7 +53,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     echo "<tr>";
                     echo "<td> $i </td>
                         <td>$ajar[nama_mapel] - $ajar[nama_kelas]</td>";
-                        
+
                     echo "</tr>";
                     $i++;
                   }
@@ -81,7 +81,10 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   <div class="col-md-6">
                     <div class="card">
                       <div class="card-header">
-                        <h6><?= $rkur['nama_kelas'] ?> - <?= $rkur['nama_mapel'] ?></h6>
+                        <h6>
+                          <?= $rkur['nama_kelas'] ?> -
+                          <?= $rkur['nama_mapel'] ?>
+                        </h6>
                       </div>
                       <div class="card-body">
                         <p><a class='btn btn-xs btn-info form-control'
@@ -91,7 +94,8 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         <p><a class='btn btn-xs btn-info form-control'
                             href='?module=ujian&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Ujian </a></p>
                         <p><a class='btn btn-xs btn-info form-control'
-                            href='?module=absensi&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Absensi </a></p>
+                            href='?module=absensi&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Absensi </a>
+                        </p>
                       </div>
                     </div>
                   </div>

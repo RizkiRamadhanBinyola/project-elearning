@@ -4,6 +4,7 @@
     .well:hover {
         box-shadow: 0px 2px 10px rgb(190, 190, 190) !important;
     }
+
     a {
         color: #666;
     }
@@ -14,10 +15,9 @@
 <?php
 
 
-if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
+if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
     echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
-}
-else {
+} else {
 
     ?>
 
@@ -32,11 +32,11 @@ else {
             </div>
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <?php 
-                    if (isset($_GET['eid'])){
-                        $kd=$_GET['eid'];
-                        $qed="SELECT * FROM ujian,kelas WHERE kelas.kd_kelas=ujian.kd_kelas AND kd_ujian='$kd'";
-                        $eujian=mysqli_fetch_array(mysqli_query($connect,$qed));
+                    <?php
+                    if (isset($_GET['eid'])) {
+                        $kd = $_GET['eid'];
+                        $qed = "SELECT * FROM ujian,kelas WHERE kelas.kd_kelas=ujian.kd_kelas AND kd_ujian='$kd'";
+                        $eujian = mysqli_fetch_array(mysqli_query($connect, $qed));
 
                         ?>
                         <div class="panel panel-info">
@@ -47,7 +47,8 @@ else {
                                 <form role="form" method="POST" action="modul/mod_ujian/aksi.php?act=edit">
                                     <div class="form-group">
                                         <label>Nama Ujian</label>
-                                        <input class="form-control" name="nama_ujian" type="text" value="<?php echo $eujian['nama_ujian']; ?>"/>
+                                        <input class="form-control" name="nama_ujian" type="text"
+                                            value="<?php echo $eujian['nama_ujian']; ?>" />
                                         <input type="hidden" name="kd_guru" value="<?php echo $_SESSION['kode']; ?>">
                                         <input type="hidden" name="kd_ujian" value="<?php echo $_GET['eid']; ?>">
 
@@ -55,18 +56,19 @@ else {
                                     <div class="form-group">
 
                                         <label>Mata Pelajaran</label>
-                                        <select name="mapel" class="form-control" id="cbmapel" data-guru="<?php echo $_SESSION['kode'] ?>">
+                                        <select name="mapel" class="form-control" id="cbmapel"
+                                            data-guru="<?php echo $_SESSION['kode'] ?>">
                                             <option selected="selected">Pilih Mata Pelajaran</option>
                                             <?php
-                                            $qmapel="SELECT m.nama_mapel,m.kd_mapel 
+                                            $qmapel = "SELECT m.nama_mapel,m.kd_mapel 
                                             FROM pengajaran as p, mapel as m 
                                             WHERE m.kd_mapel=p.kd_mapel AND p.kd_guru='$_SESSION[kode]' 
                                             GROUP BY p.kd_mapel";
 
-                                            $datamapel=mysqli_query($connect,$qmapel);
-                                            while ($mapel=mysqli_fetch_array($datamapel)){
-                                                if ($eujian['kd_mapel']==$mapel['kd_mapel']){
-                                                    echo "<option value='$mapel[kd_mapel]' selected='selected'>$mapel[nama_mapel]</option>";    
+                                            $datamapel = mysqli_query($connect, $qmapel);
+                                            while ($mapel = mysqli_fetch_array($datamapel)) {
+                                                if ($eujian['kd_mapel'] == $mapel['kd_mapel']) {
+                                                    echo "<option value='$mapel[kd_mapel]' selected='selected'>$mapel[nama_mapel]</option>";
                                                 } else {
                                                     echo "<option value='$mapel[kd_mapel]'>$mapel[nama_mapel]</option>";
                                                 }
@@ -77,23 +79,24 @@ else {
                                     <div class="form-group">
                                         <label>Soal Ujian</label>
                                         <div id="daftsoal">
-                                            <?php 
+                                            <?php
 
-                                            $output="<select name='kd_soal' class='form-control'>
+                                            $output = "<select name='kd_soal' class='form-control'>
                                             <option selected='selected'>Pilih Soal</option>";
 
-                                            function jSoal($kd,$conn){
-                                                $q=mysqli_query($conn,"SELECT kd_detail_soal FROM detail_soal WHERE kd_soal='$kd'");
-                                                $n=mysqli_num_rows($q);
+                                            function jSoal($kd, $conn)
+                                            {
+                                                $q = mysqli_query($conn, "SELECT kd_detail_soal FROM detail_soal WHERE kd_soal='$kd'");
+                                                $n = mysqli_num_rows($q);
                                                 return $n;
                                             }
 
-                                            $qsoal="SELECT soal.acak, soal.kd_soal,soal.nama_soal,mapel.nama_mapel
+                                            $qsoal = "SELECT soal.acak, soal.kd_soal,soal.nama_soal,mapel.nama_mapel
                                             FROM soal,mapel WHERE soal.kd_mapel=mapel.kd_mapel AND soal.kd_guru='$_SESSION[kode]' AND soal.kd_mapel='$eujian[kd_mapel]'";
-                                            $csoal=mysqli_query($connect,$qsoal);
-                                            while ($rsoal=mysqli_fetch_array($csoal)){
-                                                $j=jSoal($rsoal['kd_soal'],$connect);
-                                                if ($eujian['kd_soal']==$rsoal['kd_soal']){
+                                            $csoal = mysqli_query($connect, $qsoal);
+                                            while ($rsoal = mysqli_fetch_array($csoal)) {
+                                                $j = jSoal($rsoal['kd_soal'], $connect);
+                                                if ($eujian['kd_soal'] == $rsoal['kd_soal']) {
                                                     $output .= "<option value='$rsoal[kd_soal]' selected='selected'>$rsoal[nama_soal] - [$j]</option>";
                                                 } else {
                                                     $output .= "<option value='$rsoal[kd_soal]'>$rsoal[nama_soal] - [$j]</option>";
@@ -108,26 +111,31 @@ else {
                                     <div class="form-group">
                                         <label>Ujian Untuk Kelas</label>
                                         <div id="infokls">
-                                            <input class="form-control" type="text" name="kls" value="<?php echo $eujian['nama_kelas']; ?>" disabled="disabled">
+                                            <input class="form-control" type="text" name="kls"
+                                                value="<?php echo $eujian['nama_kelas']; ?>" disabled="disabled">
                                             <input type="hidden" name="kd_kelas" value="<?php echo $eujian['kd_kelas']; ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group col-xs-7">
                                         <label>Dimulai Tanggal </label>
-                                        <input class="form-control" name="tgl_mulai" type="date" value="<?php echo substr($eujian['tgl_ujian'],0,10) ?>" />
+                                        <input class="form-control" name="tgl_mulai" type="date"
+                                            value="<?php echo substr($eujian['tgl_ujian'], 0, 10) ?>" />
                                     </div>
                                     <div class="form-group col-xs-5">
                                         <label>Pukul </label>
-                                        <input class="form-control" name="jam_mulai" type="time" value="<?php echo substr($eujian['tgl_ujian'],11,5) ?>" />
+                                        <input class="form-control" name="jam_mulai" type="time"
+                                            value="<?php echo substr($eujian['tgl_ujian'], 11, 5) ?>" />
                                     </div>
                                     <div class="form-group col-xs-7">
                                         <label>Berakhir pada </label>
-                                        <input class="form-control" name="tgl_ahir" type="date" value="<?php echo substr($eujian['tgl_ahir'],0,10) ?>" />
+                                        <input class="form-control" name="tgl_ahir" type="date"
+                                            value="<?php echo substr($eujian['tgl_ahir'], 0, 10) ?>" />
                                     </div>
                                     <div class="form-group col-xs-5">
                                         <label>Pukul </label>
-                                        <input class="form-control" name="jam_ahir" type="time" value="<?php echo substr($eujian['tgl_ahir'],11,5) ?>" />
+                                        <input class="form-control" name="jam_ahir" type="time"
+                                            value="<?php echo substr($eujian['tgl_ahir'], 11, 5) ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Durasi</label>
@@ -142,10 +150,10 @@ else {
                                                     </div>
                                                     <div class="chosen-select-act fm-cmp-mg">
                                                         <select required="required" class="form-control" name="jam">
-                                                            <option value="1" <?php echo $eujian['jam']=='1' ? "selected='selected'" : " "; ?>>1</option>
-                                                            <option value="2" <?php echo $eujian['jam']=='2' ? "selected='selected'" : " "; ?>>2</option>
-                                                            <option value="3" <?php echo $eujian['jam']=='3' ? "selected='selected'" : " "; ?>>3</option>
-                                                            <option value="4" <?php echo $eujian['jam']=='4' ? "selected='selected'" : " "; ?>>4</option>
+                                                            <option value="1" <?php echo $eujian['jam'] == '1' ? "selected='selected'" : " "; ?>>1</option>
+                                                            <option value="2" <?php echo $eujian['jam'] == '2' ? "selected='selected'" : " "; ?>>2</option>
+                                                            <option value="3" <?php echo $eujian['jam'] == '3' ? "selected='selected'" : " "; ?>>3</option>
+                                                            <option value="4" <?php echo $eujian['jam'] == '4' ? "selected='selected'" : " "; ?>>4</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -155,12 +163,12 @@ else {
                                                     </div>
                                                     <div class="chosen-select-act fm-cmp-mg">
                                                         <select required="required" class="form-control" name="menit">
-                                                            <option value="00" <?php echo $eujian['menit']=='00' ? "selected='selected'" : " "; ?>>00</option>
-                                                            <option value="10" <?php echo $eujian['menit']=='10' ? "selected='selected'" : " "; ?>>10</option>
-                                                            <option value="20" <?php echo $eujian['menit']=='20' ? "selected='selected'" : " "; ?>>20</option>
-                                                            <option value="30" <?php echo $eujian['menit']=='30' ? "selected='selected'" : " "; ?>>30</option>
-                                                            <option value="40" <?php echo $eujian['menit']=='40' ? "selected='selected'" : " "; ?>>40</option>
-                                                            <option value="50" <?php echo $eujian['menit']=='50' ? "selected='selected'" : " "; ?>>50</option>
+                                                            <option value="00" <?php echo $eujian['menit'] == '00' ? "selected='selected'" : " "; ?>>00</option>
+                                                            <option value="10" <?php echo $eujian['menit'] == '10' ? "selected='selected'" : " "; ?>>10</option>
+                                                            <option value="20" <?php echo $eujian['menit'] == '20' ? "selected='selected'" : " "; ?>>20</option>
+                                                            <option value="30" <?php echo $eujian['menit'] == '30' ? "selected='selected'" : " "; ?>>30</option>
+                                                            <option value="40" <?php echo $eujian['menit'] == '40' ? "selected='selected'" : " "; ?>>40</option>
+                                                            <option value="50" <?php echo $eujian['menit'] == '50' ? "selected='selected'" : " "; ?>>50</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -170,12 +178,12 @@ else {
                                                     </div>
                                                     <div class="chosen-select-act fm-cmp-mg">
                                                         <select required="required" class="form-control" name="detik">
-                                                            <option value="00" <?php echo $eujian['detik']=='00' ? "selected='selected'" : " "; ?>>00</option>
-                                                            <option value="10" <?php echo $eujian['detik']=='10' ? "selected='selected'" : " "; ?>>10</option>
-                                                            <option value="20" <?php echo $eujian['detik']=='20' ? "selected='selected'" : " "; ?>>20</option>
-                                                            <option value="30" <?php echo $eujian['detik']=='30' ? "selected='selected'" : " "; ?>>30</option>
-                                                            <option value="40" <?php echo $eujian['detik']=='40' ? "selected='selected'" : " "; ?>>40</option>
-                                                            <option value="50" <?php echo $eujian['detik']=='50' ? "selected='selected'" : " "; ?>>50</option>
+                                                            <option value="00" <?php echo $eujian['detik'] == '00' ? "selected='selected'" : " "; ?>>00</option>
+                                                            <option value="10" <?php echo $eujian['detik'] == '10' ? "selected='selected'" : " "; ?>>10</option>
+                                                            <option value="20" <?php echo $eujian['detik'] == '20' ? "selected='selected'" : " "; ?>>20</option>
+                                                            <option value="30" <?php echo $eujian['detik'] == '30' ? "selected='selected'" : " "; ?>>30</option>
+                                                            <option value="40" <?php echo $eujian['detik'] == '40' ? "selected='selected'" : " "; ?>>40</option>
+                                                            <option value="50" <?php echo $eujian['detik'] == '50' ? "selected='selected'" : " "; ?>>50</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -184,7 +192,8 @@ else {
                                     </div>
                                     <div class="form-group">
                                         <label>Deskripsi Ujian</label>
-                                        <textarea class="form-control" name="deskripsi" rows="5"><?php echo $eujian['deskripsi']; ?></textarea>
+                                        <textarea class="form-control" name="deskripsi"
+                                            rows="5"><?php echo $eujian['deskripsi']; ?></textarea>
                                     </div>
                                     <hr>
                                     <button type="submit" class="btn btn-warning">Update </button>
@@ -193,7 +202,7 @@ else {
                             </div>
                         </div>
 
-                        <?php 
+                        <?php
                     } else {
 
                         ?>
@@ -212,28 +221,62 @@ else {
                                     <div class="form-group">
 
                                         <label>Mata Pelajaran</label>
-                                        <select name="mapel" class="form-control" id="cbmapel" data-guru="<?php echo $_SESSION['kode'] ?>">
+                                        <select name="mapel" class="form-control" id="cbmapel"
+                                            data-guru="<?php echo $_SESSION['kode'] ?>">
                                             <option selected="selected">Pilih Mata Pelajaran</option>
                                             <?php
-                                            $qmapel="SELECT m.nama_mapel,m.kd_mapel 
+                                            $qmapel = "SELECT m.nama_mapel,m.kd_mapel 
                                             FROM pengajaran as p, mapel as m 
                                             WHERE m.kd_mapel=p.kd_mapel AND p.kd_guru='$_SESSION[kode]' 
                                             GROUP BY p.kd_mapel";
 
-                                            $datamapel=mysqli_query($connect,$qmapel);
-                                            while ($mapel=mysqli_fetch_array($datamapel)){
+                                            $datamapel = mysqli_query($connect, $qmapel);
+                                            while ($mapel = mysqli_fetch_array($datamapel)) {
                                                 echo "<option value='$mapel[kd_mapel]'>$mapel[nama_mapel]</option>";
                                             }
                                             ?>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label>Soal Ujian</label>
-                                        <div id="daftsoal"></div>
+                                        <select name='kd_soal' class='form-control'>
+                                            <option selected='selected'>Pilih Soal</option>
+                                            <?php
+                                            $qsoal = "SELECT soal.acak, soal.kd_soal, soal.nama_soal, guru.kd_guru, mapel.kd_mapel, mapel.nama_mapel
+                                                    FROM soal
+                                                    JOIN mapel ON soal.kd_mapel = mapel.kd_mapel
+                                                    JOIN guru ON soal.kd_guru = guru.kd_guru
+                                                    WHERE soal.kd_guru = guru.kd_guru AND soal.kd_mapel = mapel.kd_mapel";
+
+                                            $csoal = mysqli_query($connect, $qsoal);
+                                            
+                                            while ($rsoal = mysqli_fetch_array($csoal)) {
+                                                ?>
+                                                <option value='<?= $rsoal['kd_soal']?>'><?= $rsoal['nama_soal'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <label>Ujian Untuk Kelas</label>
-                                        <div id="infokls">-</div>
+                                        <div class="form-group">
+                                            <select name="kd_kls[]" class="form-control">
+                                                <option selected="selected">Ujian untuk kelas</option>
+                                                <?php
+                                                $qkelas = "SELECT DISTINCT k.kd_kelas, k.nama_kelas 
+                   FROM pengajaran as p, kelas as k
+                   WHERE k.kd_kelas = p.kd_kelas AND p.kd_guru='$_SESSION[kode]'";
+
+                                                $datakelas = mysqli_query($connect, $qkelas);
+
+                                                while ($kelas = mysqli_fetch_array($datakelas)) {
+                                                    echo "<option value='$kelas[kd_kelas]'>$kelas[nama_kelas]</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="form-group col-xs-7">
@@ -316,7 +359,7 @@ else {
                                 </form>
                             </div>
                         </div>
-                        <?php 
+                        <?php
                     }
                     ?>
                 </div>
@@ -341,29 +384,31 @@ else {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php 
-                                        function jumSoal($kd,$conn){
-                                            $q=mysqli_query($conn,"SELECT kd_detail_soal FROM detail_soal WHERE kd_soal='$kd'");
-                                            $n=mysqli_num_rows($q);
+                                        <?php
+                                        
+                                        function jumSoal($kd, $conn)
+                                        {
+                                            $q = mysqli_query($conn, "SELECT kd_detail_soal FROM detail_soal WHERE kd_soal='$kd'");
+                                            $n = mysqli_num_rows($q);
                                             return $n;
                                         }
 
-                                        $qsoal="SELECT ujian.nama_ujian,mapel.nama_mapel,kelas.nama_kelas,ujian.tgl_ujian,ujian.kd_soal,ujian.kd_ujian,ujian.tgl_ahir
+                                        $qsoal = "SELECT ujian.nama_ujian,mapel.nama_mapel,kelas.nama_kelas,ujian.tgl_ujian,ujian.kd_soal,ujian.kd_ujian,ujian.tgl_ahir
                                         FROM ujian,mapel,kelas
                                         WHERE ujian.kd_mapel=mapel.kd_mapel AND ujian.kd_kelas=kelas.kd_kelas AND ujian.kd_guru='$_SESSION[kode]'";
-                                        if ( isset($_GET['mp']) AND isset($_GET['kls'])){
+                                        if (isset($_GET['mp']) and isset($_GET['kls'])) {
                                             $qsoal .= " AND ujian.kd_mapel='$_GET[mp]' AND ujian.kd_kelas='$_GET[kls]'";
                                         }
-                                        $esoal=mysqli_query($connect,$qsoal);
-                                        $num=mysqli_num_rows($esoal);
+                                        $esoal = mysqli_query($connect, $qsoal);
+                                        $num = mysqli_num_rows($esoal);
 
-                                        if ($num>0) {
-                                            $no=1;
-                                            while ($rsoal=mysqli_fetch_array($esoal)) {
+                                        if ($num > 0) {
+                                            $no = 1;
+                                            while ($rsoal = mysqli_fetch_array($esoal)) {
 
-                                                $js=jumSoal($rsoal['kd_soal'],$connect);
-                                                $a="SELECT nis FROM nilai_ujian WHERE kd_ujian='$rsoal[kd_ujian]'";
-                                                $j=mysqli_num_rows(mysqli_query($connect,$a));
+                                                $js = jumSoal($rsoal['kd_soal'], $connect);
+                                                $a = "SELECT nis FROM nilai_ujian WHERE kd_ujian='$rsoal[kd_ujian]'";
+                                                $j = mysqli_num_rows(mysqli_query($connect, $a));
 
                                                 echo "<tr>";
                                                 echo "<td>$no</td>";
@@ -392,6 +437,6 @@ else {
             </div>
         </div>
 
-    </div>       
+    </div>
 
-    <?php } ?>
+<?php } ?>

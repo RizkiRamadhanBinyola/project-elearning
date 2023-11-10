@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 06 Nov 2023 pada 06.58
+-- Waktu pembuatan: 10 Nov 2023 pada 08.17
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -74,7 +74,17 @@ INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel
 (32, '2023-11-03', '2023-11-03 05:15:37', '', ''),
 (33, '2023-11-03', '2023-11-03 07:04:39', '', ''),
 (34, '2023-11-06', '2023-11-06 02:15:06', '', ''),
-(35, '2023-11-06', '2023-11-06 04:56:01', '', '');
+(35, '2023-11-06', '2023-11-06 04:56:01', '', ''),
+(36, '2023-11-10', '2023-11-10 04:56:02', '', ''),
+(37, '2023-11-10', '2023-11-10 04:58:07', '', ''),
+(38, '2023-11-10', '2023-11-10 05:04:33', '', ''),
+(39, '2023-11-10', '2023-11-10 05:07:36', '', ''),
+(40, '2023-11-10', '2023-11-10 05:12:09', '', ''),
+(41, '2023-11-10', '2023-11-10 05:16:14', '', ''),
+(42, '2023-11-10', '2023-11-10 05:29:42', '', ''),
+(43, '2023-11-10', '2023-11-10 07:22:32', '', ''),
+(44, '2023-11-10', '2023-11-10 07:30:04', '', ''),
+(45, '2023-11-10', '2023-11-10 08:13:23', '', '');
 
 -- --------------------------------------------------------
 
@@ -113,7 +123,9 @@ INSERT INTO `detail_soal` (`kd_detail_soal`, `kd_soal`, `soal`, `pil_A`, `pil_B`
 ('442020GR089008', '142020GR089001', 'Pertanyaan 8', 'Pilihan A', 'Pilihan B', 'Pilihan C', 'Pilihan D', 'Pilihan E', 'a', NULL, 'T', '-', '-'),
 ('442020GR089009', '142020GR089001', 'Pertanyaan 9', 'Pilihan A', 'Pilihan B', 'Pilihan C', 'Pilihan D', 'Pilihan E', 'a', NULL, 'T', '-', '-'),
 ('442020GR089010', '142020GR089001', 'Pertanyaan 10', 'Pilihan A', 'Pilihan B', 'Pilihan C', 'Pilihan D', 'Pilihan E', 'a', NULL, 'T', '-', '-'),
-('442021GR090001', '142021GR090001', 'abcd', 'a', 'b', 'c', 'd', 'e', 'a', NULL, 'T', '-', '-');
+('442021GR090001', '142021GR090001', 'abcd', 'a', 'b', 'c', 'd', 'e', 'a', NULL, 'T', '-', '-'),
+('442023GR001001', '142023GR001001', 'tes', 'tes1', 'tes', 'tes', 'tes', 'tes', 'a', '-', 'T', '-', '-'),
+('442023GR001002', '142023GR001002', 'tes', 'tes', 'tes', 'tes', 'tes', 'tes', 'b', '-', 'T', '-', '-');
 
 -- --------------------------------------------------------
 
@@ -138,7 +150,8 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`kd_guru`, `username`, `nip_password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
-('GR001', 'smktpg2aa', '12345', '12345', 'Ahmad Amin Iswanto', '089122211234', 'rizkiramadhanbinyola@gmail.com', 'default.jpg', 'Aktif');
+('GR001', 'smktpg2aa', '12345', '12345', 'Ahmad Amin Iswanto', '089122211234', 'rizkiramadhanbinyola@gmail.com', 'default.jpg', 'Aktif'),
+('GR002', '678', '9fe8593a8a330607d76796b35c64c600', '678', 'user', '089122211234', 'sadgfsdkbi@gmail.com', 'default.jpg', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -232,12 +245,7 @@ CREATE TABLE `kerja_tugas` (
 --
 
 INSERT INTO `kerja_tugas` (`kd_kerja`, `kd_tugas`, `nis`, `file_kerja`, `nilai`, `status_kerja`) VALUES
-('1220208168001', '022020GR090001', '8168', '1220208168001.png', 90, 'N'),
-('1220208168002', '022020GR090002', '8168', 'T', 0, 'T'),
-('1220208168003', '022020GR090003', '8168', 'T', 0, 'T'),
-('1220208170001', '022020GR090001', '8170', 'T', 0, 'T'),
-('1220208170002', '022020GR090002', '8170', 'T', 0, 'T'),
-('1220208170003', '022020GR090003', '8170', '1220208170003.jpg', 80, 'N');
+('12202312345001', '022023GR001001', '12345', '12202312345001_1.pdf', 80, 'N');
 
 -- --------------------------------------------------------
 
@@ -311,6 +319,7 @@ CREATE TABLE `login` (
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
 ('12345', '827ccb0eea8a706c4c34a16891f84e7b', 'siswa', '2023-10-25 04:39:47', 'aktif'),
+('678', '9fe8593a8a330607d76796b35c64c600', 'siswa', '2023-11-10 08:12:56', 'aktif'),
 ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
 ('smktpg2aa', '827ccb0eea8a706c4c34a16891f84e7b', 'guru', '2023-10-25 09:01:26', 'aktif');
 
@@ -404,6 +413,14 @@ CREATE TABLE `nilai_ujian` (
   `benar` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `nilai_ujian`
+--
+
+INSERT INTO `nilai_ujian` (`kd_nilai_ujian`, `nis`, `kd_ujian`, `tgl_mengerjakan`, `nilai`, `salah`, `benar`) VALUES
+('08202312345001', '12345', '072023GR001001', '2023-11-10 14:06:43', 100, 0, 1),
+('08202312345002', '12345', '072023GR001002', '2023-11-10 14:15:25', 100, 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -430,7 +447,8 @@ INSERT INTO `pengajaran` (`kd_pengajaran`, `kd_mapel`, `kd_kelas`, `kd_guru`, `k
 (17, 'bing', 'xiiakl1', 'GR096', '1'),
 (20, 'Pbo', 'xirpl', 'GR001', '1'),
 (21, 'Pbo', 'xiirpl', 'GR001', '1'),
-(22, 'Bing', 'xiirpl', 'GR001', '1');
+(22, 'Bing', 'xiirpl', 'GR001', '1'),
+(23, 'Pkn', 'xiimm', 'GR002', '1');
 
 -- --------------------------------------------------------
 
@@ -479,7 +497,9 @@ CREATE TABLE `rombel` (
 --
 
 INSERT INTO `rombel` (`nis`, `kd_kelas`, `kd_tajar`) VALUES
-('12345', 'xiirpl', '2023-2024-ganjil');
+('12345', 'xiirpl', '2023-2024-ganjil'),
+('678', 'xiimm', '2023-2024-ganjil'),
+('6789', 'xiirpl', '2022-2023-genap');
 
 -- --------------------------------------------------------
 
@@ -527,7 +547,8 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nisn`, `nama`, `kelamin`, `email`, `foto`, `telp`, `status`) VALUES
-('12345', '12345', 'Rizki Ramadhan Binyola', 'L', 'rizkiramadhanbinyola@gmail.com', '', '089122211234', 'Aktif');
+('12345', '12345', 'Rizki Ramadhan Binyola', 'L', 'rizkiramadhanbinyola@gmail.com', '', '089122211234', 'Aktif'),
+('678', '678', 'Iki', 'L', 'rizkiramadhanbinyola@gmail.com', '', '089122211234', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -548,8 +569,8 @@ CREATE TABLE `soal` (
 --
 
 INSERT INTO `soal` (`kd_soal`, `nama_soal`, `acak`, `kd_mapel`, `kd_guru`) VALUES
-('142020GR089001', 'Soal Bhs Ing', 'T', 'bing', 'GR089'),
-('142021GR090001', 'ppkn1', 'T', 'ppkn', 'GR090');
+('142023GR001001', 'tes', 'T', 'Pbo', 'GR001'),
+('142023GR001002', 'tes2', 'T', 'Pbo', 'GR001');
 
 -- --------------------------------------------------------
 
@@ -630,6 +651,15 @@ CREATE TABLE `timeline` (
   `kd_guru` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `timeline`
+--
+
+INSERT INTO `timeline` (`id_timeline`, `jenis`, `id_jenis`, `waktu`, `kd_kelas`, `kd_mapel`, `kd_guru`) VALUES
+(25, 'tugas', '022023GR001001', '2023-11-10 10:58:33', 'xiirpl', 'Pbo', 'GR001'),
+(26, 'ujian', '072023GR001001', '2023-11-10 14:04:28', 'xiirpl', 'Pbo', 'GR001'),
+(27, 'ujian', '072023GR001002', '2023-11-10 14:14:35', 'xiirpl', 'Pbo', 'GR001');
+
 -- --------------------------------------------------------
 
 --
@@ -657,7 +687,8 @@ INSERT INTO `tugas` (`kd_tugas`, `nama_tugas`, `deskripsi`, `batas_awal`, `batas
 ('022020GR090001', 'Tugas 1', 'Integer ultrices lobortis eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin semper, ante vitae sollicitudin posuere, metus quam iaculis nibh, vitae scelerisque nunc massa eget pede. Sed velit urna, interdum vel, ultricies vel, faucibus at, quam. Donec elit est, consectetuer eget, consequat quis, tempus quis, wisi.', '2020-12-16 08:00:00', '2020-12-17 23:59:00', 'Tugas 1_83469434.pdf', '2020-12-16 06:07:49', 'xakl1', 'bing', 'GR090'),
 ('022020GR090002', 'Tugas 2', 'silahkan dikerjakan', '2020-12-18 06:48:00', '2020-12-18 06:48:00', 'Tugas 2_38766479.pdf', '2020-12-18 06:48:46', 'xakl1', 'bing', 'GR090'),
 ('022020GR090003', 'Tugas 3', 'dikerjakan', '2020-12-18 06:51:00', '2020-12-18 07:51:00', 'Tugas 3_77841186.pdf', '2020-12-18 06:51:35', 'xakl1', 'bing', 'GR090'),
-('022021GR090001', 'tugas1', 'ok', '2021-01-12 05:45:00', '2021-01-14 11:46:00', 'tugas1_90667724.png', '2021-01-12 11:46:14', 'xdpib1', 'mtk', 'GR090');
+('022021GR090001', 'tugas1', 'ok', '2021-01-12 05:45:00', '2021-01-14 11:46:00', 'tugas1_90667724.png', '2021-01-12 11:46:14', 'xdpib1', 'mtk', 'GR090'),
+('022023GR001001', 'tes', 'teas', '2023-11-10 10:58:00', '2023-11-17 10:01:00', 'tes_28304730.pptx', '2023-11-10 10:58:33', 'xiirpl', 'Pbo', 'GR001');
 
 -- --------------------------------------------------------
 
@@ -687,7 +718,9 @@ CREATE TABLE `ujian` (
 INSERT INTO `ujian` (`kd_ujian`, `nama_ujian`, `deskripsi`, `tgl_ujian`, `tgl_ahir`, `jam`, `menit`, `detik`, `kd_soal`, `kd_kelas`, `kd_mapel`, `kd_guru`) VALUES
 ('072020GR090001', 'Ujian Matematika', 'Ujian MTK', '2020-12-28 22:10:00', '2020-12-28 23:10:00', 1, 0, 0, '142020GR090001', 'xakl1', 'mtk', 'GR090'),
 ('072020GR089001', 'Ujian Bahasa Inggris 1', 'aksdalksjdaladasdjladsad', '2020-12-29 07:05:00', '2020-12-29 22:06:00', 1, 0, 0, '142020GR089001', 'xakl1', 'bing', 'GR089'),
-('072021GR090001', 'uj_ppkn', 'semangat', '2021-01-13 04:23:00', '2021-01-14 04:23:00', 1, 10, 0, '142021GR090001', 'xakl1', 'ppkn', 'GR090');
+('072021GR090001', 'uj_ppkn', 'semangat', '2021-01-13 04:23:00', '2021-01-14 04:23:00', 1, 10, 0, '142021GR090001', 'xakl1', 'ppkn', 'GR090'),
+('072023GR001001', 'tes', 'tes', '2023-11-10 14:04:00', '2023-11-10 18:08:00', 1, 0, 0, '142023GR001001', 'xiirpl', 'Pbo', 'GR001'),
+('072023GR001002', 'tes2', 'tes', '2023-11-10 14:14:00', '2023-11-10 20:20:00', 1, 0, 0, '142023GR001002', 'xiirpl', 'Pbo', 'GR001');
 
 -- --------------------------------------------------------
 
@@ -746,7 +779,8 @@ ALTER TABLE `kelas`
 -- Indeks untuk tabel `kerja_tugas`
 --
 ALTER TABLE `kerja_tugas`
-  ADD PRIMARY KEY (`kd_kerja`);
+  ADD PRIMARY KEY (`kd_kerja`),
+  ADD KEY `nis` (`nis`);
 
 --
 -- Indeks untuk tabel `login`
@@ -835,7 +869,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
@@ -847,7 +881,7 @@ ALTER TABLE `jurnal`
 -- AUTO_INCREMENT untuk tabel `pengajaran`
 --
 ALTER TABLE `pengajaran`
-  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `kd_pengajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT untuk tabel `post`
@@ -859,7 +893,17 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT untuk tabel `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `id_timeline` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_timeline` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `kerja_tugas`
+--
+ALTER TABLE `kerja_tugas`
+  ADD CONSTRAINT `kerja_tugas_ibfk_1` FOREIGN KEY (`nis`) REFERENCES `siswa` (`nis`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
