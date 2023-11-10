@@ -49,7 +49,7 @@
                                             </a>
                                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-                                                Master
+                                                Guru
                                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                             </a>
                                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -129,6 +129,18 @@
                                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
                                                 Home
                                             </a>
+                                            <a class="nav-link <?php if ($_GET['module'] == 'materi') {
+                                                                    echo "open";
+                                                                } ?>" href="media.php?module=materi">
+                                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                                                Materi
+                                            </a>
+                                            <a class="nav-link <?php if ($_GET['module'] == 'tugas') {
+                                                                    echo "open";
+                                                                } ?>" href="media.php?module=tugas">
+                                                <div class="sb-nav-link-icon"><i class="fa-regular fa-rectangle-list"></i></div>
+                                                Tugas
+                                            </a>
                                             <?php
                                             break;
                                             ?>
@@ -145,7 +157,7 @@
                                     <?php
                                     if ($_SESSION['level'] == 'guru') {
                                     ?>
-                                        <a class="nav-link" href="../logout.php" onclick="return confirm('Pastikan Anda Sudah Mengisi Jurnal Harian!! ');">
+                                        <a class="nav-link" href="../logout.php" onclick="return confirm('Keluar E-Learning? ');">
                                             <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
                                             Logout
                                         </a>

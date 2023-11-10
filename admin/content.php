@@ -1,6 +1,6 @@
 <?php
 if (empty($_SESSION['username']) AND empty($_SESSION['level']) AND $_SESSION['login']==0){
-  echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = 'index.php';</script>";
+  echo "<script>alert('Harap Login Terlebih Dahulu!!!'); window.location = 'login.php';</script>";
 }
 else{
   ?>
@@ -19,9 +19,6 @@ else{
       include "modul/kehadiran/kehadiran_v.php";
       break;
       
-      case 'silabus':
-      include "modul/mod_silabus/silabus_v.php";
-      break;
       
       case 'materi':
       include "modul/mod_materi/materi_v.php";
@@ -52,18 +49,6 @@ else{
       case 'detailtugas':
       include "modul/mod_tugas/detailtugas.php";
       break;
-      
-      case 'forum':
-      include "modul/mod_forum/forum_v.php";
-      break;
-
-      case 'tampil_forum':
-      include "modul/mod_forum/tampil_forum.php";
-      break;
-
-      case 'laporan':
-      include "modul/mod_laporan/laporan_v.php";
-      break;
 
       default:
       //notfound modul
@@ -92,6 +77,7 @@ else{
       case 'guru':
       include "modul/mod_guru/guru_v.php";
       break;
+      
       case 'importgr':
       include "modul/mod_guru/import_guru.php";
       break;
@@ -174,9 +160,6 @@ else{
       break;
       case 'nilai':
       include "modul/mod_nilai_siswa/nilai_v.php";
-      break;
-      case 'forum':
-      include "modul/mod_forum/forumsiswa_v.php";
       break;
 
       default:

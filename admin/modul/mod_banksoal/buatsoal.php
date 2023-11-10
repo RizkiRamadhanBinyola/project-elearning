@@ -58,15 +58,20 @@ if (!isset($_GET['kds']) or empty($_GET['kds'])) {
 						</div>
 					</div>
 				</div>
-
+				
 				<div class="col-md-9 col-sm-9 col-xs-12">
+				<div class="card border-secondary mb-3">
+				<div class="card-header text-bg-<?= ($update) ? "success" : "secondary" ?>">
+				Buat Bank Soal
+				</div>
 					<?php
 					if (isset($_GET['v'])) {
 						switch ($_GET['v']) {
 							case 'add':
 								?>
+								 <div class="card-body text-secondary">
 								<form method="post" action="modul/mod_banksoal/aksi.php?act=tbsoal" enctype="multipart/form-data">
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<?php
 										$thn = date("Y");
 										$k = "44" . $thn . $_SESSION['kode'];
@@ -111,7 +116,8 @@ if (!isset($_GET['kds']) or empty($_GET['kds'])) {
 											<input class="form-control" type="file" name="gbsoal">
 										</div>
 									</div>
-									<div class="form-group col-md-6">
+									
+									<div class="col-md-6 offset-md-6 ms-auto">
 										<div class="form-group">
 											<label>A</label>
 											<input type="text" class="form-control" name="a" placeholder="Pilihan A">
@@ -132,18 +138,23 @@ if (!isset($_GET['kds']) or empty($_GET['kds'])) {
 											<label>E</label>
 											<input type="text" class="form-control" name="e" placeholder="Pilihan E">
 										</div>
-										<div class="form-group">
-											<label>KUNCI JAWABAN</label>
-											<select class="form-control" name="kunci_jawaban">
-												<option value="a">A</option>
-												<option value="b">B</option>
-												<option value="c">C</option>
-												<option value="d">D</option>
-												<option value="e">E</option>
-											</select>
+									</div>
+										<div class="col-md-6 offset-md-6 ms-auto">
+       									 <!-- Rest of your form elements -->
+
+											<div class="form-group">
+												<label>KUNCI JAWABAN</label>
+												<select class="form-control" name="kunci_jawaban">
+													<option value="a">A</option>
+													<option value="b">B</option>
+													<option value="c">C</option>
+													<option value="d">D</option>
+													<option value="e">E</option>
+												</select>
+											</div>
 										</div>
 
-										<div class="form-group">
+										<div class="col-md-6 offset-md-6">
 											<input type="submit" name="lanjut" class="btn btn-success" value="Lanjut">
 											<input type="submit" name="simpan" class="btn btn-primary" value="Simpan">
 										</div>
