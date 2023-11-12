@@ -16,49 +16,49 @@
 include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
-  echo "<script>alert('Kembalilah Kejalan yang benar!!!'); window.location = '../../index.php';</script>";
+    echo "<script>alert('Kembalilah Kejalan yang benar!!!'); window.location = '../../index.php';</script>";
 } else {
+    $kode_guru_awal = "";
 
-  $kode_guru_awal = ""; // Langkah 1: Inisialisasi variabel kode guru awal
-
-  $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
-  if ($update) {
-    $sql = $connect->query("SELECT * FROM guru WHERE kd_guru='$_GET[key]'");
-    $row = $sql->fetch_assoc();
-
-    // Langkah 2: Isi $kode_guru_awal dengan kode guru yang akan diubah
-    $kode_guru_awal = $row["kd_guru"];
-  }
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $kd_guru = mysqli_real_escape_string($connect, $_POST['kd_guru']);
-    $nip = mysqli_real_escape_string($connect, $_POST['nip']);
-    $username = strtolower(stripslashes($_POST['username']));
-    $nama = htmlspecialchars($_POST['nama']);
-    $telp = mysqli_real_escape_string($connect, $_POST['telp']);
-    $email = htmlspecialchars($_POST['email']);
-    $status = $_POST['status'];
-
+    $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
     if ($update) {
-      $sql = "UPDATE guru SET kd_guru='$kd_guru', username='$username', nip_password='$nip', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
-    } else {
-      $tg = date('Y-m-d H:i:s');
-      // Meng-hash NIP dengan MD5
-      $hashedNIP = md5($nip);
-      $sql = "INSERT INTO guru (kd_guru, username, nip_password, nip, nama, telp, email, foto, status) VALUES ('$kd_guru', '$username', '$hashedNIP', '$nip', '$nama', '$telp', '$email', 'default.jpg', '$status')";
+        $sql = $connect->query("SELECT * FROM guru WHERE kd_guru='$_GET[key]'");
+        $row = $sql->fetch_assoc();
+        $kode_guru_awal = $row["kd_guru"];
     }
 
-    if ($connect->query($sql)) {
-      $tg = date('Y-m-d H:i:s');
-      echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
-      $connect->query("INSERT INTO login VALUES ('$username', '$hashedNIP', 'guru', '$tg', 'aktif')");
-    } else {
-      echo "<script>alert('Gagal'); window.location = 'media.php?module=guru'</script>";
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $kd_guru = mysqli_real_escape_string($connect, $_POST['kd_guru']);
+        $nip = mysqli_real_escape_string($connect, $_POST['nip']);
+        $username = strtolower(stripslashes($_POST['username']));
+        $nama = htmlspecialchars($_POST['nama']);
+        $telp = mysqli_real_escape_string($connect, $_POST['telp']);
+        $email = htmlspecialchars($_POST['email']);
+        $status = $_POST['status'];
+
+        // Hash NIP using MD5 for nip_password column
+        $hashedNIP = $nip ? md5($nip) : $row['nip_password'];
+        
+        if ($update) {
+            $sql = "UPDATE guru SET kd_guru='$kd_guru', username='$username', nip_password='$hashedNIP', nip='$nip', nama='$nama', telp='$telp', email='$email', status='$status' WHERE kd_guru='$_GET[key]'";
+        } else {
+            $tg = date('Y-m-d H:i:s');
+            $sql = "INSERT INTO guru (kd_guru, username, nip_password, nip, nama, telp, email, foto, status) VALUES ('$kd_guru', '$username', '$hashedNIP', '$nip', '$nama', '$telp', '$email', 'default.jpg', '$status')";
+        }
+
+        if ($connect->query($sql)) {
+            $tg = date('Y-m-d H:i:s');
+            echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
+            $connect->query("INSERT INTO login VALUES ('$username', MD5('$nip'), 'guru', '$tg', 'aktif')");
+        } else {
+            echo "<script>alert('Gagal'); window.location = 'media.php?module=guru'</script>";
+        }
     }
-  }
-  if (isset($_GET['action']) and $_GET['action'] == 'delete') {
-    $connect->query("DELETE FROM guru WHERE kd_guru='$_GET[key]'");
-    echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
-  }
+
+    if (isset($_GET['action']) and $_GET['action'] == 'delete') {
+        $connect->query("DELETE FROM guru WHERE kd_guru='$_GET[key]'");
+        echo "<script>alert('Berhasil'); window.location = 'media.php?module=guru'</script>";
+    }
 ?>
 
 

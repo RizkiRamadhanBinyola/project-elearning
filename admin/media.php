@@ -1,6 +1,5 @@
 <?php
 session_start();
-//error_reporting(1);
 include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
@@ -15,12 +14,16 @@ if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
             $kd_tajar = $tj['kd_tajar'];
             $namatajar = $tj['tahun_ajar'] . " Semester " . $tj['kd_semester'];
         } else {
-            // Handle jika tidak ada baris yang cocok dengan query
             echo "<script>alert('Data tahun ajar tidak ditemukan!.');</script>";
         }
     } else {
-        // Handle jika query tidak berhasil
         echo "Terjadi kesalahan dalam menjalankan query.";
+    }
+
+    // Set a variable for the title based on the current page
+    $pageTitle = "Your Default Title"; // Set a default title
+    if (isset($_GET['module'])) {
+        $pageTitle = ucfirst($_GET['module']); // Set title based on the module parameter
     }
     ?>
     <!DOCTYPE html>
@@ -31,7 +34,7 @@ if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
             <meta name="description" content="" />
             <meta name="author" content="" />
-            <title>Dashboard - Webkolah</title>
+            <title><?php echo $pageTitle; ?></title>
             <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
             <link href="assets/css/styles.css" rel="stylesheet" />
             <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

@@ -14,66 +14,72 @@
 
 <?php
 
-include "../koneksi/koneksi.php";
-if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
-  echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
-} else {
-?>
-  <?php
-  $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
-  if ($update) {
-    $sql = $connect->query("SELECT * FROM siswa,login WHERE siswa.nis=login.username and siswa.nis='$_GET[key]'");
-    $row = $sql->fetch_assoc();
-  }
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nisn = mysqli_real_escape_string($connect, $_POST['nisn']);
-    $nama = htmlspecialchars($_POST['nama']);
-    $username = mysqli_real_escape_string($connect, $_POST['nis']); // Menggunakan nis sebagai username
-    $kelamin = $_POST['kelamin'];
-    $email = htmlspecialchars($_POST['email']);
-    $telp = mysqli_real_escape_string($connect, $_POST['telp']);
-    $status = $_POST['status'];
 
-    // Cek apakah input kosong
-    if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
-      echo "
-    <script>
-        alert('Form tidak boleh kosong');
-        window.location.href='media.php?module=siswa';
-    </script>
-  ";
-      exit; // Hentikan eksekusi jika input kosong
-    }
+include "../koneksi/koneksi.php";
+
+if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
+    echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
+} else {
+    $update = (isset($_GET['action']) and $_GET['action'] == 'update') ? true : false;
 
     if ($update) {
-      $sql = "UPDATE siswa SET nisn='$_POST[nisn]', nama='$_POST[nama]', kelamin='$_POST[kelamin]', email='$_POST[email]', telp='$_POST[telp]', status='$_POST[status]' WHERE nis='$_GET[key]'";
-    } else {
-      $sql = "INSERT INTO siswa VALUES ('$_POST[nis]', '$_POST[nisn]', '$_POST[nama]', '$_POST[kelamin]', '$_POST[email]', '', '$_POST[telp]', '$_POST[status]')";
-      // Setelah menyimpan siswa, tambahkan siswa ke tabel `rombel`
-      $connect->query("INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
+        $sql = $connect->query("SELECT * FROM siswa,login WHERE siswa.nis=login.username and siswa.nis='$_GET[key]'");
+        $row = $sql->fetch_assoc();
     }
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $pageTitle = "Siswa Page";
+        $nisn = mysqli_real_escape_string($connect, $_POST['nisn']);
+        $nama = htmlspecialchars($_POST['nama']);
+        $username = mysqli_real_escape_string($connect, $_POST['nis']); // Menggunakan nis sebagai username
+        $kelamin = $_POST['kelamin'];
+        $email = htmlspecialchars($_POST['email']);
+        $telp = mysqli_real_escape_string($connect, $_POST['telp']);
+        $status = $_POST['status'];
 
-    if ($connect->query($sql)) {
-      if ($update) {
-        $sql = "UPDATE login SET password='$_POST[nis]' WHERE username='$_POST[nis]'";
-      } else {
-        $password = md5($_POST['nisn']);
-        $tg = date('Y-m-d H:i:s');
+        // Cek apakah input kosong
+        if (empty($nisn) || empty($nama) || empty($username) || empty($kelamin) || empty($email) || empty($telp) || empty($status)) {
+            echo "<script>alert('Form tidak boleh kosong'); window.location.href='media.php?module=siswa';</script>";
+            exit; // Hentikan eksekusi jika input kosong
+        }
+
+        // Store the original nisn value in the nisn column
+        $hashed_nisn_password = md5($nisn);
+
+        if ($update) {
+            $sql = "UPDATE siswa SET nisn='$nisn', nisn_password='$hashed_nisn_password', nama='$_POST[nama]', kelamin='$_POST[kelamin]', email='$_POST[email]', telp='$_POST[telp]', status='$_POST[status]' WHERE nis='$_GET[key]'";
+        } else {
+            $sql = "INSERT INTO siswa (nis, nisn, nisn_password, nama, kelamin, email, telp, status) VALUES ('$username', '$nisn', '$hashed_nisn_password', '$_POST[nama]', '$_POST[kelamin]', '$_POST[email]', '$_POST[telp]', '$_POST[status]')";
+            // Setelah menyimpan siswa, tambahkan siswa ke tabel `rombel`
+            $connect->query("INSERT INTO rombel VALUES ('$username', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
+        }
+
+        if ($connect->query($sql)) {
+            if ($update) {
+                $sql = "UPDATE login SET password='$username' WHERE username='$username'";
+            } else {
+                $password = md5($nisn);
+                $tg = date('Y-m-d H:i:s');
+                echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
+
+                $connect->query("INSERT INTO login VALUES ('$username', '$password', 'siswa', '$tg', 'aktif')");
+                $connect->query("INSERT INTO rombel VALUES ('$username', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
+            }
+        } else {
+            echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
+        }
+    }
+
+    if (isset($_GET['action']) and $_GET['action'] == 'delete') {
+        // Hapus data siswa dari tabel siswa
+        $connect->query("DELETE FROM siswa WHERE nis='$_GET[key]'");
+
+        // Hapus data siswa dari tabel rombel
+        $connect->query("DELETE FROM rombel WHERE nis='$_GET[key]'");
+
         echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
-
-        $connect->query("INSERT INTO login VALUES ('$_POST[nis]', '$password', 'siswa', '$tg', 'aktif')");
-        $connect->query("INSERT INTO rombel VALUES ('$_POST[nis]', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
-      }
-    } else {
-      echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
     }
-  }
-  if (isset($_GET['action']) and $_GET['action'] == 'delete') {
-    $connect->query("DELETE FROM siswa WHERE nis='$_GET[key]'");
-    echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
-  }
-  ?>
+?>
 
   <div class="container mt-5">
     <div class="content-wrapper">
@@ -83,7 +89,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
             <div class="card border-secondary mb-3">
 
               <div class="card-header text-bg-<?= ($update) ? "success" : "secondary" ?>">
-                <?= ($update) ? "EDIT" : "TAMBAH" ?> MATA PELAJARAN
+                <?= ($update) ? "EDIT" : "TAMBAH" ?> SISWA
               </div>
               <div class="card-body text-secondary">
                 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" enctype="multipart/form-data">
@@ -128,22 +134,13 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     <select class="form-control" name="kd_kelas">
                       <option>--Pilih Kelas--</option>
                       <?php $query3 = $connect->query("SELECT * FROM kelas");
-                      while ($data3 = $query3->fetch_assoc()) : ?>
-                        <option value="<?= $data3["kd_kelas"] ?>" <?= (!$update) ?: (($data3["kd_kelas"] != $row["kd_kelas"]) ?: 'selected="on"') ?>><?= $data3["nama_kelas"] ?></option>
+                      while ($data3 = $query3->fetch_assoc()): ?>
+                        <option value="<?= $data3["kd_kelas"] ?>" <?= (!$update) ?: (($data3["kd_kelas"] != $row["kd_kelas"]) ?: 'selected="on"') ?>>
+                          <?= $data3["nama_kelas"] ?>
+                        </option>
                       <?php endwhile; ?>
                     </select>
                   </div>
-
-                  <!-- <div class="form-group mb-3">
-                    <label>Tahun Ajaran</label>
-                    <select class="form-control" name="kd_tajar">
-                      <option>--Pilih Tahun Ajaran--</option>
-                      <?php $query5 = $connect->query("SELECT * FROM tahun_ajar");
-                      while ($data5 = $query5->fetch_assoc()) : ?>
-                        <option value="<?= $data5["kd_tajar"] ?>" <?= (!$update) ?: (($data5["kd_tajar"] != $row["kd_tajar"]) ?: 'selected="on"') ?>><?= $data5["tahun_ajar"] ?></option>
-                      <?php endwhile; ?>
-                    </select>
-                  </div> -->
 
                   <div class="form-group mb-3">
                     <label>Tahun Ajaran</label>
@@ -155,9 +152,10 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         $tahun_ajar = $data5["tahun_ajar"];
                         $kd_semester = $data5["kd_semester"];
                         $semester_label = ($kd_semester == 1) ? "Ganjil" : "Genap";
-                      ?>
+                        ?>
                         <option value="<?= $data5["kd_tajar"] ?>" <?= (!$update) ?: (($data5["kd_tajar"] != $row["kd_tajar"]) ?: 'selected="on"') ?>>
-                          <?= $semester_label ?> - <?= $tahun_ajar ?>
+                          <?= $semester_label ?> -
+                          <?= $tahun_ajar ?>
                         </option>
                       <?php } ?>
                     </select>
@@ -165,7 +163,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 
 
                   <button type="submit" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block">Simpan</button>
-                  <?php if ($update) : ?>
+                  <?php if ($update): ?>
                     <a href="?module=akun" class="btn btn-info btn-block">Batal</a>
                   <?php endif; ?>
                 </form>
@@ -175,7 +173,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
           <div class="col-md-8 col-sm-8 col-xs-12">
             <div class="card border-secondary mb-3">
               <div class="card-header text-bg-secondary">
-                TABEL MATA PELAJARAN
+                TABEL SISWA
 
 
               </div>
@@ -188,43 +186,58 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                       <th>NISN</th>
                       <th>Nama Siswa</th>
                       <th>Jenis Kelamin</th>
-
                       <th>E-mail</th>
-                      <th>Foto</th>
                       <th>Telp</th>
                       <th>Status</th>
-
+                      <th>Tahun Ajaran</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <?php $no = 1; ?>
-                      <?php if ($query = $connect->query("SELECT * FROM siswa")) : ?>
-                        <?php while ($row = $query->fetch_assoc()) : ?>
-                          <td><?= $no++; ?></td>
-                          <td><?= $row['nis'] ?></td>
-                          <td><?= $row['nisn'] ?></td>
-                          <td><?= $row['nama'] ?></td>
-
-
-                          <td><?= $row['kelamin'] ?></td>
-
-                          <td><?= $row['email'] ?></td>
-                          <td><?= $row['foto'] ?></td>
-                          <td><?= $row['telp'] ?></td>
-                          <td><?= $row['status'] ?></td>
+                    <?php $no = 1; ?>
+                    <?php if ($query = $connect->query("SELECT siswa.*, rombel.kd_tajar FROM siswa INNER JOIN rombel ON siswa.nis = rombel.nis")): ?>
+                      <?php while ($row = $query->fetch_assoc()): ?>
+                        <tr>
+                          <td>
+                            <?= $no++; ?>
+                          </td>
+                          <td>
+                            <?= $row['nis'] ?>
+                          </td>
+                          <td>
+                            <?= $row['nisn'] ?>
+                          </td>
+                          <td>
+                            <?= $row['nama'] ?>
+                          </td>
+                          <td>
+                            <?= $row['kelamin'] ?>
+                          </td>
+                          <td>
+                            <?= $row['email'] ?>
+                          </td>
+                          <td>
+                            <?= $row['telp'] ?>
+                          </td>
+                          <td>
+                            <?= $row['status'] ?>
+                          </td>
+                          <td>
+                            <?= $row['kd_tajar'] ?>
+                          </td>
                           <td class="hidden-print">
                             <div class="btn-group">
-                              <a href="?module=siswa&action=update&key=<?= $row['nis'] ?>" class="btn btn-warning btn-xs">Edit</a>
-                              <a href="?module=siswa&action=delete&key=<?= $row['nis'] ?>" class="btn btn-danger btn-xs">Hapus</a>
+                              <a href="?module=siswa&action=update&key=<?= $row['nis'] ?>"
+                                class="btn btn-warning btn-xs">Edit</a>
+                              <a href="?module=siswa&action=delete&key=<?= $row['nis'] ?>"
+                                class="btn btn-danger btn-xs">Hapus</a>
                             </div>
                           </td>
-
-                    </tr>
-                  <?php endwhile ?>
-                <?php endif ?>
+                        </tr>
+                      <?php endwhile ?>
+                    <?php endif ?>
                   </tbody>
+
                 </table>
               </div>
             </div>

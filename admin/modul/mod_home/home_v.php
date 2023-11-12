@@ -92,8 +92,6 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         <p><a class='btn btn-xs btn-info form-control'
                             href='?module=tugas&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Tugas </a></p>
                         <p><a class='btn btn-xs btn-info form-control'
-                            href='?module=ujian&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Ujian </a></p>
-                        <p><a class='btn btn-xs btn-info form-control'
                             href='?module=absensi&mp=<?= $rkur['kd_mapel'] ?>&kls=<?= $rkur['kd_kelas'] ?>'> Absensi </a>
                         </p>
                       </div>

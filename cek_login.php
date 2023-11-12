@@ -32,9 +32,6 @@ if (!ctype_alnum($username) || !ctype_alnum($pass)) {
 
             $qk = date('Y-m-d');
             $q = date('Y-m-d H:i:s');
-
-            $qkd1 = "INSERT INTO absensi VALUES ('$kode[kd_guru]','$qk','$q','', '')";
-            $kd1 = mysqli_query($connect, $qkd1);
             header('location:admin/media.php?module=home');
         } else if ($r['level'] == 'siswa') {
             $qkd = "SELECT nis FROM siswa WHERE nis='$r[username]'";

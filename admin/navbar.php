@@ -1,3 +1,8 @@
+<?php
+if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
+    echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
+}
+?>
 <!-- Navbar -->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
@@ -9,29 +14,7 @@
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
             class="fas fa-bars"></i></button>
-    <!-- Navbar Search-->
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-        <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
-                aria-describedby="btnNavbarSearch" />
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-        </div>
-    </form>
-    <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                <li>
-                    <hr class="dropdown-divider" />
-                </li>
-                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-            </ul>
-        </li>
-    </ul>
+
 </nav>
 
 <div id="layoutSidenav">
@@ -43,7 +26,7 @@
                     switch ($_SESSION['level']) {
                         case 'admin':
                             ?>
-                            <!-- Start Admin Sidebar Navigasi -->
+                            <!-- ========================= NAVBAR ADMIN START =========================== -->
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link <?php if ($_GET['module'] == 'homeadm') {
                                 echo "open";
@@ -51,10 +34,16 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
                                 Home
                             </a>
+                            <a class="nav-link <?php if ($_GET['module'] == 'regadmin') {
+                                echo "open";
+                            } ?>" href="media.php?module=regadmin">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                                RegAdmin
+                            </a>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
                                 aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-                                Master
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-chalkboard"></i></div>
+                                Guru
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
@@ -130,7 +119,7 @@
                                 Mapel
                             </a>
 
-                            <!-- End Admin Sidebar Navigasi -->
+                            <!-- ======================== NAVBAR ADMIN END =====================================-->
 
                             <!-- ========================= NAVBAR GURU START ======================== NAVBAR GURU START ========================== -->
                             <?php
@@ -170,6 +159,20 @@
                             } ?>" href="media.php?module=home">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-house"></i></div>
                                 Home
+                            </a>
+
+                            <a class="nav-link <?php if ($_GET['module'] == 'materi') {
+                                echo "open";
+                            } ?>" href="media.php?module=materi&mp=all">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                Materi
+                            </a>
+
+                            <a class="nav-link <?php if ($_GET['module'] == 'tugas') {
+                                echo "open";
+                            } ?>" href="media.php?module=tugas&mpl=all">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-pencil"></i></div>
+                                Tugas
                             </a>
 
                             <!-- ========================= NAVBAR SISWA END ======================== NAVBAR SISWA END ========================== -->

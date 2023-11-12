@@ -8,50 +8,28 @@ if (isset($_GET['act'])) {
 				echo "<script>alert('Gagal karena Tidak memilih kelas '); location='../../media.php?module=pengajaran'</script>";
 			}
 			$kd_mapel = $_POST['kd_mapel'];
-			$kd_jrs = $_POST['kd_jurusan'];
 			$kd_kelas = $_POST['kd_kls'];
 			$kd_guru = $_POST['kd_guru'];
 
 			function cek_pengajar($con, $mp, $kls)
 			{
 				$query = mysqli_query($con, "SELECT kd_guru FROM pengajaran WHERE kd_mapel='$mp' AND kd_kelas='$kls'");
-				if (mysqli_num_rows($query)) {
-					$pengajar = mysqli_fetch_array($query);
-					$cekjumpengajar = explode(",", $pengajar['kd_guru']);
-					$jpengajar = count($cekjumpengajar);
-					if ($jpengajar == 1) {
-						return 1;
-					} else {
-						return 2;
-					}
-				} else {
-					return 0;
-				}
+				return mysqli_num_rows($query) > 0;
 			}
+
 			if (is_array($kd_kelas)) {
 				foreach ($kd_kelas as $kd) {
 					//cek kd_guru
+					if (cek_pengajar($connect, $kd_mapel, $kd)) {
+						echo "<script>alert('GAGAL karena sudah ada pengajar untuk matapelajaran dan kelas tersebut'); location='../../media.php?module=pengajaran'</script>";
+						exit; // exit the script to prevent further execution
+					}
+
 					$cek = cek_pengajar($connect, $kd_mapel, $kd);
 					switch ($cek) {
-						case '1':
-							$query = mysqli_query($connect, "SELECT kd_pengajaran,kd_guru FROM pengajaran WHERE kd_mapel='$kd_mapel' AND kd_kelas='$kd'");
-							$guru1 = mysqli_fetch_array($query);
-							$kd_insert = $guru1['kd_guru'] . ',' . $kd_guru;
-
-							$qins = mysqli_query($connect, "UPDATE pengajaran SET kd_guru='$kd_insert' WHERE kd_pengajaran='$guru1[kd_pengajaran]'");
-
-							if ($qins) {
-								echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
-							} else {
-								echo "<script>alert('GAGAL'); location='../../media.php?module=pengajaran'</script>";
-							}
-							break;
-						case '2':
-							echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
-							break;
 						case '0':
 							$kd_insert = $kd_guru;
-							$qins = mysqli_query($connect, "INSERT INTO pengajaran (kd_mapel,kd_kelas,kd_guru) VALUES ('$kd_mapel','$kd','$kd_insert')");
+							$qins = mysqli_query($connect, "INSERT INTO pengajaran (kd_mapel, kd_kelas, kd_guru) VALUES ('$kd_mapel', '$kd', '$kd_insert')");
 							if ($qins) {
 								echo "<script>alert('Berhasil menambah pengajar matapelajaran'); location='../../media.php?module=pengajaran'</script>";
 							} else {
@@ -60,7 +38,7 @@ if (isset($_GET['act'])) {
 							break;
 
 						default:
-							echo "<script>alert('GAGAL karena sudah penuh'); location='../../media.php?module=pengajaran'</script>";
+							echo "<script>alert('GAGAL karena sudah ada pengajar untuk matapelajaran dan kelas tersebut'); location='../../media.php?module=pengajaran'</script>";
 							break;
 					}
 				}
@@ -69,6 +47,49 @@ if (isset($_GET['act'])) {
 				echo "<script>alert('Gagal karena format kelas tidak valid'); location='../../media.php?module=pengajaran'</script>";
 			}
 			break;
+
+		case 'update':
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				// Extract the updated data from the form
+				$kd_pengajaran = $_POST['kd_pengajaran'];
+				$kd_mapel = $_POST['kd_mapel'];
+				$kd_kelas = $_POST['kd_kelas'];
+				$kd_guru = $_POST['kd_guru'];
+				// Define the cek_pengajar function
+				function cek_pengajar($con, $mp, $kls, $guru)
+				{
+					$query = mysqli_query($con, "SELECT kd_guru FROM pengajaran WHERE kd_mapel='$mp' AND kd_kelas='$kls'");
+					$result = mysqli_fetch_assoc($query);
+
+					if ($result) {
+						$existingGurus = explode(",", $result['kd_guru']);
+						return in_array($guru, $existingGurus);
+					}
+
+					return false;
+				}
+
+				// Check if the teacher is already assigned to teach the subject in the selected class
+				if (cek_pengajar($connect, $kd_mapel, $kd_kelas, $kd_guru)) {
+					echo "<script>alert('GAGAL karena sudah ada pengajar untuk matapelajaran dan kelas tersebut'); location='../../media.php?module=pengajaran'</script>";
+					exit; // exit the script to prevent further execution
+				}
+
+				// Perform the update query
+				$updateQuery = "UPDATE pengajaran SET kd_mapel='$kd_mapel', kd_kelas='$kd_kelas', kd_guru='$kd_guru' WHERE kd_pengajaran='$kd_pengajaran'";
+				$updateResult = mysqli_query($connect, $updateQuery);
+
+				if ($updateResult) {
+					echo "<script>alert('Berhasil update data'); location='../../media.php?module=pengajaran'</script>";
+				} else {
+					echo "<script>alert('GAGAL update data'); location='../../media.php?module=pengajaran'</script>";
+				}
+			}
+
+			break;
+
+
+
 
 		case 'del':
 			$kd = $_GET['kd'];

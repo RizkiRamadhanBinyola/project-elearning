@@ -1,17 +1,3 @@
-<!-- CSS -->
-
-<style type="text/css">
-  .well:hover {
-    box-shadow: 0px 2px 10px rgb(190, 190, 190) !important;
-  }
-
-  a {
-    color: #666;
-  }
-</style>
-
-<!-- CSS/ -->
-
 <?php
 include "../koneksi/koneksi.php";
 
@@ -19,7 +5,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
   echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
 } else {
 
-?>
+  ?>
 
   <div class="container mt-5">
     <div class="content-wrapper">
@@ -30,62 +16,147 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
               MANAJEMEN PENGAJAR
             </div>
             <div class="card-body text-secondary">
-              <form action="modul/mod_pengajaran/aksi.php?act=add" method="POST" role="form">
+              <?php
+              if (isset($_GET['eid'])) {
+                $id = $_GET['eid'];
+                // Fetch the data for the selected pengajaran
+                $query = "SELECT * FROM pengajaran WHERE kd_pengajaran='$id'";
+                $result = mysqli_query($connect, $query);
+                $pengajaranData = mysqli_fetch_assoc($result);
+                ?>
+                <form action="modul/mod_pengajaran/aksi.php?act=update" method="POST">
+                  <input type="hidden" name="kd_pengajaran" value="<?= $pengajaranData['kd_pengajaran'] ?>">
 
-                <div class="form-group mb-3">
-                  <label> Mata Pelajaran</label>
-                  <select class="form-control" name="kd_mapel" id="cbbmapelajar">
-                    <option selected hidden>Pilih Matapelajaran</option>
-                    <?php if ($query = $connect->query("SELECT * FROM mapel ORDER BY nama_mapel")) : ?>
-                      <?php while ($row = $query->fetch_assoc()) : ?>
-                        <option value="<?php echo $row['kd_mapel']; ?>"><?php echo $row['nama_mapel']; ?></option>
-                      <?php endwhile ?>
-                    <?php endif ?>
-                  </select>
-                </div>
-                <div class="form-group mb-3">
-                  <label> Jurusan </label>
-                  <select class="form-control" name="kd_jurusan" id="cbbjurusan" data-mapel="">
-                    <option selected hidden>Pilih Jurusan</option>
-                    <?php if ($query = $connect->query("SELECT * FROM jurusan ORDER BY nama_jurusan")) : ?>
-                      <?php while ($row = $query->fetch_assoc()) : ?>
-                        <option value="<?php echo $row['kd_jurusan']; ?>"><?php echo $row['nama_jurusan']; ?></option>
-                      <?php endwhile ?>
-                    <?php endif ?>
-                  </select>
-                </div>
-
-                <div class="form-group mb-3">
-                  <label>Kelas </label>
-                  <select class="form-control" name="kd_kls[]" id="cbbkelas" data-kelas="">
-                    <option selected hidden>Pilih Kelas</option>
-                    <?php if ($query = $connect->query("SELECT * FROM kelas ORDER BY kd_kelas")) : ?>
-                      <?php while ($row = $query->fetch_assoc()) : ?>
-                        <option value="<?php echo $row['kd_kelas']; ?>"><?= $row['nama_kelas'] ?></option>
-                      <?php endwhile ?>
-                    <?php endif ?>
-                  </select>
-
-                </div>
-                <div class="form-group mb-3">
-                  <label>Guru </label>
-                  <select class="form-control" name="kd_guru">
-                    <option selected hidden>Pilih Guru Pengajar</option>
-                    <?php
-                    $query = mysqli_query($connect, "SELECT kd_guru,nama FROM guru WHERE status='Aktif' ORDER BY nama");
-                    $c = mysqli_num_rows($query);
-                    if ($c > 0) {
-                      while ($rsl = mysqli_fetch_array($query)) {
-                        echo "<option value='$rsl[kd_guru]'>$rsl[nama]</option>";
+                  <div class="form-group mb-3">
+                    <label for="kd_mapel">Mata Pelajaran</label>
+                    <select name="kd_mapel" class="form-control" required>
+                      <?php
+                      $mapelQuery = "SELECT kd_mapel, nama_mapel FROM mapel ORDER BY nama_mapel";
+                      $mapelResult = mysqli_query($connect, $mapelQuery);
+                      while ($mapel = mysqli_fetch_assoc($mapelResult)) {
+                        $selected = ($mapel['kd_mapel'] == $pengajaranData['kd_mapel']) ? 'selected' : '';
+                        echo "<option value='{$mapel['kd_mapel']}' $selected>{$mapel['nama_mapel']}</option>";
                       }
-                    }
-                    ?>
-                  </select>
-                </div>
+                      ?>
+                    </select>
+                  </div>
 
-                <input type="submit" name="submit" value="Tambah" class="btn btn-info">
+                  <div class="form-group mb-3">
+                    <label for="kd_kelas">Kelas</label>
+                    <select name="kd_kelas" class="form-control" required>
+                      <?php
+                      $kelasQuery = "SELECT kd_kelas, nama_kelas FROM kelas ORDER BY nama_kelas";
+                      $kelasResult = mysqli_query($connect, $kelasQuery);
+                      while ($kelas = mysqli_fetch_assoc($kelasResult)) {
+                        $selected = ($kelas['kd_kelas'] == $pengajaranData['kd_kelas']) ? 'selected' : '';
+                        echo "<option value='{$kelas['kd_kelas']}' $selected>{$kelas['nama_kelas']}</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
 
-              </form>
+                  <div class="form-group mb-3">
+                    <label for="kd_jurusan">Jurusan</label>
+                    <select name="kd_jurusan" class="form-control" required>
+                      <?php
+                      $jurusanQuery = "SELECT kd_jurusan, nama_jurusan FROM jurusan ORDER BY nama_jurusan";
+                      $jurusanResult = mysqli_query($connect, $jurusanQuery);
+                      while ($jurusan = mysqli_fetch_assoc($jurusanResult)) {
+                        $selected = ($jurusan['kd_jurusan'] == $pengajaranData['kd_jurusan']) ? 'selected' : '';
+                        echo "<option value='{$jurusan['kd_jurusan']}' $selected>{$jurusan['nama_jurusan']}</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="kd_guru">Guru Pengajar</label>
+                    <select name="kd_guru" class="form-control" required>
+                      <?php
+                      $guruQuery = "SELECT kd_guru, nama FROM guru WHERE status='Aktif' ORDER BY nama";
+                      $guruResult = mysqli_query($connect, $guruQuery);
+                      while ($guru = mysqli_fetch_assoc($guruResult)) {
+                        $selected = (in_array($guru['kd_guru'], explode(",", $pengajaranData['kd_guru']))) ? 'selected' : '';
+                        echo "<option value='{$guru['kd_guru']}' $selected>{$guru['nama']}</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+                  <!-- Include input fields for editing -->
+                  <input type="hidden" name="kd_pengajaran" value="<?= $pengajaranData['kd_pengajaran'] ?>">
+                  <!-- Add other input fields as needed -->
+                
+                  <a href="media.php?module=pengajaran" class="btn btn-danger">Batal</a>
+                  <input type="submit" name="submit" value="Update" class="btn btn-primary">
+                </form>
+
+                <?php } else {
+                ?>
+                  <form action="modul/mod_pengajaran/aksi.php?act=add" method="POST" role="form">
+
+                    <div class="form-group mb-3">
+                      <label> Mata Pelajaran</label>
+                      <select class="form-control" name="kd_mapel" id="cbbmapelajar">
+                        <option selected hidden>Pilih Matapelajaran</option>
+                        <?php if ($query = $connect->query("SELECT * FROM mapel ORDER BY nama_mapel")): ?>
+                          <?php while ($row = $query->fetch_assoc()): ?>
+                            <option value="<?php echo $row['kd_mapel']; ?>">
+                              <?php echo $row['nama_mapel']; ?>
+                            </option>
+                          <?php endwhile ?>
+                        <?php endif ?>
+                      </select>
+                    </div>
+                    <div class="form-group mb-3">
+                      <label> Jurusan </label>
+                      <select class="form-control" name="kd_jurusan" id="cbbjurusan" data-mapel="">
+                        <option selected hidden>Pilih Jurusan</option>
+                        <?php if ($query = $connect->query("SELECT * FROM jurusan ORDER BY nama_jurusan")): ?>
+                          <?php while ($row = $query->fetch_assoc()): ?>
+                            <option value="<?php echo $row['kd_jurusan']; ?>">
+                              <?php echo $row['nama_jurusan']; ?>
+                            </option>
+                          <?php endwhile ?>
+                        <?php endif ?>
+                      </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label>Kelas </label>
+                      <select class="form-control" name="kd_kls[]" id="cbbkelas" data-kelas="">
+                        <option selected hidden>Pilih Kelas</option>
+                        <?php if ($query = $connect->query("SELECT * FROM kelas ORDER BY kd_kelas")): ?>
+                          <?php while ($row = $query->fetch_assoc()): ?>
+                            <option value="<?php echo $row['kd_kelas']; ?>">
+                              <?= $row['nama_kelas'] ?>
+                            </option>
+                          <?php endwhile ?>
+                        <?php endif ?>
+                      </select>
+
+                    </div>
+                    <div class="form-group mb-3">
+                      <label>Guru </label>
+                      <select class="form-control" name="kd_guru">
+                        <option selected hidden>Pilih Guru Pengajar</option>
+                        <?php
+                        $query = mysqli_query($connect, "SELECT kd_guru,nama FROM guru WHERE status='Aktif' ORDER BY nama");
+                        $c = mysqli_num_rows($query);
+                        if ($c > 0) {
+                          while ($rsl = mysqli_fetch_array($query)) {
+                            echo "<option value='$rsl[kd_guru]'>$rsl[nama]</option>";
+                          }
+                        }
+                        ?>
+                      </select>
+                    </div>
+
+                    <input type="submit" name="submit" value="Tambah" class="btn btn-info">
+
+                  </form>
+
+                  <?php
+              } ?>
             </div>
           </div>
         </div>
@@ -147,38 +218,46 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     }
                   }
                   $no = 1;
-                  if ($query = $connect->query("SELECT * FROM pengajaran,mapel,kelas where pengajaran.kd_mapel=mapel.kd_mapel AND pengajaran.kd_kelas=kelas.kd_kelas " . $fkelas . " ORDER BY pengajaran.kd_kelas")) : ?>
-                    <?php while ($row = $query->fetch_assoc()) : ?>
+                  if ($query = $connect->query("SELECT * FROM pengajaran,mapel,kelas where pengajaran.kd_mapel=mapel.kd_mapel AND pengajaran.kd_kelas=kelas.kd_kelas " . $fkelas . " ORDER BY pengajaran.kd_kelas")): ?>
+                    <?php while ($row = $query->fetch_assoc()): ?>
                       <tr>
-                        <td><?= $no; ?></td>
-                        <td><?= $row['nama_mapel'] ?></td>
-                        <td><?= $row['nama_kelas'] ?></td>
-                        <td><?php
-                            $kd_guru = explode(",", $row['kd_guru']);
-                            $j = 1;
-                            foreach ($kd_guru as $kd) {
-                              echo $j == 2 ? "<br>" : " ";
-                              echo namaGuru($connect, $kd) . " 
+                        <td>
+                          <?= $no; ?>
+                        </td>
+                        <td>
+                          <?= $row['nama_mapel'] ?>
+                        </td>
+                        <td>
+                          <?= $row['nama_kelas'] ?>
+                        </td>
+                        <td>
+                          <?php
+                          $kd_guru = explode(",", $row['kd_guru']);
+                          $j = 1;
+                          foreach ($kd_guru as $kd) {
+                            echo $j == 2 ? "<br>" : " ";
+                            echo namaGuru($connect, $kd) . " 
                               </td>
                               <td>
                                 <div class='hidden-print'>
                                   <div class='btn-group'>
                                   <a href='modul/mod_pengajaran/aksi.php?act=del&kd=$row[kd_pengajaran]&kdg=$kd' class='btn btn-danger btn-xs'>Hapus</a>
                               ";
-                              $j++;
-                            }
-                            ?>
-                          <a href="?module=pengajaran&eid=<?php echo $row['kd_pengajaran'] ?>" class="btn btn-warning btn-xs">Edit</a>
-            </div>
-          </div>
-          </td>
+                            $j++;
+                          }
+                          ?>
+                          <a href="?module=pengajaran&eid=<?php echo $row['kd_pengajaran'] ?>"
+                            class="btn btn-warning btn-xs">Edit</a>
+                </div>
+              </div>
+              </td>
 
-          </tr>
-        <?php $no++;
+              </tr>
+              <?php $no++;
                     endwhile ?>
-      <?php endif ?>
-      </tbody>
-      </table>
+          <?php endif ?>
+          </tbody>
+          </table>
         </div>
       </div>
     </div>

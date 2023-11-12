@@ -24,7 +24,8 @@ echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../
 
 
 <div class="container mt-5">
-
+    <h4>Dashboard Admin</h4>
+    <img src="assets/img/smktpg2.jpeg" class="img-fluid mx-auto d-block" alt="...">
 </div>
        
 
