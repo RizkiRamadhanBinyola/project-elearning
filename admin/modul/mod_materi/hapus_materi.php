@@ -16,6 +16,7 @@ if ($rfile['ForL'] === 'file') {
             // File successfully deleted, now delete the database entry
             $q = "DELETE FROM materi WHERE kd_materi='$kd'";
             if (mysqli_query($connect, $q)) {
+                // Delete corresponding timeline entry
                 $delt = "DELETE FROM timeline WHERE timeline.jenis='materi' AND timeline.id_jenis='$kd'";
                 mysqli_query($connect, $delt);
                 echo "<script>alert('File dan data Materi berhasil dihapus'); window.location = '../../media.php?module=materi'</script>";
@@ -32,6 +33,7 @@ if ($rfile['ForL'] === 'file') {
     // Jika materi adalah tautan/link, cukup hapus entri database
     $q = "DELETE FROM materi WHERE kd_materi='$kd'";
     if (mysqli_query($connect, $q)) {
+        // Delete corresponding timeline entry
         $delt = "DELETE FROM timeline WHERE timeline.jenis='materi' AND timeline.id_jenis='$kd'";
         mysqli_query($connect, $delt);
         echo "<script>alert('Data Materi berhasil dihapus'); window.location = '../../media.php?module=materi'</script>";

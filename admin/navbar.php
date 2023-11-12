@@ -9,7 +9,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     <a class="navbar-brand mx-5" href="#">
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Logo-smkterataiputihglobal.png" alt="Logo"
             width="30" height="24" class="d-inline-block align-text-top">
-        Dashboard
+            e-learning tpgII
     </a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
@@ -173,6 +173,13 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                             } ?>" href="media.php?module=tugas&mpl=all">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pencil"></i></div>
                                 Tugas
+                            </a>
+
+                            <a class="nav-link <?php if ($_GET['module'] == 'nilai') {
+                                echo "open";
+                            } ?>" href="media.php?module=nilai&mp=all">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip"></i></div>
+                                Nilai
                             </a>
 
                             <!-- ========================= NAVBAR SISWA END ======================== NAVBAR SISWA END ========================== -->

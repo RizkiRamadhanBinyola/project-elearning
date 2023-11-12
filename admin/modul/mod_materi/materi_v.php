@@ -11,9 +11,12 @@
 <!-- CSS/ -->
 
 <?php
+// Memasukkan file koneksi.php untuk mengakses database
 include "../koneksi/koneksi.php";
 
+// Pengecekan apakah user sudah login atau belum
 if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION['login'] == 0) {
+    // Jika belum login, maka munculkan pesan dan redirect ke halaman index.php
     echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
 } else {
     // Mengambil data dari database untuk mendapatkan kode terbaru
@@ -29,7 +32,9 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
         $kd_materi = 'KM-' . sprintf('%03d', $kodeawal);
     }
 
+    // Pengecekan apakah form telah disubmit (metode POST)
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Mengambil data dari form
         $nama_materi = isset($_POST['nama_materi']) ? $_POST['nama_materi'] : "";
         $deskripsi = isset($_POST['deskripsi']) ? $_POST['deskripsi'] : "";
         $ForL = isset($_POST['ForL']) ? $_POST['ForL'] : "";
@@ -59,6 +64,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
             }
         }
 
+        // Check for duplicate entry
         $existingEntry = $connect->prepare("SELECT * FROM materi WHERE kd_materi = ?");
         $existingEntry->bind_param("s", $kd_materi);
         $existingEntry->execute();
@@ -69,6 +75,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
             exit; // Exit the script if there's a duplicate entry
         }
 
+        // Insert data into the database
         $stmt = $connect->prepare("INSERT INTO materi (kd_materi, nama_materi, deskripsi, ForL, materi, tgl_up, kd_mapel, kd_kelas, kd_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssssss", $kd_materi, $nama_materi, $deskripsi, $ForL, $file, $tgl_up, $kd_mapel, $kd_kelas, $kd_guru);
 
@@ -81,7 +88,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     }
     ?>
 
-
+    <!-- HTML untuk form tambah materi -->
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-4 col-sm-12">
@@ -90,11 +97,11 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                         Tambah Materi
                     </div>
                     <div class="card-body">
-                        <form role="form" name="fupmateri" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>"
-                            enctype="multipart/form-data">
+                        <!-- Form untuk input data materi -->
+                        <form role="form" name="fupmateri" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" enctype="multipart/form-data">
+                            <!-- Dropdown untuk memilih mata pelajaran -->
                             <div class="form-group mb-3">
-                                <select name="kd_mapel" class="form-control" id="cbbmapel"
-                                    data-guru="<?php echo $_SESSION['kode'] ?>">
+                                <select name="kd_mapel" class="form-control" id="cbbmapel" data-guru="<?php echo $_SESSION['kode'] ?>">
                                     <option selected="selected">Pilih Mata Pelajaran</option>
                                     <?php
                                     $qmapel = "SELECT m.nama_mapel,m.kd_mapel 
@@ -106,66 +113,69 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                         <option value="<?= $mapel["kd_mapel"] ?>">
                                             <?= $mapel["kd_mapel"] ?>
                                         </option>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </select>
                             </div>
+                            <!-- Dropdown untuk memilih kelas -->
                             <div class="form-group mb-3">
-                                <div class="form-group mb-3">
-                                    <select name="kd_kelas" class="form-control" id="cbbkelas"
-                                        data-guru="<?php echo $_SESSION['kode'] ?>">
-                                        <option selected="selected">Pilih Kelas</option>
-                                        <?php
-                                        $qkelas = "SELECT nama_kelas, kd_kelas FROM kelas";
-                                        $datakelas = mysqli_query($connect, $qkelas);
-                                        while ($kelas = mysqli_fetch_array($datakelas)) {
-                                            ?>
-                                            <option value="<?php echo $kelas['kd_kelas']; ?>">
-                                                <?php echo $kelas['nama_kelas']; ?>
-                                            </option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                                <select name="kd_kelas" class="form-control" id="cbbkelas" data-guru="<?php echo $_SESSION['kode'] ?>">
+                                    <option selected="selected">Pilih Kelas</option>
+                                    <?php
+                                    $qkelas = "SELECT nama_kelas, kd_kelas FROM kelas";
+                                    $datakelas = mysqli_query($connect, $qkelas);
+                                    while ($kelas = mysqli_fetch_array($datakelas)) { ?>
+                                        <option value="<?php echo $kelas['kd_kelas']; ?>">
+                                            <?php echo $kelas['nama_kelas']; ?>
+                                        </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
+                            <!-- Input judul materi -->
                             <div class="form-group mb-3">
                                 <input class="form-control" type="text" name="nama_materi" required="" placeholder="Judul Materi" />
                             </div>
+                            <!-- Input deskripsi materi -->
                             <div class="form-group mb-3">
                                 <textarea class="form-control" name="deskripsi" rows="3" required="" placeholder="Deskripsi Materi" ></textarea>
                             </div>
+                            <!-- Dropdown untuk memilih bentuk materi (file/link) -->
                             <div class="form-group mb-3">
                                 <select name="ForL" class="form-control" id="cbbForL">
                                     <option value="file" selected="selected">FILE</option>
                                     <option value="link">LINK</option>
                                 </select>
                             </div>
+                            <!-- Input file atau link materi sesuai pilihan di dropdown -->
                             <div class="form-group mb-3">
                                 <div id="ForL">
-                                    
                                     <input class="form-control" type="file" name="filemateri" id="filemateri" />
-                                    
                                     <input class="form-control" type="text" name="linkmateri" id="linkmateri" placeholder="Link Materi" />
                                 </div>
                                 <p class="warningnya text-danger text-left"></p>
                             </div>
+                            <!-- Input hidden untuk menyimpan kode guru dan aksi yang dilakukan -->
                             <div class="form-group mb-3">
                                 <input type="hidden" name="kd_guru" value="<?php echo $_SESSION['kode'] ?>">
                                 <input type="hidden" name="act" value="tbmateri">
                             </div>
+                            <!-- Tombol untuk submit form -->
                             <button type="submit" class="btn btn-success">Simpan</button>
                         </form>
                     </div>
                 </div>
             </div>
+            <!-- Tabel untuk menampilkan data materi -->
             <div class="col-md-8 col-sm-12">
                 <div class="card border-secondary mb-3">
                     <div class="card-header text-bg-secondary">
                         Tabel Materi
                     </div>
                     <div class="card-body">
+                        <!-- Tabel untuk menampilkan data materi -->
                         <table id="datatablesSimple">
                             <thead>
                                 <tr>
@@ -182,6 +192,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                             <tbody>
                                 <div id="bag-data">
                                     <?php
+                                    // Query untuk mengambil data materi dari database
                                     $q = "SELECT materi.ForL, materi.nama_materi, materi.materi, 
                     materi.tgl_up, mapel.nama_mapel, materi.kd_materi, kelas.nama_kelas 
                     FROM materi, pengajaran as p, mapel, kelas 
@@ -189,6 +200,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     AND kelas.kd_kelas=materi.kd_kelas AND p.kd_kelas=kelas.kd_kelas 
                     and p.kd_guru like '%$_SESSION[kode]%'
                     ";
+                                    // Filter data jika parameter mp dan kls ada di URL
                                     if (isset($_GET['mp']) and isset($_GET['kls'])) {
                                         $q .= " AND materi.kd_mapel='$_GET[mp]' AND materi.kd_kelas='$_GET[kls]'";
                                     }
@@ -202,6 +214,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                                                     <td>$rmateri[nama_kelas]</td>
                                                     <td>$rmateri[nama_mapel]</td>";
 
+                                            // Cek jenis materi, apakah file atau link
                                             if ($rmateri['ForL'] == 'file') {
                                                 echo "<td><a href='files/materi/$rmateri[materi]' target='_blank' class='btn btn-info btn-sm'>Lihat Materi</a></td>";
                                             } else {
@@ -229,7 +242,7 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
         </div>
     </div>
 
-
+    <!-- Script untuk menangani perubahan tampilan input berdasarkan pilihan dropdown -->
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             // Ambil elemen-elemen yang akan diubah tampilannya

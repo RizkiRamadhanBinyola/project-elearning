@@ -10,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = $_POST['status'];
 
     // Set a variable for the title based on the current page
-    $pageTitle = "Register Admin";
 
     $sql = "INSERT INTO login (username, password, level, last, status) VALUES ('$username', '$password', '$level', '$last', '$status')";
 

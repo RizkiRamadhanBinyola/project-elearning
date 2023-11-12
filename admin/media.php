@@ -1,29 +1,40 @@
 <?php
+// Mulai sesi untuk mengakses variabel-variabel sesi
 session_start();
+// Sertakan file koneksi.php untuk menghubungkan ke database
 include "../koneksi/koneksi.php";
 
+// Periksa apakah variabel sesi 'username' dan 'level' tidak kosong
 if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
+    // Jika kosong, tampilkan pesan kesalahan dan kembalikan ke halaman index.php
     echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = 'index.php';</script>";
 } else {
+    // Jika sesi 'username' dan 'level' tidak kosong, lanjutkan dengan mengeksekusi kode berikutnya
+
+    // Query untuk mendapatkan data tahun ajaran yang aktif
     $qtj = "SELECT * FROM tahun_ajar WHERE aktif='Y'";
     $result = mysqli_query($connect, $qtj);
 
     if ($result) {
+        // Jika query berhasil dieksekusi, ambil data tahun ajaran
         $tj = mysqli_fetch_array($result);
         if ($tj) {
+            // Jika data tahun ajaran ditemukan, set variabel berdasarkan data tersebut
             $kd_tajar = $tj['kd_tajar'];
             $namatajar = $tj['tahun_ajar'] . " Semester " . $tj['kd_semester'];
         } else {
+            // Jika data tahun ajaran tidak ditemukan, tampilkan pesan kesalahan
             echo "<script>alert('Data tahun ajar tidak ditemukan!.');</script>";
         }
     } else {
+        // Jika terjadi kesalahan dalam menjalankan query, tampilkan pesan kesalahan
         echo "Terjadi kesalahan dalam menjalankan query.";
     }
 
-    // Set a variable for the title based on the current page
-    $pageTitle = "Your Default Title"; // Set a default title
+    // Set variabel untuk judul berdasarkan halaman saat ini
+    $pageTitle = "Your Default Title"; // Set judul default
     if (isset($_GET['module'])) {
-        $pageTitle = ucfirst($_GET['module']); // Set title based on the module parameter
+        $pageTitle = ucfirst($_GET['module']); // Set judul berdasarkan parameter module
     }
     ?>
     <!DOCTYPE html>
@@ -65,33 +76,6 @@ if (empty($_SESSION['username']) || empty($_SESSION['level'])) {
             <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
             <script src="assets/js/datatables-simple-demo.js"></script>
     
-        
-            <script>
-                function prosesLogin() {
-                    let timerInterval
-                    Swal.fire({
-                        title: 'Auto close alert!',
-                        html: 'I will close in <b></b> milliseconds.',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading()
-                            const b = Swal.getHtmlContainer().querySelector('b')
-                            timerInterval = setInterval(() => {
-                            b.textContent = Swal.getTimerLeft()
-                            }, 100)
-                        },
-                        willClose: () => {
-                            clearInterval(timerInterval)
-                        }
-                        }).then((result) => {
-                        /* Read more about handling dismissals below */
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            console.log('I was closed by the timer')
-                        }
-                    })
-                }    
-            </script>
     
         </body>
     </html>

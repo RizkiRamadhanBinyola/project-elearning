@@ -1,26 +1,14 @@
-<!-- CSS -->
-
-<style type="text/css">
-  .well:hover {
-    box-shadow: 0px 2px 10px rgb(190, 190, 190) !important;
-  }
-  a {
-    color: #666;
-  }
-</style>
-
-<!-- CSS/ -->
-
 <?php
 include "../koneksi/koneksi.php";
 
 if (empty($_SESSION['username']) AND empty($_SESSION['passuser']) AND $_SESSION['login']==0){
+  // Jika sesi tidak terdaftar, maka akan diarahkan kembali ke halaman index.php
   echo "<script>alert('Kembalilah Kejalan yg benar!!!'); window.location = '../../index.php';</script>";
 }
 else{
 
   ?>
-
+  <!-- PHP code untuk memproses data tahun ajaran -->
   <?php
   $update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
   if ($update) {
@@ -50,11 +38,13 @@ else{
 }
 
 }
+// Menghapus data tahun ajaran
 if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
   $key = substr($_GET['key'], 0, 9);
   $connect->query("DELETE FROM tahun_ajar WHERE tahun_ajar='$key'");
   echo "<script>alert('Berhasil'); window.location = 'media.php?module=tahun'</script>";
 }
+// Mengaktifkan tahun ajaran tertentu
 if (isset($_GET['action']) AND $_GET['action'] == 'aktif') {
   $sql = $connect->query("SELECT kd_tajar FROM tahun_ajar WHERE aktif='Y'");
   $row = $sql->fetch_assoc();
@@ -68,7 +58,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'aktif') {
   }
 }
 
-
+// Menghapus file siswa untuk tahun ajaran tertentu
 if (isset($_GET['action']) AND $_GET['action'] == 'delfile') {
   $kd_tajar=$_GET['key'];
   $list = "";
@@ -131,11 +121,10 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delfile') {
   } else {
     echo "<script>alert('Tidak ada file untuk dihapus'); window.location = 'media.php?module=tahun'</script>";
   }
-
-  
 }
 ?>
 
+<!-- HTML untuk menampilkan tabel tahun ajaran -->
 <div class="container mt-5">
   <div class="accordion" id="accordionExample">
     <div class="accordion-item">
@@ -146,7 +135,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delfile') {
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <!-- Content -->
+          <!-- Konten tabel -->
           <table class="table table-striped table-bordered table-hover" id="dataTables-example">
             <thead>
                 <tr>
@@ -171,7 +160,6 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delfile') {
                 <td><?=$row['aktif']?></td>
                 <td class="hidden-print">
                   <div class="btn-group">
-                    <!-- <a href="?module=tahun&action=update&key=<?=$row['kd_tajar']?>" class="btn btn-warning btn-xs">Edit</a> -->
                     <a href="?module=tahun&action=delete&key=<?=$row['kd_tajar']?>" class="btn btn-danger btn-xs">Hapus</a>
                     <?php 
                     if ($row['aktif']=='Y'){
@@ -209,6 +197,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delfile') {
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
+          <!-- Form untuk menambah atau mengedit tahun ajaran -->
           <form action="<?=$_SERVER['REQUEST_URI']?>" method="POST" role="form">
             <div class="form-group">
               <label>Tahun Ajar </label>

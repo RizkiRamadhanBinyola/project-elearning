@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 12 Nov 2023 pada 12.12
+-- Waktu pembuatan: 12 Nov 2023 pada 18.00
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -34,6 +34,13 @@ CREATE TABLE `absensi` (
   `kd_kelas` varchar(10) NOT NULL,
   `kd_mapel` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `absensi`
+--
+
+INSERT INTO `absensi` (`kd_absensi`, `nis`, `tgl_absensi`, `kd_kelas`, `kd_mapel`) VALUES
+(82, '12345', '2023-11-12 22:05:23', 'xiirpl', 'Pbo');
 
 -- --------------------------------------------------------
 
@@ -113,6 +120,13 @@ CREATE TABLE `kerja_tugas` (
   `status_kerja` varchar(20) NOT NULL DEFAULT 'T'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `kerja_tugas`
+--
+
+INSERT INTO `kerja_tugas` (`kd_kerja`, `kd_tugas`, `nis`, `file_kerja`, `nilai`, `status_kerja`) VALUES
+('12202312345001', '022023GR001001', '12345', 'T', 0, 'T');
+
 -- --------------------------------------------------------
 
 --
@@ -132,6 +146,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `password`, `level`, `last`, `status`) VALUES
+('', 'd41d8cd98f00b204e9800998ecf8427e', 'guru', '2023-11-12 14:29:26', 'aktif'),
 ('12345', '827ccb0eea8a706c4c34a16891f84e7b', 'siswa', '2023-11-12 05:20:53', 'aktif'),
 ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2020-12-14 09:45:15', 'Aktif'),
 ('smktpg2aa', '827ccb0eea8a706c4c34a16891f84e7b', 'guru', '2023-11-12 05:29:16', 'aktif');
@@ -152,7 +167,8 @@ CREATE TABLE `mapel` (
 --
 
 INSERT INTO `mapel` (`kd_mapel`, `nama_mapel`) VALUES
-('Pbo', 'Pemrograman berbasis objek'),
+('Bing1', 'Bahasa Inggris'),
+('Pbo1', 'Pemrograman berbasis objek'),
 ('Pweb', 'Pemrograman Web');
 
 -- --------------------------------------------------------
@@ -163,15 +179,23 @@ INSERT INTO `mapel` (`kd_mapel`, `nama_mapel`) VALUES
 
 CREATE TABLE `materi` (
   `kd_materi` varchar(30) NOT NULL,
-  `nama_materi` varchar(300) NOT NULL,
+  `nama_materi` varchar(50) NOT NULL,
   `deskripsi` text NOT NULL,
   `ForL` varchar(5) NOT NULL DEFAULT 'file',
-  `materi` varchar(50) NOT NULL,
+  `materi` varchar(300) NOT NULL,
   `tgl_up` datetime NOT NULL,
   `kd_mapel` varchar(10) NOT NULL,
   `kd_kelas` varchar(10) NOT NULL,
   `kd_guru` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `materi`
+--
+
+INSERT INTO `materi` (`kd_materi`, `nama_materi`, `deskripsi`, `ForL`, `materi`, `tgl_up`, `kd_mapel`, `kd_kelas`, `kd_guru`) VALUES
+('KM-001', 'tes', 'tes', 'file', 'NILAI BCF 2.xlsx', '2023-11-12 14:33:31', 'Pweb', 'xiirpl', 'GR001'),
+('KM-002', 'tes', 'tes', 'link', 'https://github.com/RizkiRamadhanBinyola/project-elearning/tree/Rizkirb_laptop', '2023-11-12 14:37:04', 'Pweb', 'xiirpl', 'GR001');
 
 -- --------------------------------------------------------
 
@@ -274,6 +298,13 @@ CREATE TABLE `timeline` (
   `kd_guru` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `timeline`
+--
+
+INSERT INTO `timeline` (`id_timeline`, `jenis`, `id_jenis`, `waktu`, `kd_kelas`, `kd_mapel`, `kd_guru`) VALUES
+(43, 'tugas', '022023GR001001', '2023-11-12 21:26:47', 'xiirpl', 'Pweb', 'GR001');
+
 -- --------------------------------------------------------
 
 --
@@ -283,7 +314,6 @@ CREATE TABLE `timeline` (
 CREATE TABLE `tugas` (
   `kd_tugas` varchar(30) NOT NULL,
   `nama_tugas` varchar(100) NOT NULL,
-  `deskripsi` text NOT NULL,
   `batas_awal` datetime NOT NULL,
   `batas_ahir` datetime NOT NULL,
   `file` varchar(50) NOT NULL,
@@ -294,6 +324,13 @@ CREATE TABLE `tugas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data untuk tabel `tugas`
+--
+
+INSERT INTO `tugas` (`kd_tugas`, `nama_tugas`, `batas_awal`, `batas_ahir`, `file`, `tgl_up`, `kd_kelas`, `kd_mapel`, `kd_guru`) VALUES
+('022023GR001001', 'tes', '2023-11-12 21:26:00', '2023-11-15 23:29:00', '022023GR001001_6550e0a7171f0.doc', '2023-11-12 21:26:47', 'xiirpl', 'Pweb', 'GR001');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -301,7 +338,9 @@ CREATE TABLE `tugas` (
 -- Indeks untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  ADD PRIMARY KEY (`kd_absensi`);
+  ADD PRIMARY KEY (`kd_absensi`),
+  ADD KEY `kd_mapel` (`kd_mapel`),
+  ADD KEY `kd_kelas` (`kd_kelas`);
 
 --
 -- Indeks untuk tabel `guru`
@@ -377,7 +416,10 @@ ALTER TABLE `tahun_ajar`
 -- Indeks untuk tabel `timeline`
 --
 ALTER TABLE `timeline`
-  ADD PRIMARY KEY (`id_timeline`);
+  ADD PRIMARY KEY (`id_timeline`),
+  ADD KEY `kd_guru` (`kd_guru`),
+  ADD KEY `kd_kelas` (`kd_kelas`),
+  ADD KEY `kd_mapel` (`kd_mapel`);
 
 --
 -- Indeks untuk tabel `tugas`
@@ -393,7 +435,7 @@ ALTER TABLE `tugas`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `kd_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengajaran`
@@ -405,17 +447,11 @@ ALTER TABLE `pengajaran`
 -- AUTO_INCREMENT untuk tabel `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `id_timeline` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_timeline` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
-
---
--- Ketidakleluasaan untuk tabel `kelas`
---
-ALTER TABLE `kelas`
-  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`kd_jurusan`) REFERENCES `jurusan` (`kd_jurusan`);
 
 --
 -- Ketidakleluasaan untuk tabel `materi`
@@ -424,6 +460,14 @@ ALTER TABLE `materi`
   ADD CONSTRAINT `materi_ibfk_1` FOREIGN KEY (`kd_guru`) REFERENCES `guru` (`kd_guru`),
   ADD CONSTRAINT `materi_ibfk_2` FOREIGN KEY (`kd_kelas`) REFERENCES `kelas` (`kd_kelas`),
   ADD CONSTRAINT `materi_ibfk_3` FOREIGN KEY (`kd_mapel`) REFERENCES `mapel` (`kd_mapel`);
+
+--
+-- Ketidakleluasaan untuk tabel `timeline`
+--
+ALTER TABLE `timeline`
+  ADD CONSTRAINT `timeline_ibfk_1` FOREIGN KEY (`kd_guru`) REFERENCES `guru` (`kd_guru`),
+  ADD CONSTRAINT `timeline_ibfk_2` FOREIGN KEY (`kd_kelas`) REFERENCES `kelas` (`kd_kelas`),
+  ADD CONSTRAINT `timeline_ibfk_3` FOREIGN KEY (`kd_mapel`) REFERENCES `mapel` (`kd_mapel`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
