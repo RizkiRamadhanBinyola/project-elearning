@@ -19,19 +19,22 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
     $row = $sql->fetch_assoc();
 
     // Buat ngambil status dari tabel siswa
-    $stmt = $connect->prepare("SELECT nis, status FROM siswa WHERE nis = ?");
+    $stmt = $connect->prepare("SELECT siswa.nis, siswa.status, rombel.kd_kelas, rombel.kd_tajar FROM siswa INNER JOIN rombel ON siswa.nis = rombel.nis WHERE siswa.nis = ?");
     $stmt->bind_param('s', $niss);
     $stmt->execute();
-    $stmt->bind_result($nisss, $statusss);
+    $stmt->bind_result($nisss, $statusss, $kd_kelasss, $kd_tajarrr);
     $stmt->fetch();
 
     $edit = [
         'nis' => $nisss,
         'status' => $statusss,
+        'kd_kelas' => $kd_kelasss,
+        'kd_tajar'=> $kd_tajarrr,
         // ... other columns ...
     ];
-
+    $currentKelas = $edit['kd_kelas'];
     $currentStatus = $edit['status'];
+    $currentTajar = $edit['kd_tajar'];
     
     // Close the statement
     $stmt->close();
@@ -77,47 +80,56 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 
     // Check if the data has changed
     if ($update) {
-      $currentDataQuery = $connect->query("SELECT * FROM siswa WHERE nis='$_GET[key]'");
+      $currentDataQuery = $connect->query("SELECT siswa.*, rombel.kd_kelas, rombel.kd_tajar FROM siswa INNER JOIN rombel ON siswa.nis = rombel.nis WHERE siswa.nis='$_GET[key]'");
+
       $currentData = $currentDataQuery->fetch_assoc();
-
+  
       if (
-        $nisn == $currentData['nisn'] &&
-        $nama == $currentData['nama'] &&
-        $kelamin == $currentData['kelamin'] &&
-        $email == $currentData['email'] &&
-        $telp == $currentData['telp'] &&
-        $status == $currentData['status']
+          $nisn == $currentData['nisn'] &&
+          $nama == $currentData['nama'] &&
+          $kelamin == $currentData['kelamin'] &&
+          $email == $currentData['email'] &&
+          $telp == $currentData['telp'] &&
+          $status == $currentData['status'] &&
+          $_POST['kd_kelas'] == $currentData['kd_kelas']&&
+          $_POST['kd_tajar'] == $currentData['kd_tajar']
+
       ) {
-        // No changes, skip the update
-        echo "<script>alert('Tidak ada perubahan data.'); window.location = 'media.php?module=siswa'</script>";
-        exit;
+          // No changes, skip the update
+          echo "<script>alert('Tidak ada perubahan data.'); window.location = 'media.php?module=siswa'</script>";
+          exit;
       }
-    }
-
+  }
+  if ($update) {
+    $sql .= "; UPDATE rombel SET kd_kelas='$_POST[kd_kelas], $_POST[kd_tajar]', WHERE nis='$username'";
+  } else {
+    $sql .= "; INSERT INTO rombel VALUES ('$username', '$_POST[kd_kelas]', '$_POST[kd_tajar]')";
+  }
     // Menyusun query SQL untuk update atau insert data siswa
-    if ($update) {
-      $sql = "UPDATE siswa SET nisn='$nisn', nisn_password='$hashed_nisn_password', nama='$nama', kelamin='$kelamin', email='$email', telp='$telp', status='$status' WHERE nis='$_GET[key]'";
-    } else {
-      $sql = "INSERT INTO siswa (nis, nisn, nisn_password, nama, kelamin, email, telp, status) VALUES ('$username', '$nisn', '$hashed_nisn_password', '$nama', '$kelamin', '$email', '$telp', '$status')";
-      // Setelah menyimpan siswa, tambahkan siswa ke tabel `rombel`
-      $connect->query("INSERT INTO rombel VALUES ('$username', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
-    }
+if ($update) {
+    $sql = "UPDATE siswa SET nisn='$nisn', nisn_password='$hashed_nisn_password', nama='$nama', kelamin='$kelamin', email='$email', telp='$telp', status='$status' WHERE nis='$_GET[key]'";
+    
+} else {
+    $sql = "INSERT INTO siswa (nis, nisn, nisn_password, nama, kelamin, email, telp, status) VALUES ('$username', '$nisn', '$hashed_nisn_password', '$nama', '$kelamin', '$email', '$telp', '$status')";
+    
+    // Setelah menyimpan siswa, tambahkan siswa ke tabel `rombel`
+}
 
-    // Eksekusi query
-    if ($connect->query($sql)) {
-      if ($update) {
-        $sql = "UPDATE login SET password='$username' WHERE username='$username'";
-      } else {
-        $password = md5($nisn);
-        $tg = date('Y-m-d H:i:s');
-        echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
+// Eksekusi query
+if ($connect->multi_query($sql)) {
+  if ($update) {
+      $sql = "UPDATE login SET password='$username' WHERE username='$username'";
+  } else {
+      $password = md5($nisn);
+      $tg = date('Y-m-d H:i:s');
+      echo "<script>alert('Berhasil!'); window.location = 'media.php?module=siswa'</script>";
 
-        $connect->query("INSERT INTO login VALUES ('$username', '$password', 'siswa', '$tg', 'aktif')");
-        $connect->query("INSERT INTO rombel VALUES ('$username', '$_POST[kd_kelas]', '$_POST[kd_tajar]')");
-      }
-    } else {
-      echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
-    }
+      $connect->query("INSERT INTO login VALUES ('$username', '$password', 'siswa', '$tg', 'aktif')");
+  }
+} else {
+  echo "<script>alert('Gagal!'); window.location = 'media.php?module=siswa'</script>";
+}
+
   }
 
   // Jika parameter 'action' di-set dan memiliki nilai 'delete'
@@ -198,13 +210,13 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                     <select class="form-control" name="kd_kelas">
                       <option>--Pilih Kelas--</option>
                       <?php
-                      $query3 = $connect->query("SELECT * FROM kelas");
-                      while ($data3 = $query3->fetch_assoc()):
+                        $query3 = $connect->query("SELECT * FROM kelas");
+                        while ($data3 = $query3->fetch_assoc()):
                         ?>
-                        <option value="<?= $data3["kd_kelas"] ?>" <?= (!$update) ?: (($data3["kd_kelas"] == $row["kd_kelas"]) ? 'selected="on"' : '') ?>>
-                          <?= $data3["nama_kelas"] ?>
+                        <option value="<?= $data3["kd_kelas"] ?>" <?= (!$update) ?: (($data3["kd_kelas"] == $currentKelas) ? 'selected="selected"' : '') ?>>
+                            <?= $data3["nama_kelas"] ?>
                         </option>
-                      <?php endwhile; ?>
+                        <?php endwhile; ?>
                     </select>
                   </div>
 
