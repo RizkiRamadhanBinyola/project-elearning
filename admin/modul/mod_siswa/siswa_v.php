@@ -12,9 +12,34 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
 
   // Jika parameter 'update' di-set, ambil data siswa berdasarkan 'key'
   if ($update) {
-    $sql = $connect->query("SELECT * FROM siswa, login WHERE siswa.nis=login.username and siswa.nis='$_GET[key]'");
+    $niss = $_GET['key'];
+    
+    // Using procedural style for the first query
+    $sql = $connect->query("SELECT * FROM siswa, login WHERE siswa.nis=login.username and siswa.nis='$niss'");
     $row = $sql->fetch_assoc();
+
+    // Buat ngambil status dari tabel siswa
+    $stmt = $connect->prepare("SELECT nis, status FROM siswa WHERE nis = ?");
+    $stmt->bind_param('s', $niss);
+    $stmt->execute();
+    $stmt->bind_result($nisss, $statusss);
+    $stmt->fetch();
+
+    $edit = [
+        'nis' => $nisss,
+        'status' => $statusss,
+        // ... other columns ...
+    ];
+
+    $currentStatus = $edit['status'];
+    
+    // Close the statement
+    $stmt->close();
   }
+  $selectedStatus = (!$update || empty($row2["status"])) ? '' : $row2["status"];
+  $selectedStatusAktif = ($selectedStatus === "aktif") ? 'selected="selected"' : '';
+  $selectedStatusNonAktif = ($selectedStatus === "nonaktif") ? 'selected="selected"' : '';
+  
 
   // Jika metode HTTP request adalah POST, artinya form telah di-submit
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -161,13 +186,9 @@ if (empty($_SESSION['username']) and empty($_SESSION['passuser']) and $_SESSION[
                   <div class="form-group mb-3">
                     <label>Status </label>
                     <select class="form-control" name="status">
-                      <option value="" <?= (!$update || empty($row["status"])) ? 'selected="on"' : '' ?>>--Pilih Status--
-                      </option>
-                      <option value="Aktif" <?= ($update && $row["status"] == "Aktif") ? 'selected="on"' : '' ?>>--Aktif--
-                      </option>
-                      <option value="NonAktif" <?= ($update && $row["status"] == "NonAktif") ? 'selected="on"' : '' ?>>--Non
-                        Aktif--
-                      </option>
+                      <option value="" <?= (!$update || $currentStatus) ? 'selected="on"' : '' ?>>--Pilih Status--</option>
+                      <option value="Aktif" <?= ($update && $currentStatus == 'Aktif') ? 'selected' : ''; ?>>--Aktif--</option>
+                      <option value="NonAktif" <?= ($update && $currentStatus == 'NonAktif') ? 'selected' : ''; ?>>--Non Aktif--</option>
                     </select>
                   </div>
 
