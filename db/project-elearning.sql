@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 12 Nov 2023 pada 18.00
+-- Waktu pembuatan: 13 Nov 2023 pada 02.31
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -59,13 +59,6 @@ CREATE TABLE `guru` (
   `foto` varchar(100) NOT NULL DEFAULT 'default.jpg',
   `status` varchar(10) NOT NULL DEFAULT 'aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `guru`
---
-
-INSERT INTO `guru` (`kd_guru`, `username`, `nip_password`, `nip`, `nama`, `telp`, `email`, `foto`, `status`) VALUES
-('GR001', 'smktpg2aa', '827ccb0eea8a706c4c34a16891f84e7b', '12345', 'Ahmad Amin Iswanto', '08979912254', 'rizkibinyola25@gmail.com', 'default.jpg', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -448,26 +441,6 @@ ALTER TABLE `pengajaran`
 --
 ALTER TABLE `timeline`
   MODIFY `id_timeline` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `materi`
---
-ALTER TABLE `materi`
-  ADD CONSTRAINT `materi_ibfk_1` FOREIGN KEY (`kd_guru`) REFERENCES `guru` (`kd_guru`),
-  ADD CONSTRAINT `materi_ibfk_2` FOREIGN KEY (`kd_kelas`) REFERENCES `kelas` (`kd_kelas`),
-  ADD CONSTRAINT `materi_ibfk_3` FOREIGN KEY (`kd_mapel`) REFERENCES `mapel` (`kd_mapel`);
-
---
--- Ketidakleluasaan untuk tabel `timeline`
---
-ALTER TABLE `timeline`
-  ADD CONSTRAINT `timeline_ibfk_1` FOREIGN KEY (`kd_guru`) REFERENCES `guru` (`kd_guru`),
-  ADD CONSTRAINT `timeline_ibfk_2` FOREIGN KEY (`kd_kelas`) REFERENCES `kelas` (`kd_kelas`),
-  ADD CONSTRAINT `timeline_ibfk_3` FOREIGN KEY (`kd_mapel`) REFERENCES `mapel` (`kd_mapel`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
